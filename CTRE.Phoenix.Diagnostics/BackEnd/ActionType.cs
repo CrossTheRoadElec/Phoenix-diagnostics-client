@@ -17,10 +17,8 @@
         GetConfig,
         SetConfig,
         //Robot Controller 
-        InstallDiagServerToRobotController, // UpdateBinaries
-        UpdateBinaries = InstallDiagServerToRobotController,
-        UninstallDiagServerToRobotController, // RevertBinaries
-        RevertBinaries = UninstallDiagServerToRobotController,
+        InstallDiagServerToRobotController,
+        UninstallDiagServerToRobotController,
         StartServer,
         StopServer,
         //Unit Testing Actions

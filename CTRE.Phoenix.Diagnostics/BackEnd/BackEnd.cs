@@ -624,7 +624,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
 
         private bool ActionIsAbortable(ActionType action)
         {
-            return !(action == ActionType.UpdateBinaries || action == ActionType.CheckProcess);
+            return !(action == ActionType.InstallDiagServerToRobotController || action == ActionType.CheckProcess);
         }
 
         //------------------------------- Routines for getting status of BackEnd, these routines must not block -------------------------------------//
@@ -899,12 +899,12 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
         //------------- Robot Controller Commands --------//
         public Status UpdateRIO(Action.CallBack callback)
         {
-            Action ac = new Action(callback, ActionType.UpdateBinaries);
+            Action ac = new Action(callback, ActionType.InstallDiagServerToRobotController);
             return PushAction(ac, false); //Server may not be on RIO yet, so we must force this actino past connection
         }
         public Status RevertRIO(Action.CallBack callback)
         {
-            Action ac = new Action(callback, ActionType.RevertBinaries);
+            Action ac = new Action(callback, ActionType.UninstallDiagServerToRobotController);
             return PushAction(ac, false); //Server may not be on RIO yet, so we must force this actino past connection
         }
         public Status StartServer(Action.CallBack callBack)
