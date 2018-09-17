@@ -1,0 +1,28 @@
+#! /bin/sh
+
+case "$1" in
+	start)
+		echo "Starting Phoenix Diagnostics"
+		start-stop-daemon --start --background --quiet -C --exec /usr/local/frc/bin/Phoenix-diagnostics-server "1250" >/home/lvuser/PhoenixServerOutput.txt
+		;;
+	stop)
+		echo "Stopping Daemon"
+		start-stop-daemon --stop -x /usr/local/frc/bin/Phoenix-diagnostics-server
+		;;
+	restart)
+		echo "Restarting Phoenix Diagnostics"
+		
+		echo "Stopping..."
+		start-stop-daemon --stop -x /usr/local/frc/bin/Phoenix-diagnostics-server
+		echo "Starting..."
+		start-stop-daemon --start --background --quiet -C --exec /usr/local/frc/bin/Phoenix-diagnostics-server "1250" >/home/lvuser/PhoenixServerOutput.txt
+		
+		echo "Done!"
+		;;
+	*)
+		echo "call start or stop"
+		exit 1
+		;;
+esac
+
+exit 0

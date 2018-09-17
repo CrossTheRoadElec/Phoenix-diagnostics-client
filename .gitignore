@@ -1,0 +1,10 @@
+Debug
+Release
+.vs
+*.db
+*.suo
+*.diagsession
+*.vspx
+*.bak
+*.psess
+*.vsp

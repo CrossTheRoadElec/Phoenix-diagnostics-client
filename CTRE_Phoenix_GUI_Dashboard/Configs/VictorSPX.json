@@ -1,0 +1,68 @@
+{
+  "Configs": [
+    {
+      "Name": "Motor Output",
+      "Type": "MotorOutputGroup",
+      "Description": "Group of all configs relating to motor output",
+      "Ordinal": 0,
+
+      "Values": {
+        "NeutralMode": 0
+      }
+    },
+    {
+      "Name": "Hardware Limit Switches",
+      "Type": "HardLimitSwitchGroup",
+      "Description": "Group of all configs relating to hardware limit switches",
+      "Ordinal": 0,
+
+      "Values": {
+        "LimitSwitchForward": 1,
+        "LimitSwitchReverse": 1
+      }
+    },
+    {
+      "Name": "Software Limit Switches",
+      "Type": "SoftLimitSwitchGroup",
+      "Description": "Group of all configs relating to software limit switches",
+      "Ordinal": 0,
+
+      "Values": {
+        "ForwardSoftLimitEnable": false,
+        "ReverseSoftLimitEnable": false,
+        "SoftLimitForwardValue": 0.0,
+        "SoftLimitReverseValue": 0.0
+      }
+    },
+    {
+      "Name": "Slot 0",
+      "Type": "SlotGroup",
+      "Description": "Group of all configs relating to slot 0",
+      "Ordinal": 0,
+
+      "Values": {
+        "pGain": 0.0,
+        "iGain": 0.0,
+        "dGain": 0.0,
+        "fGain": 0.0,
+        "iZone": 0.0,
+        "clRampRate": 0.0
+      }
+    },
+    {
+      "Name": "Slot 1",
+      "Type": "SlotGroup",
+      "Description": "Group of all configs relating to slot 1",
+      "Ordinal": 1,
+
+      "Values": {
+        "pGain": 0.0,
+        "iGain": 0.0,
+        "dGain": 0.0,
+        "fGain": 0.0,
+        "iZone": 0.0,
+        "clRampRate": 0.0
+      }
+    }
+  ]
+}
