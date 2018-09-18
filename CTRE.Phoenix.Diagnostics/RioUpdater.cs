@@ -234,7 +234,7 @@ namespace CTRE.Phoenix.Diagnostics
             if (error == 0)
             {
                 Log("Connecting to roboRIO " + DateTime.Now.ToString("MM/dd/yyyy h:mm tt"));
-                client = new SftpClient("172.22.11.2", "admin", "");
+                client = new SftpClient(_host.GetHostName(), "admin", "");
                 client.ConnectionInfo.Timeout = new TimeSpan(0, 0, 0, 0, 6000);
                 try
                 {
@@ -435,7 +435,7 @@ namespace CTRE.Phoenix.Diagnostics
             if (error == 0)
             {
                 Log("Connecting to roboRIO " + DateTime.Now.ToString("MM/dd/yyyy h:mm tt"));
-                client = new SftpClient("172.22.11.2", "admin", "");
+                client = new SftpClient(_host.GetHostName(), "admin", "");
                 client.ConnectionInfo.Timeout = new TimeSpan(0, 0, 0, 0, 6000);
                 try
                 {

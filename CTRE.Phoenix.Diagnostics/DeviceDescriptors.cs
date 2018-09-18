@@ -9,7 +9,7 @@ namespace CTRE.Phoenix.Diagnostics
     public class DeviceDescriptors
     {
         // TODO replace this with a set
-        private  Dictionary<uint, DeviceDescrip> _map = new Dictionary<uint, DeviceDescrip>();
+        private  Dictionary<string, DeviceDescrip> _map = new Dictionary<string, DeviceDescrip>();
 
         public void Insert(DeviceDescrip dd)
         {
@@ -32,9 +32,9 @@ namespace CTRE.Phoenix.Diagnostics
 
         }
 
-        public bool Get(Model model, byte deviceID, out DeviceDescrip ddRef)
+        public bool Get(string model, byte deviceID, out DeviceDescrip ddRef)
         {
-            uint keyValue = DeviceDescrip.KeyValue.ToKeyValue(model, deviceID);
+            string keyValue = DeviceDescrip.KeyValue.ToKeyValue(model, deviceID);
 
             return _map.TryGetValue(keyValue, out ddRef);
         }
@@ -45,9 +45,9 @@ namespace CTRE.Phoenix.Diagnostics
                 return (uint)_map.Count;
             }
         }
-        public bool Remove(Model model, byte deviceID)
+        public bool Remove(string model, byte deviceID)
         {
-            uint keyValue = DeviceDescrip.KeyValue.ToKeyValue(model, deviceID);
+            string keyValue = DeviceDescrip.KeyValue.ToKeyValue(model, deviceID);
 
             bool existed = _map.Remove(keyValue);
 

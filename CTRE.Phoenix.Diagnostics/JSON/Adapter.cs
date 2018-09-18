@@ -14,7 +14,7 @@ namespace CTRE.Phoenix.Diagnostics.JSON
             DeviceDescrip dd = new DeviceDescrip();
             dd.jsonStrings = jd;
             dd.deviceID = (byte)(jd.ID & 0x3F);
-            dd.model = ModelUtility.Parse(jd.Model, jd.ID.Value);
+            dd.model = jd.Model;
             return dd; ;
         }
     }

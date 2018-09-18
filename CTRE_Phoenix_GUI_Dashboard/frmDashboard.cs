@@ -518,8 +518,6 @@ namespace CTRE_Phoenix_GUI_Dashboard {
             else
             {
                 er = _deviceListContainer.RemoveSelectedItem();
-                if(er == Status.Ok)
-                    er = BackEnd.Instance.RemoveDD(dd);
             }
             /* request the action */
             if (er == Status.Ok)

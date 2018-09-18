@@ -20,7 +20,7 @@
         /// <summary>
         /// The model type.
         /// </summary>
-        public Model model;
+        public string model;
 
         /// <summary>
         /// Ecu address of device to operate on.
@@ -73,7 +73,7 @@
         {
 
         }
-        public Action(CallBack callback, Model model, byte deviceID, ActionType type)
+        public Action(CallBack callback, string model, byte deviceID, ActionType type)
         {
             this.callback = callback;
             this.model = model;
