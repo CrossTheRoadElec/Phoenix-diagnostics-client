@@ -56,7 +56,6 @@
     <Compile Include="HTTP\AsyncWebExchange.cs" />
     <Compile Include="HTTP\WebExchange.cs" />
     <Compile Include="JSON\Adapter.cs" />
-    <Compile Include="Model.cs" />
     <Compile Include="DeviceDescriptor.cs" />
     <Compile Include="DeviceDescriptors.cs" />
     <Compile Include="BackEnd\Action.cs" />

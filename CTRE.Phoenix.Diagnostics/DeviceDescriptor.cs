@@ -6,10 +6,10 @@ namespace CTRE.Phoenix.Diagnostics {
         public JSON.Serializers.JsonDevice jsonStrings;
         public JSON.Serializers.GetConfigsReturn configCache = null;
         public byte deviceID;
-        public Model model;
+        public string model;
         public System.DateTime updateTimestamp;
 
-        public DeviceDescrip(Model model, byte deviceID)
+        public DeviceDescrip(string model, byte deviceID)
         {
             this.model = model;
             this.deviceID = deviceID;
@@ -28,13 +28,9 @@ namespace CTRE.Phoenix.Diagnostics {
             System.TimeSpan diff = System.DateTime.UtcNow - updateTimestamp;
             return (uint)diff.TotalMilliseconds;
         }
-        public uint ToKeyValue()
+        public string ToKeyValue()
         {
-            uint retval;
-            retval = (uint)model;
-            retval <<= 8;
-            retval |= (uint)deviceID;
-            return retval;
+            return model + deviceID;
         }
 
         public class KeyValue
@@ -45,13 +41,9 @@ namespace CTRE.Phoenix.Diagnostics {
             /// <param name="model"></param>
             /// <param name="id"></param>
             /// <returns>sortable value</returns>
-            public static uint ToKeyValue(Model model, byte id)
+            public static string ToKeyValue(string model, byte id)
             {
-                uint retval;
-                retval = (uint)model;
-                retval <<= 8;
-                retval |= (uint)id; 
-                return retval;
+                return model + id;
             }
         }
     }

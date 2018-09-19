@@ -16,7 +16,7 @@ namespace CTRE.Phoenix.Diagnostics.HTTP
         private WebRequest _client = null;
 
         // ------------------ Public functional interface ----------------------------- //
-        public Status HttpGet(HostNameAndPort hostName, Model device, byte deviceID, ActionType action, out string response, string extraOptions = "", int timeout = 1000)
+        public Status HttpGet(HostNameAndPort hostName, string model, byte deviceID, ActionType action, out string response, string extraOptions = "", int timeout = 1000)
         {
             string ip = hostName.ToString();
             Status retval = Status.Ok;
@@ -25,7 +25,7 @@ namespace CTRE.Phoenix.Diagnostics.HTTP
             response = string.Empty;
 
             /* build URI to send */
-            string builtUrl = BuildURI(ip, device, deviceID, action, extraOptions);
+            string builtUrl = BuildURI(ip, model, deviceID, action, extraOptions);
 
             /* attempt sending */
             try
@@ -49,7 +49,7 @@ namespace CTRE.Phoenix.Diagnostics.HTTP
             /* give caller the response */
             return retval;
         }
-        public Status HttpPost(HostNameAndPort hostName, Model device, byte deviceID, ActionType action, byte [] file, out string response, int timeout = 2000)
+        public Status HttpPost(HostNameAndPort hostName, string model, byte deviceID, ActionType action, byte [] file, out string response, int timeout = 2000)
         {
             Status retval = Status.Ok;
 
@@ -60,7 +60,7 @@ namespace CTRE.Phoenix.Diagnostics.HTTP
 
             /* build URI to send */
             string extraOptions = string.Empty;
-            string builtUrl = BuildURI(ip, device, deviceID, action, extraOptions);
+            string builtUrl = BuildURI(ip, model, deviceID, action, extraOptions);
 
             /* attempt sending */
             try { response = SendHttpPost(builtUrl, file, timeout); }
@@ -156,17 +156,17 @@ namespace CTRE.Phoenix.Diagnostics.HTTP
             return retval;
         }
 
-        private string BuildURI(string baseIP, Model device, byte deviceID, ActionType action, string extraOptions = "")
+        private string BuildURI(string baseIP, string model, byte deviceID, ActionType action, string extraOptions = "")
         {
             string address = baseIP;
-            address += "?";
-            switch (device)
+            address += "/?";
+            if (model == "")
             {
-                case Model.None:
-                    break; //No device selected, fall through
-                default:
-                    address += "device=" + URI.DeviceMap[device];
-                    break;
+                // Do nothing
+            }
+            else
+            {
+                address += "model=" + model;
             }
             address += "&";
 

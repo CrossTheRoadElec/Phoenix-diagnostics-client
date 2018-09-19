@@ -109,7 +109,7 @@ namespace CTRE_Phoenix_GUI_Dashboard
             item.SubItems.Add((descriptor.jsonStrings.ManDate));              // Man Date
             item.SubItems.Add((descriptor.jsonStrings.BootloaderRev));        // Btld
             item.SubItems.Add(descriptor.jsonStrings.HardwareRev);          // Hard Rev
-            item.ImageIndex = (int)descriptor.model;    /* icon index, same as model */
+            item.ImageIndex = ModelToInt(descriptor.model);    /* icon index, same as model */
 
             return item;
         }
@@ -127,7 +127,7 @@ namespace CTRE_Phoenix_GUI_Dashboard
             ValueChanged |= AssignIfDiff(item.SubItems[i++], descriptor.jsonStrings.HardwareRev);             // Man Rev
 
             /* icon index, same as model */
-            int imageIndex = (int)descriptor.model;   
+            int imageIndex = ModelToInt(descriptor.model);   
             if (item.ImageIndex != imageIndex)
             {
                 item.ImageIndex = imageIndex;
@@ -138,6 +138,29 @@ namespace CTRE_Phoenix_GUI_Dashboard
             if (ValueChanged)
                 return true; 
             return false;
+        }
+
+        private int ModelToInt(string model)
+        {
+            switch (model.ToLower())
+            {
+                case "pcm":
+                    return 1;
+                case "pdp":
+                    return 2;
+                case "talon srx":
+                    return 3;
+                case "victor spx":
+                    return 4;
+                case "pigeon":
+                    return 5;
+                case "pigeon over ribbon":
+                    return 6;
+                case "canifier":
+                    return 7;
+                default:
+                    return 0;
+            }
         }
 
         public Status RemoveSelectedItem()

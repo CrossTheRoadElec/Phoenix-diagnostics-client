@@ -276,7 +276,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                 case ActionType.GetVersion: //Used for Unit Testing
                     VersionReturn responseClass = null;
                     if (retval == Status.Ok)
-                        retval = _WebServerScripts.HttpGet(_hostName, Model.None, 0, ActionType.GetVersion, out response);
+                        retval = _WebServerScripts.HttpGet(_hostName, "", 0, ActionType.GetVersion, out response);
                     if (retval == Status.Ok)
                     {
                         responseClass = JsonConvert.DeserializeObject<VersionReturn>(response);
@@ -287,7 +287,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                 case ActionType.GetNumOfDevices:
                     GetDevicesReturn numDeviceReturn = null;
                     if (retval == Status.Ok)
-                        retval = _WebServerScripts.HttpGet(_hostName, Model.None, 0, ActionType.GetDeviceList, out response);
+                        retval = _WebServerScripts.HttpGet(_hostName, "", 0, ActionType.GetDeviceList, out response);
                     if (retval == Status.Ok)
                     {
                         numDeviceReturn = JsonConvert.DeserializeObject<GetDevicesReturn>(response);
@@ -333,7 +333,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
         {
             /* attempt requesting an update */
             string response;
-            Status retval = _WebServerScripts.HttpGet(_hostName, Model.None, 0, ActionType.GetVersion, out response, String.Empty, 1000);
+            Status retval = _WebServerScripts.HttpGet(_hostName, "", 0, ActionType.GetVersion, out response, String.Empty, 1000);
 
             /* attempt parsing */
             VersionReturn general = null;
@@ -366,7 +366,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
         {
             /* attempt requesting an update */
             string response;
-            Status retval = _WebServerScripts.HttpGet(_hostName, Model.None, 0, ActionType.GetDeviceList, out response, String.Empty, 2000);
+            Status retval = _WebServerScripts.HttpGet(_hostName, "", 0, ActionType.GetDeviceList, out response, String.Empty, 2000);
 
             /* attempt parsing */
             GetDevicesReturn deviceStatus = null;
@@ -423,12 +423,12 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
             /* get the json */
             if (retval == Status.Ok)
             {
-                switch (dd.model)
+                switch (dd.model.ToLower())
                 {
-                    case Model.TalonSRX:
+                    case "talon srx":
                         strmConfigs = File.Read("Configs/TalonSRX.json");
                         break;
-                    case Model.VictorSPX:
+                    case "victor spx":
                         strmConfigs = File.Read("Configs/VictorSPX.json");
                         break;
                     default:
@@ -735,10 +735,6 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                 }
             }
             return false;
-        }
-        public Status RemoveDD(DeviceDescrip dd)
-        {
-            return _descriptors.Remove(dd) ? Status.Ok : Status.DeviceNotFound;
         }
         //------------------- Private state accessors with various locking patterns -----------------//
         private bool IsIdle_NoLock()

@@ -17,7 +17,7 @@ namespace CTRE.Phoenix.Diagnostics.HTTP
         private class ThreadParams
         {
             public HostNameAndPort hostName;
-            public Model device;
+            public string model;
             public byte deviceID;
             public ActionType action;
             public byte [] file;
@@ -33,13 +33,13 @@ namespace CTRE.Phoenix.Diagnostics.HTTP
         private ManualResetEvent _isDone = new ManualResetEvent(false);
         private ThreadParams _params = new ThreadParams();
         
-        public Status StartHttpPost(HostNameAndPort hostName, Model device, byte deviceID, ActionType action, byte [] file, int timeout = 2000)
+        public Status StartHttpPost(HostNameAndPort hostName, string model, byte deviceID, ActionType action, byte [] file, int timeout = 2000)
         {
             if (_thread != null)
                 return Status.Busy;
 
             _params.hostName = hostName;
-            _params.device = device;
+            _params.model = model;
             _params.deviceID = deviceID;
             _params.action = action;
             _params.file = file;
@@ -84,7 +84,7 @@ namespace CTRE.Phoenix.Diagnostics.HTTP
         {
             ThreadParams p = (ThreadParams)_params;
 
-            p.outStatus = _webExchange.HttpPost(p.hostName, p.device, p.deviceID, p.action, p.file, out p.outResponse, p.timeout);
+            p.outStatus = _webExchange.HttpPost(p.hostName, p.model, p.deviceID, p.action, p.file, out p.outResponse, p.timeout);
 
             _isDone.Set();
         }
