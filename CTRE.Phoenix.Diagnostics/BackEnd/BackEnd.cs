@@ -736,10 +736,6 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
             }
             return false;
         }
-        public Status RemoveDD(DeviceDescrip dd)
-        {
-            return _descriptors.Remove(dd) ? Status.Ok : Status.DeviceNotFound;
-        }
         //------------------- Private state accessors with various locking patterns -----------------//
         private bool IsIdle_NoLock()
         {
