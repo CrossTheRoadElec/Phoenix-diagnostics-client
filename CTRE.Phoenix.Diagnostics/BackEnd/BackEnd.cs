@@ -414,38 +414,11 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
 
             /* all state info to track */
             string response = string.Empty;
-            byte[] strmConfigs = null;
-
-            /* pull the necessary inputs out of dd */
-            var descriptor = dd.jsonStrings;
-            byte id = dd.deviceID;
-
-            /* get the json */
-            if (retval == Status.Ok)
-            {
-                switch (dd.model.ToLower())
-                {
-                    case "talon srx":
-                        strmConfigs = File.Read("Configs/TalonSRX.json");
-                        break;
-                    case "victor spx":
-                        strmConfigs = File.Read("Configs/VictorSPX.json");
-                        break;
-                    default:
-                        strmConfigs = File.Read("Configs/NotRecognized.json");
-                        break;
-                }
-                if (strmConfigs == null)
-                {
-                    /* something is wrong, file missing maybe? */
-                    retval = Status.CouldNotOpenFile;
-                }
-            }
 
             /* do the http exchange */
             if (retval == Status.Ok)
             {
-                retval = _WebServerScripts.HttpPost(_hostName, dd.model, dd.deviceID, ActionType.GetConfig, strmConfigs, out response);
+                retval = _WebServerScripts.HttpGet(_hostName, dd.model, dd.deviceID, ActionType.GetConfig, out response);
             }
 
             /* parse the served response */
