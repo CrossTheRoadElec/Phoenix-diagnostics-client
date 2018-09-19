@@ -21,6 +21,8 @@ namespace CTRE.Phoenix.Diagnostics
         AsyncWebReqNotDone, //!< Sent a field upgrade web request, but did not get a resp yet.
         ServerIsFlashingAlready, //!< Attempted to field upgrade, but server is already flashing a device.
 
+        SuccessAndConnecting, //!< Successful action, but we want to reconnect to server
+
         /* Error codes pertinent solely to Unit Testing */
         ProcessNotRunning,
         VersionDoesNotMatch,

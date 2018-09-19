@@ -152,6 +152,9 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
             /* temp for catching JSON responses */
             string response = string.Empty;
 
+            /* Bool to set the state to polling */
+            bool setStateToLostComms = false;
+
             switch (_action.type)
             {
                 case ActionType.Blink:
@@ -298,27 +301,39 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                 case ActionType.RebootRio:
                     _rioUpdater = new RioUpdater(_hostName);
                     retval = _rioUpdater.RebootRio();
+                    setStateToLostComms = true;
                     break;
 
                 case ActionType.StartServer:
                     _rioUpdater = new RioUpdater(_hostName);
                     retval = _rioUpdater.StartServer();
+                    setStateToLostComms = true;
                     break;
 
                 case ActionType.StopServer:
                     _rioUpdater = new RioUpdater(_hostName);
                     retval = _rioUpdater.StopServer();
+                    setStateToLostComms = true;
                     break;
 
                 case ActionType.CheckProcess:
                     _rioUpdater = new RioUpdater(_hostName);
                     retval = _rioUpdater.CheckProcessStarted();
+                    setStateToLostComms = true;
                     break;
 
                 default:
                     retval = Status.UnsupportedAction;
                     break;
             }
+
+            if(setStateToLostComms)
+            {
+                /* Set retval to not Status.Ok so we can move to connecting */
+                if (retval == Status.Ok)
+                    retval = Status.SuccessAndConnecting;
+            }
+
             /* callback to GUI */
             _action.Error = retval;
             _action.callback(_action, retval);
