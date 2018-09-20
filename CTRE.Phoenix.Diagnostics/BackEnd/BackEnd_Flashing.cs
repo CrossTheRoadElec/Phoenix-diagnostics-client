@@ -91,7 +91,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
 
             return retval;
         }
-        private Status ExecuteFieldUpgrade(DeviceDescrip ddRef, AsyncWebExchange asyncWebExchange, string fileName, bool usingPost)
+        private Status ExecuteFieldUpgrade(DeviceDescrip ddRef, AsyncWebExchange asyncWebExchange, string fileName, bool usingSftp)
         {
             Status retval = Status.Ok;
             String response = string.Empty;
@@ -102,7 +102,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
 
             byte[] fileContents = null;
             /* If we're using POST, we need to make sure the file has contents */
-            if (usingPost)
+            if (!usingSftp)
             {
                 /* copy out CRF */
                 fileContents = File.Read(_action.filePath);
@@ -127,17 +127,17 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
             {
                 SetFieldUpgradeStatus("Starting field-upgrade", 0); /* now we will request to start a new FU session */
 
-                /* If we're using Post, use Post */
-                if (usingPost)
-                {
-                    /* start firmware-update */
-                    retval = asyncWebExchange.StartHttpPost(_hostName, ddRef.model, ddRef.deviceID, ActionType.FieldUpgradeDevice, fileContents, 60000);
-                }
-                /* Otherwise use Get */
-                else
+                /* If we're using sftp, use Get */
+                if (usingSftp)
                 {
                     /* start firmware-update */
                     retval = asyncWebExchange.StartHttpGet(_hostName, ddRef.model, ddRef.deviceID, ActionType.FieldUpgradeDevice, 60000, "&file=" + fileName);
+                }
+                /* Otherwise use Post */
+                else
+                {
+                    /* start firmware-update */
+                    retval = asyncWebExchange.StartHttpPost(_hostName, ddRef.model, ddRef.deviceID, ActionType.FieldUpgradeDevice, fileContents, 60000);
                 }
             }
             /* confirm FU started okay */

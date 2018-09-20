@@ -42,6 +42,7 @@
             this.enableAutoRefreshMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.disableAutoRefreshMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemTools = new System.Windows.Forms.ToolStripMenuItem();
+            this.captureAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.label5 = new System.Windows.Forms.Label();
@@ -114,7 +115,9 @@
             this.rtbUnitTestBox = new System.Windows.Forms.RichTextBox();
             this.unitTestingCheckboxes = new System.Windows.Forms.CheckedListBox();
             this.overnightTestButton = new System.Windows.Forms.Button();
-            this.captureAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dataTransferMethodToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sFTPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pOSTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.menuStripTop.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -158,7 +161,7 @@
             // 
             this.bottomStrip_L.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.bottomStrip_L.Name = "bottomStrip_L";
-            this.bottomStrip_L.Size = new System.Drawing.Size(380, 17);
+            this.bottomStrip_L.Size = new System.Drawing.Size(395, 17);
             this.bottomStrip_L.Spring = true;
             this.bottomStrip_L.Text = "????????????";
             // 
@@ -174,7 +177,7 @@
             // 
             this.bottomStrip_MR.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.bottomStrip_MR.Name = "bottomStrip_MR";
-            this.bottomStrip_MR.Size = new System.Drawing.Size(380, 17);
+            this.bottomStrip_MR.Size = new System.Drawing.Size(395, 17);
             this.bottomStrip_MR.Spring = true;
             this.bottomStrip_MR.Text = "????????????";
             // 
@@ -205,7 +208,8 @@
             // menuItemOptions
             // 
             this.menuItemOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.devicePollingToolStripMenuItem});
+            this.devicePollingToolStripMenuItem,
+            this.dataTransferMethodToolStripMenuItem});
             this.menuItemOptions.Name = "menuItemOptions";
             this.menuItemOptions.Size = new System.Drawing.Size(61, 20);
             this.menuItemOptions.Text = "Options";
@@ -216,7 +220,7 @@
             this.enableAutoRefreshMenuItem1,
             this.disableAutoRefreshMenuItem1});
             this.devicePollingToolStripMenuItem.Name = "devicePollingToolStripMenuItem";
-            this.devicePollingToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.devicePollingToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.devicePollingToolStripMenuItem.Text = "Auto Refresh Devices";
             // 
             // enableAutoRefreshMenuItem1
@@ -241,6 +245,13 @@
             this.menuItemTools.Size = new System.Drawing.Size(47, 20);
             this.menuItemTools.Text = "Tools";
             this.menuItemTools.Click += new System.EventHandler(this.btnEasterEgg_Click);
+            // 
+            // captureAllToolStripMenuItem
+            // 
+            this.captureAllToolStripMenuItem.Name = "captureAllToolStripMenuItem";
+            this.captureAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.captureAllToolStripMenuItem.Text = "Capture All (ZIP file)";
+            this.captureAllToolStripMenuItem.Click += new System.EventHandler(this.captureAllToolStripMenuItem_Click);
             // 
             // tabControl
             // 
@@ -967,7 +978,7 @@
             this.tbUnitTesting.Location = new System.Drawing.Point(4, 22);
             this.tbUnitTesting.Name = "tbUnitTesting";
             this.tbUnitTesting.Padding = new System.Windows.Forms.Padding(3);
-            this.tbUnitTesting.Size = new System.Drawing.Size(1002, 490);
+            this.tbUnitTesting.Size = new System.Drawing.Size(956, 490);
             this.tbUnitTesting.TabIndex = 3;
             this.tbUnitTesting.Text = "Unit Testing";
             this.tbUnitTesting.UseVisualStyleBackColor = true;
@@ -1032,12 +1043,28 @@
             this.overnightTestButton.UseVisualStyleBackColor = true;
             this.overnightTestButton.Click += new System.EventHandler(this.overnightTestButton_Click);
             // 
-            // captureAllToolStripMenuItem
+            // dataTransferMethodToolStripMenuItem
             // 
-            this.captureAllToolStripMenuItem.Name = "captureAllToolStripMenuItem";
-            this.captureAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.captureAllToolStripMenuItem.Text = "Capture All (ZIP file)";
-            this.captureAllToolStripMenuItem.Click += new System.EventHandler(this.captureAllToolStripMenuItem_Click);
+            this.dataTransferMethodToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sFTPToolStripMenuItem,
+            this.pOSTToolStripMenuItem});
+            this.dataTransferMethodToolStripMenuItem.Name = "dataTransferMethodToolStripMenuItem";
+            this.dataTransferMethodToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.dataTransferMethodToolStripMenuItem.Text = "Data Transfer Method";
+            // 
+            // sFTPToolStripMenuItem
+            // 
+            this.sFTPToolStripMenuItem.Name = "sFTPToolStripMenuItem";
+            this.sFTPToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sFTPToolStripMenuItem.Text = "SFTP";
+            this.sFTPToolStripMenuItem.Click += new System.EventHandler(this.enableDisabledSftpDataTransfer_Click);
+            // 
+            // pOSTToolStripMenuItem
+            // 
+            this.pOSTToolStripMenuItem.Name = "pOSTToolStripMenuItem";
+            this.pOSTToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.pOSTToolStripMenuItem.Text = "POST";
+            this.pOSTToolStripMenuItem.Click += new System.EventHandler(this.enableDisabledSftpDataTransfer_Click);
             // 
             // frmDashboard
             // 
@@ -1173,6 +1200,9 @@
         private System.Windows.Forms.Button btnRefreshDevices;
         private System.Windows.Forms.Panel pnlDeviceListInner;
         private System.Windows.Forms.ToolStripMenuItem captureAllToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem dataTransferMethodToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sFTPToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pOSTToolStripMenuItem;
     }
 }
 

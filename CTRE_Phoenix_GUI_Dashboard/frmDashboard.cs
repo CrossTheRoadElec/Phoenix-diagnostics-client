@@ -72,6 +72,7 @@ namespace CTRE_Phoenix_GUI_Dashboard {
 
             /* more GUI rendering updates */
             PaintEnablePollingCheckbox();
+            PaintEnableSftpTransferCheckbox();
         }
 
         //--------------- Rendering GUI elements ---------------------------------//
@@ -160,6 +161,12 @@ namespace CTRE_Phoenix_GUI_Dashboard {
             enableAutoRefreshMenuItem1.Checked = bEnableAutoRefresh;
             disableAutoRefreshMenuItem1.Checked = !bEnableAutoRefresh;
             btnRefreshDevices.Visible = !bEnableAutoRefresh;
+        }
+        void PaintEnableSftpTransferCheckbox()
+        {
+            bool bEnableSftpTransfer = BackEnd.Instance.EnableSftpTransfer;
+            sFTPToolStripMenuItem.Checked = bEnableSftpTransfer;
+            pOSTToolStripMenuItem.Checked = !bEnableSftpTransfer;
         }
         /// Caller must ensure dd is not null
         /// <param name="dd"></param>
@@ -1010,6 +1017,13 @@ namespace CTRE_Phoenix_GUI_Dashboard {
             BackEnd.Instance.EnableAutoRefresh = bEnableAutoRefresh;
             PaintEnablePollingCheckbox();
             SaveStickySettings();
+        }
+
+        private void enableDisabledSftpDataTransfer_Click(object sender, EventArgs e) {
+            bool bEnableSftpTransfer = (sender == sFTPToolStripMenuItem);
+            BackEnd.Instance.EnableSftpTransfer = bEnableSftpTransfer;
+            PaintEnableSftpTransferCheckbox();
+            //SaveStickySettings(); //Currently not used
         }
   
         private void txtDevicePath_TextChanged(object sender, EventArgs e) { SaveStickySettings(); }

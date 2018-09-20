@@ -42,7 +42,6 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
         private DateTime _lastPoll = DateTime.UtcNow;
         private RioUpdater _rioUpdater;
         private int _refreshRequest = 0;
-        private bool _usingPost = false;
 
 
         private const string RIO_SEARCH_DIRECTORY = "/usr/local/frc/bin/";
@@ -246,7 +245,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                     byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(serializedData);
 
                     /* If we're using GET we need to send the file up */
-                    if (_usingPost == false)
+                    if (EnableSftpTransfer)
                     {
                         _rioUpdater = new RioUpdater(_hostName);
                         _rioUpdater.SendFileContents(dataBytes, RIO_SEARCH_DIRECTORY + fileName);
@@ -260,13 +259,13 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                     if (retval == Status.Ok)
                     {
                         /* Decide if we're posting or getting from the _usingPost flag */
-                        if (_usingPost)
+                        if (EnableSftpTransfer)
                         {
-                            retval = _WebServerScripts.HttpPost(_hostName, ddRef.model, ddRef.deviceID, ActionType.SetConfig, dataBytes, out response, 5000);
+                            retval = _WebServerScripts.HttpGet(_hostName, ddRef.model, ddRef.deviceID, ActionType.SetConfig, out response, "&file=" + fileName, 5000);
                         }
                         else
                         {
-                            retval = _WebServerScripts.HttpGet(_hostName, ddRef.model, ddRef.deviceID, ActionType.SetConfig, out response, "&file=" + fileName, 5000);
+                            retval = _WebServerScripts.HttpPost(_hostName, ddRef.model, ddRef.deviceID, ActionType.SetConfig, dataBytes, out response, 5000);
                         }
                     }
                     /* parse resp */
@@ -282,7 +281,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                     fileName = "firmwarefile.crf";
 
                     /* If we're using POST, we don't need to send the file up */
-                    if (_usingPost == false)
+                    if (EnableSftpTransfer)
                     {
                         /* Create a RioFile to be sent to the server */
                         RioFile file = new RioFile(_action.filePath, RIO_SEARCH_DIRECTORY + fileName);
@@ -297,7 +296,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                     if (retval == Status.Ok)
                         retval = (foundOk) ? Status.Ok : Status.DeviceNotFound;
                     if (retval == Status.Ok)
-                        retval = ExecuteFieldUpgrade(ddRef, _asyncWebExchange, fileName, _usingPost);
+                        retval = ExecuteFieldUpgrade(ddRef, _asyncWebExchange, fileName, EnableSftpTransfer);
                     /* free resouces */
                     _asyncWebExchange.Dispose();
                     break;
@@ -842,7 +841,13 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
         /// pausing the web exchanges during advanced debugging.
         /// </summary>
         public bool EnableAutoRefresh { set; get; } = true;
- 
+
+        /// <summary>
+        /// Caling application can turn off SFTP data transfer to devices, this is helpful for
+        /// utilizing the speed of POST, but is more likely to cause problems
+        /// </summary>
+        public bool EnableSftpTransfer { set; get; } = true;
+
         /// <summary>
         /// Queues a few rounds of updates/pollings for device and config values.
         /// Typically useful if EnableAutoRefresh is false, but calling app
