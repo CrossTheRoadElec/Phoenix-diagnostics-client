@@ -106,6 +106,8 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         {
             /* disabling the outer tab control is adequeate */
             tabControl.Enabled = enabled;
+            /* disabling upper menu strip is also adequate */
+            menuStripTop.Enabled = enabled;
 
             if (enabled) {
                 RefreshAllDataEntry();
