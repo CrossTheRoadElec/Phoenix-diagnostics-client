@@ -138,8 +138,9 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
         /// <summary>
         /// Service _action and update _action.Error.
         /// </summary>
-        private Status PerformAction()
+        private Status PerformAction(out bool setStateToConnecting)
         {
+            setStateToConnecting = false;
             /* get info on this device */
             byte devID = _action.deviceID;
             var model = _action.model;
@@ -151,9 +152,6 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
             Status retval = Status.Ok;
             /* temp for catching JSON responses */
             string response = string.Empty;
-
-            /* Bool to set the state to polling */
-            bool setStateToLostComms = false;
 
             switch (_action.type)
             {
@@ -268,13 +266,29 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                     _rioUpdater = new RioUpdater(_hostName);
                     _rioUpdater.StartUpdate();
                     retval = Status.Ok;
+                    setStateToConnecting = true;
                     break;
 
                 case ActionType.UninstallDiagServerToRobotController:
                     _rioUpdater = new RioUpdater(_hostName);
                     _rioUpdater.StartRevert();
                     retval = Status.Ok;
+                    setStateToConnecting = true;
                     break;
+
+                case ActionType.StartServer:
+                    _rioUpdater = new RioUpdater(_hostName);
+                    retval = _rioUpdater.StartServer();
+                    setStateToConnecting = true;
+                    break;
+
+                case ActionType.StopServer:
+                    _rioUpdater = new RioUpdater(_hostName);
+                    retval = _rioUpdater.StopServer();
+                    setStateToConnecting = true;
+                    break;
+
+                /* Unit Testing Cases */
 
                 case ActionType.GetVersion: //Used for Unit Testing
                     VersionReturn responseClass = null;
@@ -301,37 +315,17 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                 case ActionType.RebootRio:
                     _rioUpdater = new RioUpdater(_hostName);
                     retval = _rioUpdater.RebootRio();
-                    setStateToLostComms = true;
-                    break;
-
-                case ActionType.StartServer:
-                    _rioUpdater = new RioUpdater(_hostName);
-                    retval = _rioUpdater.StartServer();
-                    setStateToLostComms = true;
-                    break;
-
-                case ActionType.StopServer:
-                    _rioUpdater = new RioUpdater(_hostName);
-                    retval = _rioUpdater.StopServer();
-                    setStateToLostComms = true;
+                    setStateToConnecting = true;
                     break;
 
                 case ActionType.CheckProcess:
                     _rioUpdater = new RioUpdater(_hostName);
                     retval = _rioUpdater.CheckProcessStarted();
-                    setStateToLostComms = true;
                     break;
 
                 default:
                     retval = Status.UnsupportedAction;
                     break;
-            }
-
-            if(setStateToLostComms)
-            {
-                /* Set retval to not Status.Ok so we can move to connecting */
-                if (retval == Status.Ok)
-                    retval = Status.SuccessAndConnecting;
             }
 
             /* callback to GUI */
@@ -590,10 +584,22 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
 
                         case State.ExecAction:
                             /* run calling applications requested action */
-                            if (PerformAction() != Status.Ok)
+                            bool setStateToConnecting;
+                            if (PerformAction(out setStateToConnecting) != Status.Ok)
+                            {
                                 SetState(State.LostComm);
+                            }
                             else
-                                SetState(State.Polling);
+                            {
+                                if(setStateToConnecting)
+                                {
+                                    SetState(State.Connecting);
+                                }
+                                else
+                                {
+                                    SetState(State.Polling);
+                                }
+                            }
                             break;
 
                         case State.Disposing:
