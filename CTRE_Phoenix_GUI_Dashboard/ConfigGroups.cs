@@ -8,6 +8,7 @@ namespace CTRE_Phoenix_GUI_Dashboard
         Panel CreateLayout();
         void SetFromValues(object values, int ordinal);
         IControlGroup GetFromValues(GroupTabPage tab);
+        void UpdateFromValues(GroupTabPage tab);
     }
 
     class GroupTabPage : TabPage
@@ -39,6 +40,18 @@ namespace CTRE_Phoenix_GUI_Dashboard
                 }
             }
             return this;
+        }
+
+        public void UpdateFromValues(GroupTabPage tab)
+        {
+            var allControls = ((TableLayoutPanel)((Panel)tab.Controls[0]).Controls[0]).Controls;
+            foreach (Control c in allControls)
+            {
+                if (c is ComboBox)
+                {
+                    ((ComboBox)c).SelectedItem = NeutralMode;
+                }
+            }
         }
 
         public void SetFromValues(object values, int ordinal)
@@ -109,6 +122,30 @@ namespace CTRE_Phoenix_GUI_Dashboard
                 }
             }
             return this;
+        }
+
+        public void UpdateFromValues(GroupTabPage tab)
+        {
+            var allControls = ((TableLayoutPanel)((Panel)tab.Controls[0]).Controls[0]).Controls;
+            int state = 0;
+            foreach (Control c in allControls)
+            {
+                if (c is ComboBox)
+                {
+                    ComboBox combo = (ComboBox)c;
+                    switch (state)
+                    {
+                        case 0:
+                            //Forward limit switch
+                            combo.SelectedItem = LimitSwitchForward;
+                            state = 1;
+                            break;
+                        case 1:
+                            combo.SelectedItem = LimitSwitchReverse;
+                            break;
+                    }
+                }
+            }
         }
 
         public void SetFromValues(object values, int ordinal)
@@ -208,6 +245,46 @@ namespace CTRE_Phoenix_GUI_Dashboard
             return this;
         }
 
+        public void UpdateFromValues(GroupTabPage tab)
+        {
+            var allControls = ((TableLayoutPanel)((Panel)tab.Controls[0]).Controls[0]).Controls;
+            int checkState = 0;
+            int numericState = 0;
+            foreach (Control c in allControls)
+            {
+                if (c is CheckBox)
+                {
+                    CheckBox check = (CheckBox)c;
+                    switch (checkState)
+                    {
+                        case 0:
+                            //Forward limit switch
+                            check.Checked = ForwardSoftLimitEnable ?? false;
+                            checkState = 1;
+                            break;
+                        case 1:
+                            check.Checked = ReverseSoftLimitEnable ?? false;
+                            break;
+                    }
+                }
+                if (c is NumericUpDown)
+                {
+                    NumericUpDown numeric = (NumericUpDown)c;
+                    switch (numericState)
+                    {
+                        case 0:
+                            //Forward limit switch
+                            numeric.Value = (decimal)(SoftLimitForwardValue ?? 0);
+                            numericState = 1;
+                            break;
+                        case 1:
+                            numeric.Value = (decimal)(SoftLimitReverseValue ?? 0);
+                            break;
+                    }
+                }
+            }
+        }
+
         public void SetFromValues(object values, int ordinal)
         {
             SoftLimitSwitchGroup newGroup = JsonConvert.DeserializeObject<SoftLimitSwitchGroup>(JsonConvert.SerializeObject(values));
@@ -292,6 +369,18 @@ namespace CTRE_Phoenix_GUI_Dashboard
         {
             var allControls = ((TableLayoutPanel)((Panel)tab.Controls[0]).Controls[0]).Controls;
             int state = 0;
+            switch(tab.Text)
+            {
+                case "Slot 0":
+                    SlotNumber = 0;
+                    break;
+                case "Slot 1":
+                    SlotNumber = 1;
+                    break;
+                default:
+                    SlotNumber = -1;
+                    break;
+            }
             foreach (Control c in allControls)
             {
                 if (c is NumericUpDown)
@@ -301,35 +390,30 @@ namespace CTRE_Phoenix_GUI_Dashboard
                     {
                         case 0:
                             //Forward limit switch
-                            SlotNumber = (int)numeric.Value;
+                            pGain = (float)numeric.Value;
                             state = 1;
                             break;
                         case 1:
                             //Forward limit switch
-                            pGain = (float)numeric.Value;
+                            iGain = (float)numeric.Value;
                             state = 2;
                             break;
                         case 2:
                             //Forward limit switch
-                            iGain = (float)numeric.Value;
+                            dGain = (float)numeric.Value;
                             state = 3;
                             break;
                         case 3:
                             //Forward limit switch
-                            dGain = (float)numeric.Value;
+                            fGain = (float)numeric.Value;
                             state = 4;
                             break;
                         case 4:
                             //Forward limit switch
-                            fGain = (float)numeric.Value;
+                            iZone = (float)numeric.Value;
                             state = 5;
                             break;
                         case 5:
-                            //Forward limit switch
-                            iZone = (float)numeric.Value;
-                            state = 6;
-                            break;
-                        case 6:
                             //Forward limit switch
                             clRampRate = (float)numeric.Value;
                             break;
@@ -339,10 +423,55 @@ namespace CTRE_Phoenix_GUI_Dashboard
             return this;
         }
 
+        public void UpdateFromValues(GroupTabPage tab)
+        {
+            var allControls = ((TableLayoutPanel)((Panel)tab.Controls[0]).Controls[0]).Controls;
+            int state = 0;
+            foreach (Control c in allControls)
+            {
+                if (c is NumericUpDown)
+                {
+                    NumericUpDown numeric = (NumericUpDown)c;
+                    switch (state)
+                    {
+                        case 0:
+                            //Forward limit switch
+                            numeric.Value = (decimal)(pGain ?? 0);
+                            state = 1;
+                            break;
+                        case 1:
+                            //Forward limit switch
+                            numeric.Value = (decimal)(iGain ?? 0);
+                            state = 2;
+                            break;
+                        case 2:
+                            //Forward limit switch
+                            numeric.Value = (decimal)(dGain ?? 0);
+                            state = 3;
+                            break;
+                        case 3:
+                            //Forward limit switch
+                            numeric.Value = (decimal)(fGain ?? 0);
+                            state = 4;
+                            break;
+                        case 4:
+                            //Forward limit switch
+                            numeric.Value = (decimal)(iZone ?? 0);
+                            state = 5;
+                            break;
+                        case 5:
+                            //Forward limit switch
+                            numeric.Value = (decimal)(clRampRate ?? 0);
+                            break;
+                    }
+                }
+            }
+        }
+
         public void SetFromValues(object values, int ordinal)
         {
             SlotGroup newGroup = JsonConvert.DeserializeObject<SlotGroup>(JsonConvert.SerializeObject(values));
-            SlotNumber = ordinal;
+            SlotNumber = newGroup.SlotNumber;
             pGain = newGroup.pGain;
             iGain = newGroup.iGain;
             dGain = newGroup.dGain;
@@ -353,10 +482,6 @@ namespace CTRE_Phoenix_GUI_Dashboard
 
         public Panel CreateLayout()
         {
-            Label slotNumberLabel = new Label();
-            slotNumberLabel.Text = "Slot Number";
-            slotNumberLabel.Dock = DockStyle.Fill;
-
             Label pLabel = new Label();
             pLabel.Text = "P Gain";
             pLabel.Dock = DockStyle.Fill;
@@ -380,12 +505,6 @@ namespace CTRE_Phoenix_GUI_Dashboard
             Label clRampLabel = new Label();
             clRampLabel.Text = "Closed Loop Ramp Rate";
             clRampLabel.Dock = DockStyle.Fill;
-
-            NumericUpDown slotNumber = new NumericUpDown();
-            slotNumber.Minimum = 0;
-            slotNumber.Maximum = 4;
-            slotNumber.Dock = DockStyle.Fill;
-            slotNumber.Value = (decimal)SlotNumber;
 
             NumericUpDown p = new NumericUpDown();
             p.Minimum = decimal.MinValue;
@@ -430,11 +549,9 @@ namespace CTRE_Phoenix_GUI_Dashboard
 
 
             TableLayoutPanel grid = new TableLayoutPanel();
-            grid.RowCount = 7;
+            grid.RowCount = 6;
             grid.ColumnCount = 2;
             grid.Dock = DockStyle.Fill;
-            grid.Controls.Add(slotNumberLabel);
-            grid.Controls.Add(slotNumber);
             grid.Controls.Add(pLabel);
             grid.Controls.Add(p);
             grid.Controls.Add(ilabel);

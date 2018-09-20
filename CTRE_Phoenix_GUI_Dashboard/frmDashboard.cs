@@ -156,6 +156,11 @@ namespace CTRE_Phoenix_GUI_Dashboard {
                  * don't update anything */
             }
         }
+        void RefreshConfigsOfSelectedDevice()
+        {
+            var selected = _deviceListContainer.SelectedDeviceDescriptor;
+            UpdateTabs(selected, groupedControls);
+        }
 
         void PaintEnablePollingCheckbox()
         {
@@ -955,7 +960,27 @@ namespace CTRE_Phoenix_GUI_Dashboard {
                 }
             }
         }
+        void UpdateTabs(DeviceDescrip dd, TabControl tabControl)
+        {
+            String strNamespace = "CTRE_Phoenix_GUI_Dashboard";
+            /* lots of missing error checking here */
+            int tabIndex = 1; //Index starts at one to pass over self test
 
+            if (dd.configCache != null)
+            {
+                foreach (ConfigGroup group in dd.configCache.Device.Configs)
+                {
+                    GroupTabPage tabReference = (GroupTabPage)tabControl.TabPages[tabIndex++];
+
+                    Type t = Type.GetType(strNamespace + "." + group.Type);
+
+                    IControlGroup newGroup = (IControlGroup)Activator.CreateInstance(t);
+                    newGroup.SetFromValues(group.Values, group.Ordinal ?? 0);
+
+                    newGroup.UpdateFromValues(tabReference);
+                }
+            }
+        }
         DeviceConfigs GetConfigsFromTabs()
         {
             /* Create a DeviceConfigs variable that has all the config data from the tabs */
@@ -1050,6 +1075,8 @@ namespace CTRE_Phoenix_GUI_Dashboard {
 
         private void btnSaveConfigs_Click(object sender, EventArgs e) { SaveConfigsOfSelectedDevice(); }
 
+        private void btnRefreshConfigs_Click(object sender, EventArgs e) { RefreshConfigsOfSelectedDevice(); }
+
         private void btnFirmwareDialog_Click(object sender, EventArgs e) { OpenFileBrowserCRF(); }
 
         private void btnCopyHttpLog_Click(object sender, EventArgs e) { CopyDiagnosticLogToClipboard(); }
@@ -1080,17 +1107,7 @@ namespace CTRE_Phoenix_GUI_Dashboard {
 
         private void panelSelfTestAndConfigControls_Resize(object sender, EventArgs e)
         {
-            /* shape self-test and save-configs buttons to be equidistant.
-               panelWidth = space + btnWidth + space + btnWidth + space */
-            int space = 2;
-            int panelWidth = panelSelfTestAndConfigControls.Width;
-            int btnWidth = (panelWidth - 3 * space) / 2;
-            if (btnWidth < 1) { btnWidth = 1; }
-            /* update btn dimensions */
-            btnSelfTest.Left = space;
-            btnSelfTest.Width = btnWidth;
-            btnSaveConfigs.Left = space + btnWidth + space;
-            btnSaveConfigs.Width = btnWidth;
+            /* Logic for updating control sizes that are unachievable using visual studio's design viewer */
         }
 
         private void selectAllCtrlAToolStripMenuItem_Click(object sender, EventArgs e) { gridDiagnosticLog.SelectAll(); }
