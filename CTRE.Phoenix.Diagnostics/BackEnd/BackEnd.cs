@@ -42,6 +42,10 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
         private DateTime _lastPoll = DateTime.UtcNow;
         private RioUpdater _rioUpdater;
         private int _refreshRequest = 0;
+        private bool _usingPost = false;
+
+
+        private const string RIO_SEARCH_DIRECTORY = "/usr/local/frc/bin/";
 
         public DateTime GetLastPoll()
         {
@@ -152,6 +156,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
             Status retval = Status.Ok;
             /* temp for catching JSON responses */
             string response = string.Empty;
+            string fileName = string.Empty;
 
             switch (_action.type)
             {
@@ -232,16 +237,38 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                     break;
 
                 case ActionType.SetConfig:
+                    /* Specify the filename so it's somewhat unique */
+                    fileName = (ddRef.model + ": " + ddRef.deviceID + ".json").ToLower(); //ToLower Everything to make it parsable in URL
+
                     /* get params for this action */
                     string serializedData = _action.stringParam;
-                    /* Enclose memory stream in a using statement to properly dispose it later */
+                    /* Get content payload from action */
                     byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(serializedData);
+
+                    /* If we're using GET we need to send the file up */
+                    if (_usingPost == false)
+                    {
+                        _rioUpdater = new RioUpdater(_hostName);
+                        _rioUpdater.SendFileContents(dataBytes, RIO_SEARCH_DIRECTORY + fileName);
+                        System.Threading.Thread.Sleep(250); //Wait a bit to make sure file got onto the RIO
+                    }
+
                     /* make sure device was found in our collection */
                     if (retval == Status.Ok)
                         retval = (foundOk) ? Status.Ok : Status.DeviceNotFound;
                     /* perform http exchange */
                     if (retval == Status.Ok)
-                        retval = _WebServerScripts.HttpPost(_hostName, ddRef.model, ddRef.deviceID, ActionType.SetConfig, dataBytes, out response, 5000);
+                    {
+                        /* Decide if we're posting or getting from the _usingPost flag */
+                        if (_usingPost)
+                        {
+                            retval = _WebServerScripts.HttpPost(_hostName, ddRef.model, ddRef.deviceID, ActionType.SetConfig, dataBytes, out response, 5000);
+                        }
+                        else
+                        {
+                            retval = _WebServerScripts.HttpGet(_hostName, ddRef.model, ddRef.deviceID, ActionType.SetConfig, out response, "&file=" + fileName, 5000);
+                        }
+                    }
                     /* parse resp */
                     if (retval == Status.Ok)
                     {
@@ -251,13 +278,26 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                     break;
 
                 case ActionType.FieldUpgradeDevice:
+                    /* Specify file name as generic so it gets overwritten every time */
+                    fileName = "firmwarefile.crf";
+
+                    /* If we're using POST, we don't need to send the file up */
+                    if (_usingPost == false)
+                    {
+                        /* Create a RioFile to be sent to the server */
+                        RioFile file = new RioFile(_action.filePath, RIO_SEARCH_DIRECTORY + fileName);
+                        /* First put the files onto the RIO */
+                        _rioUpdater = new RioUpdater(_hostName);
+                        _rioUpdater.SendFile(file);
+                    }
+
                     /* make a new web exchange that allows for overlapped operation */
                     _asyncWebExchange = new AsyncWebExchange();
                     /* make sure device was found in our collection */
                     if (retval == Status.Ok)
                         retval = (foundOk) ? Status.Ok : Status.DeviceNotFound;
                     if (retval == Status.Ok)
-                        retval = ExecuteFieldUpgrade(ddRef, _asyncWebExchange);
+                        retval = ExecuteFieldUpgrade(ddRef, _asyncWebExchange, fileName, _usingPost);
                     /* free resouces */
                     _asyncWebExchange.Dispose();
                     break;

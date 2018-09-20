@@ -91,21 +91,27 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
 
             return retval;
         }
-        private Status ExecuteFieldUpgrade(DeviceDescrip ddRef, AsyncWebExchange asyncWebExchange)
+        private Status ExecuteFieldUpgrade(DeviceDescrip ddRef, AsyncWebExchange asyncWebExchange, string fileName, bool usingPost)
         {
             Status retval = Status.Ok;
             String response = string.Empty;
 
-            /* copy out CRF */
-            byte[] fileContents = File.Read(_action.filePath);
-
             /* let user know action is being processed */
             SetFieldUpgradeStatus("Starting field-upgrade...", 0);
 
-            /* check file read */
-            if (retval == Status.Ok)
+
+            byte[] fileContents = null;
+            /* If we're using POST, we need to make sure the file has contents */
+            if (usingPost)
             {
-                if (fileContents == null) { retval = Status.CouldNotOpenFile; }
+                /* copy out CRF */
+                fileContents = File.Read(_action.filePath);
+
+                /* check file read */
+                if (retval == Status.Ok)
+                {
+                    if (fileContents == null) { retval = Status.CouldNotOpenFile; }
+                }
             }
 
             /* check firmUpdate progress first */
@@ -121,8 +127,18 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
             {
                 SetFieldUpgradeStatus("Starting field-upgrade", 0); /* now we will request to start a new FU session */
 
-                /* start firmware-update */
-                retval = asyncWebExchange.StartHttpPost(_hostName, ddRef.model, ddRef.deviceID, ActionType.FieldUpgradeDevice, fileContents, 60000);
+                /* If we're using Post, use Post */
+                if (usingPost)
+                {
+                    /* start firmware-update */
+                    retval = asyncWebExchange.StartHttpPost(_hostName, ddRef.model, ddRef.deviceID, ActionType.FieldUpgradeDevice, fileContents, 60000);
+                }
+                /* Otherwise use Get */
+                else
+                {
+                    /* start firmware-update */
+                    retval = asyncWebExchange.StartHttpGet(_hostName, ddRef.model, ddRef.deviceID, ActionType.FieldUpgradeDevice, 60000, "&file=" + fileName);
+                }
             }
             /* confirm FU started okay */
             if (retval == Status.Ok)

@@ -34,6 +34,84 @@ namespace CTRE.Phoenix.Diagnostics
         {
             ThreadProcRestore();
         }
+        /// <summary>
+        /// Method to send arbitrary files to server at target location
+        /// </summary>
+        /// <param name="hostPath">Location of file on PC</param>
+        /// <param name="targetPath">Target location of file on server</param>
+        /// <returns></returns>
+        public Status SendFileContents(byte[] content, string targetPath)
+        {
+            /* This will only happen on second tab, so don't bother logging */
+            Status error = Status.Ok;
+            SftpClient client = new SftpClient(_host.GetHostName(), "admin", "");
+
+            /* Try to connect to server */
+            if (error == Status.Ok)
+            {
+                client.ConnectionInfo.Timeout = new TimeSpan(0, 0, 0, 0, 6000);
+                try
+                {
+                    client.Connect();
+                }
+                catch (Exception)
+                {
+                    error = Status.CouldNotSFTPToServer;
+                }
+
+            }
+
+            /* If connected to server, try to read the file */
+            if (error == Status.Ok)
+            {
+                if (content == null)
+                {
+                    error = Status.CouldNotOpenFile;
+                }
+                /* If file has contents, delete and place it */
+                else
+                {
+                    /* delete file first, regardless of success, continue */
+                    try
+                    {
+                        if (client.Exists(targetPath))
+                        {
+                            client.DeleteFile(targetPath);
+                        }
+                    }
+                    catch (Exception) { }
+                    /* write it */
+                    try
+                    {
+                        client.WriteAllBytes(targetPath, content);
+                    }
+                    catch (Exception)
+                    {
+                        error = Status.CouldNotWriteFile;
+                    }
+                }
+            }
+            return error;
+        }
+        public Status SendFile(RioFile file)
+        {
+            /* This will only happen on second tab, so don't bother logging */
+            Status error = Status.Ok;
+            SftpClient client = new SftpClient(_host.GetHostName(), "admin", "");
+
+            /* Check if file exists on PC */
+            if (error == Status.Ok)
+            {
+                if (file.CheckExistanceOnPC() == false)
+                {
+                    /* could not open file? */
+                    Log("  Could not open file:" + file.TargetPath);
+                    error = Status.CouldNotOpenFile;
+                }
+            }
+
+            return SendFileContents(file.GetContents(), file.TargetPath);
+        }
         public Status StartServer()
         {
             Status error = Status.Ok;

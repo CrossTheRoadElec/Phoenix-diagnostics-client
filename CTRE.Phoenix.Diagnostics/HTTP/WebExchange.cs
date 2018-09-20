@@ -178,13 +178,8 @@ namespace CTRE.Phoenix.Diagnostics.HTTP
             {
                 case ActionType.None:
                     break; //Just calling the address for a ping
-                case ActionType.SetID:
-                case ActionType.SetDeviceName:
-                case ActionType.FieldUpgradeDevice:
-                    address += URI.ActionMap[action] + extraOptions;
-                    break;
                 default:
-                    address += URI.ActionMap[action];
+                    address += URI.ActionMap[action] + extraOptions;
                     break;
             }
             address = Uri.EscapeUriString(address);

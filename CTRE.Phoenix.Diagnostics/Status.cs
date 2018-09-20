@@ -20,6 +20,8 @@ namespace CTRE.Phoenix.Diagnostics
         UserCanceled,
         AsyncWebReqNotDone, //!< Sent a field upgrade web request, but did not get a resp yet.
         ServerIsFlashingAlready, //!< Attempted to field upgrade, but server is already flashing a device.
+        CouldNotSFTPToServer,
+        CouldNotWriteFile,
 
         /* Error codes pertinent solely to Unit Testing */
         ProcessNotRunning,

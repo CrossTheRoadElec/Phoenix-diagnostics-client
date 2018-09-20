@@ -22,6 +22,9 @@ namespace CTRE.Phoenix.Diagnostics.HTTP
             public ActionType action;
             public byte [] file;
             public int timeout;
+            public string extraParams;
+
+            public bool isPOST;
 
             public string outResponse;
             public Status outStatus;
@@ -44,6 +47,29 @@ namespace CTRE.Phoenix.Diagnostics.HTTP
             _params.action = action;
             _params.file = file;
             _params.timeout = timeout;
+
+            _params.isPOST = true;
+
+            _isDone.Reset();
+
+            _thread = new dotNET.Thread(ExecuteTask);
+            _thread.Start();
+
+            return Status.Ok;
+        }
+        public Status StartHttpGet(HostNameAndPort hostName, string model, byte deviceID, ActionType action, int timeout = 2000, string extraParams = "")
+        {
+            if (_thread != null)
+                return Status.Busy;
+
+            _params.hostName = hostName;
+            _params.model = model;
+            _params.deviceID = deviceID;
+            _params.action = action;
+            _params.timeout = timeout;
+            _params.extraParams = extraParams;
+
+            _params.isPOST = false;
 
             _isDone.Reset();
 
@@ -83,8 +109,14 @@ namespace CTRE.Phoenix.Diagnostics.HTTP
         private void ExecuteTask()
         {
             ThreadParams p = (ThreadParams)_params;
-
-            p.outStatus = _webExchange.HttpPost(p.hostName, p.model, p.deviceID, p.action, p.file, out p.outResponse, p.timeout);
+            if (p.isPOST)
+            {
+                p.outStatus = _webExchange.HttpPost(p.hostName, p.model, p.deviceID, p.action, p.file, out p.outResponse, p.timeout);
+            }
+            else
+            {
+                p.outStatus = _webExchange.HttpGet(p.hostName, p.model, p.deviceID, p.action, out p.outResponse, p.extraParams, p.timeout);
+            }
 
             _isDone.Set();
         }
