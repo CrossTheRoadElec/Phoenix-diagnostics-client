@@ -43,8 +43,8 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
         private RioUpdater _rioUpdater;
         private int _refreshRequest = 0;
 
+        private string _serverSearchDirectory = "/usr/local/frc/bin/";
 
-        private const string RIO_SEARCH_DIRECTORY = "/usr/local/frc/bin/";
 
         public DateTime GetLastPoll()
         {
@@ -248,7 +248,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                     if (EnableSftpTransfer)
                     {
                         _rioUpdater = new RioUpdater(_hostName);
-                        _rioUpdater.SendFileContents(dataBytes, RIO_SEARCH_DIRECTORY + fileName);
+                        _rioUpdater.SendFileContents(dataBytes, _serverSearchDirectory + fileName);
                         System.Threading.Thread.Sleep(250); //Wait a bit to make sure file got onto the RIO
                     }
 
@@ -284,7 +284,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                     if (EnableSftpTransfer)
                     {
                         /* Create a RioFile to be sent to the server */
-                        RioFile file = new RioFile(_action.filePath, RIO_SEARCH_DIRECTORY + fileName);
+                        RioFile file = new RioFile(_action.filePath, _serverSearchDirectory + fileName);
                         /* First put the files onto the RIO */
                         _rioUpdater = new RioUpdater(_hostName);
                         _rioUpdater.SendFile(file);
@@ -395,6 +395,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                     {
                         /* decoded okay */
                         _serverVersion = general.Version;
+                        _serverSearchDirectory = general.SearchDirectory;
                     }
                     else
                     {
