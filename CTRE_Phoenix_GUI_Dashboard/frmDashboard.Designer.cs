@@ -41,7 +41,11 @@
             this.devicePollingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enableAutoRefreshMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.disableAutoRefreshMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.dataTransferMethodToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sFTPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pOSTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemTools = new System.Windows.Forms.ToolStripMenuItem();
+            this.captureAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.label5 = new System.Windows.Forms.Label();
@@ -89,10 +93,12 @@
             this.btnUpdateDevice = new System.Windows.Forms.Button();
             this.btnFirmwareDialog = new System.Windows.Forms.Button();
             this.panelSelfTestAndConfigControls = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnSaveConfigs = new System.Windows.Forms.Button();
+            this.btnRefreshConfigs = new System.Windows.Forms.Button();
+            this.btnSelfTest = new System.Windows.Forms.Button();
             this.groupedControls = new System.Windows.Forms.TabControl();
             this.txtSelfTestResults = new System.Windows.Forms.RichTextBox();
-            this.btnSaveConfigs = new System.Windows.Forms.Button();
-            this.btnSelfTest = new System.Windows.Forms.Button();
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.btnJumpToBottom = new System.Windows.Forms.Button();
             this.btnPauseTelem = new System.Windows.Forms.Button();
@@ -114,7 +120,6 @@
             this.rtbUnitTestBox = new System.Windows.Forms.RichTextBox();
             this.unitTestingCheckboxes = new System.Windows.Forms.CheckedListBox();
             this.overnightTestButton = new System.Windows.Forms.Button();
-            this.captureAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.menuStripTop.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -131,6 +136,7 @@
             this.pnlFirmUpgradeOuter.SuspendLayout();
             this.pnlFirmUpgradeInner.SuspendLayout();
             this.panelSelfTestAndConfigControls.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.tabPage6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
@@ -148,9 +154,9 @@
             this.bottomStrip_ML,
             this.bottomStrip_MR,
             this.bottomStrip_R});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 546);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 533);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(964, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(967, 22);
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -158,7 +164,7 @@
             // 
             this.bottomStrip_L.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.bottomStrip_L.Name = "bottomStrip_L";
-            this.bottomStrip_L.Size = new System.Drawing.Size(380, 17);
+            this.bottomStrip_L.Size = new System.Drawing.Size(397, 17);
             this.bottomStrip_L.Spring = true;
             this.bottomStrip_L.Text = "????????????";
             // 
@@ -174,7 +180,7 @@
             // 
             this.bottomStrip_MR.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.bottomStrip_MR.Name = "bottomStrip_MR";
-            this.bottomStrip_MR.Size = new System.Drawing.Size(380, 17);
+            this.bottomStrip_MR.Size = new System.Drawing.Size(397, 17);
             this.bottomStrip_MR.Spring = true;
             this.bottomStrip_MR.Text = "????????????";
             // 
@@ -198,14 +204,15 @@
             this.menuItemTools});
             this.menuStripTop.Location = new System.Drawing.Point(0, 0);
             this.menuStripTop.Name = "menuStripTop";
-            this.menuStripTop.Size = new System.Drawing.Size(964, 24);
+            this.menuStripTop.Size = new System.Drawing.Size(967, 24);
             this.menuStripTop.TabIndex = 1;
             this.menuStripTop.Text = "menuStripTop";
             // 
             // menuItemOptions
             // 
             this.menuItemOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.devicePollingToolStripMenuItem});
+            this.devicePollingToolStripMenuItem,
+            this.dataTransferMethodToolStripMenuItem});
             this.menuItemOptions.Name = "menuItemOptions";
             this.menuItemOptions.Size = new System.Drawing.Size(61, 20);
             this.menuItemOptions.Text = "Options";
@@ -216,22 +223,45 @@
             this.enableAutoRefreshMenuItem1,
             this.disableAutoRefreshMenuItem1});
             this.devicePollingToolStripMenuItem.Name = "devicePollingToolStripMenuItem";
-            this.devicePollingToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.devicePollingToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.devicePollingToolStripMenuItem.Text = "Auto Refresh Devices";
             // 
             // enableAutoRefreshMenuItem1
             // 
             this.enableAutoRefreshMenuItem1.Name = "enableAutoRefreshMenuItem1";
-            this.enableAutoRefreshMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.enableAutoRefreshMenuItem1.Size = new System.Drawing.Size(112, 22);
             this.enableAutoRefreshMenuItem1.Text = "Enable";
             this.enableAutoRefreshMenuItem1.Click += new System.EventHandler(this.enableDisableDeviceAutoRefresh_Click);
             // 
             // disableAutoRefreshMenuItem1
             // 
             this.disableAutoRefreshMenuItem1.Name = "disableAutoRefreshMenuItem1";
-            this.disableAutoRefreshMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.disableAutoRefreshMenuItem1.Size = new System.Drawing.Size(112, 22);
             this.disableAutoRefreshMenuItem1.Text = "Disable";
             this.disableAutoRefreshMenuItem1.Click += new System.EventHandler(this.enableDisableDeviceAutoRefresh_Click);
+            // 
+            // dataTransferMethodToolStripMenuItem
+            // 
+            this.dataTransferMethodToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sFTPToolStripMenuItem,
+            this.pOSTToolStripMenuItem});
+            this.dataTransferMethodToolStripMenuItem.Name = "dataTransferMethodToolStripMenuItem";
+            this.dataTransferMethodToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.dataTransferMethodToolStripMenuItem.Text = "Data Transfer Method";
+            // 
+            // sFTPToolStripMenuItem
+            // 
+            this.sFTPToolStripMenuItem.Name = "sFTPToolStripMenuItem";
+            this.sFTPToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.sFTPToolStripMenuItem.Text = "SFTP";
+            this.sFTPToolStripMenuItem.Click += new System.EventHandler(this.enableDisabledSftpDataTransfer_Click);
+            // 
+            // pOSTToolStripMenuItem
+            // 
+            this.pOSTToolStripMenuItem.Name = "pOSTToolStripMenuItem";
+            this.pOSTToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.pOSTToolStripMenuItem.Text = "POST";
+            this.pOSTToolStripMenuItem.Click += new System.EventHandler(this.enableDisabledSftpDataTransfer_Click);
             // 
             // menuItemTools
             // 
@@ -241,6 +271,13 @@
             this.menuItemTools.Size = new System.Drawing.Size(47, 20);
             this.menuItemTools.Text = "Tools";
             this.menuItemTools.Click += new System.EventHandler(this.btnEasterEgg_Click);
+            // 
+            // captureAllToolStripMenuItem
+            // 
+            this.captureAllToolStripMenuItem.Name = "captureAllToolStripMenuItem";
+            this.captureAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.captureAllToolStripMenuItem.Text = "Capture All (ZIP file)";
+            this.captureAllToolStripMenuItem.Click += new System.EventHandler(this.captureAllToolStripMenuItem_Click);
             // 
             // tabControl
             // 
@@ -254,7 +291,7 @@
             this.tabControl.Location = new System.Drawing.Point(0, 27);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(964, 516);
+            this.tabControl.Size = new System.Drawing.Size(967, 503);
             this.tabControl.TabIndex = 1;
             this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabOptions_SelectedIndexChanged);
             // 
@@ -273,7 +310,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(956, 490);
+            this.tabPage2.Size = new System.Drawing.Size(959, 477);
             this.tabPage2.TabIndex = 0;
             this.tabPage2.Text = "Prepare the Target Robot Controller";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -372,8 +409,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cboHostSelectorAddr.FormattingEnabled = true;
             this.cboHostSelectorAddr.Items.AddRange(new object[] {
-            "localhost # Local PC Development",
-            "172.22.11.2 # RoboRIO Over USB"});
+            "172.22.11.2 # RoboRIO Over USB",
+            "localhost # Local PC Development"});
             this.cboHostSelectorAddr.Location = new System.Drawing.Point(156, 62);
             this.cboHostSelectorAddr.Name = "cboHostSelectorAddr";
             this.cboHostSelectorAddr.Size = new System.Drawing.Size(595, 21);
@@ -395,7 +432,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(956, 490);
+            this.tabPage3.Size = new System.Drawing.Size(959, 477);
             this.tabPage3.TabIndex = 1;
             this.tabPage3.Text = "CAN Devices";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -418,8 +455,8 @@
             this.splitContainer1.Panel2.Controls.Add(this.pnlGenDevConfigOuter);
             this.splitContainer1.Panel2.Controls.Add(this.pnlFirmUpgradeOuter);
             this.splitContainer1.Panel2.Controls.Add(this.panelSelfTestAndConfigControls);
-            this.splitContainer1.Size = new System.Drawing.Size(950, 484);
-            this.splitContainer1.SplitterDistance = 177;
+            this.splitContainer1.Size = new System.Drawing.Size(953, 471);
+            this.splitContainer1.SplitterDistance = 172;
             this.splitContainer1.TabIndex = 48;
             // 
             // pnlDeviceListInner
@@ -432,7 +469,7 @@
             this.pnlDeviceListInner.Controls.Add(this.btnRefreshDevices);
             this.pnlDeviceListInner.Location = new System.Drawing.Point(3, 3);
             this.pnlDeviceListInner.Name = "pnlDeviceListInner";
-            this.pnlDeviceListInner.Size = new System.Drawing.Size(940, 167);
+            this.pnlDeviceListInner.Size = new System.Drawing.Size(943, 162);
             this.pnlDeviceListInner.TabIndex = 5;
             // 
             // lstDevices
@@ -454,7 +491,7 @@
             this.lstDevices.Location = new System.Drawing.Point(0, 0);
             this.lstDevices.MultiSelect = false;
             this.lstDevices.Name = "lstDevices";
-            this.lstDevices.Size = new System.Drawing.Size(940, 137);
+            this.lstDevices.Size = new System.Drawing.Size(943, 132);
             this.lstDevices.SmallImageList = this.imgLstDevices;
             this.lstDevices.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lstDevices.TabIndex = 3;
@@ -520,9 +557,9 @@
             // 
             this.btnRefreshDevices.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.btnRefreshDevices.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRefreshDevices.Location = new System.Drawing.Point(0, 137);
+            this.btnRefreshDevices.Location = new System.Drawing.Point(0, 132);
             this.btnRefreshDevices.Name = "btnRefreshDevices";
-            this.btnRefreshDevices.Size = new System.Drawing.Size(940, 30);
+            this.btnRefreshDevices.Size = new System.Drawing.Size(943, 30);
             this.btnRefreshDevices.TabIndex = 0;
             this.btnRefreshDevices.Text = "Refresh Devices";
             this.btnRefreshDevices.UseVisualStyleBackColor = true;
@@ -741,15 +778,65 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelSelfTestAndConfigControls.BackColor = System.Drawing.Color.DarkOrange;
+            this.panelSelfTestAndConfigControls.Controls.Add(this.tableLayoutPanel1);
             this.panelSelfTestAndConfigControls.Controls.Add(this.groupedControls);
             this.panelSelfTestAndConfigControls.Controls.Add(this.txtSelfTestResults);
-            this.panelSelfTestAndConfigControls.Controls.Add(this.btnSaveConfigs);
-            this.panelSelfTestAndConfigControls.Controls.Add(this.btnSelfTest);
             this.panelSelfTestAndConfigControls.Location = new System.Drawing.Point(465, 3);
             this.panelSelfTestAndConfigControls.Name = "panelSelfTestAndConfigControls";
-            this.panelSelfTestAndConfigControls.Size = new System.Drawing.Size(478, 297);
+            this.panelSelfTestAndConfigControls.Size = new System.Drawing.Size(481, 289);
             this.panelSelfTestAndConfigControls.TabIndex = 48;
-            this.panelSelfTestAndConfigControls.Resize += new System.EventHandler(this.panelSelfTestAndConfigControls_Resize);
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel1.ColumnCount = 3;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel1.Controls.Add(this.btnSaveConfigs, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.btnRefreshConfigs, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.btnSelfTest, 2, 0);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 256);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(475, 30);
+            this.tableLayoutPanel1.TabIndex = 11;
+            // 
+            // btnSaveConfigs
+            // 
+            this.btnSaveConfigs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnSaveConfigs.Location = new System.Drawing.Point(3, 3);
+            this.btnSaveConfigs.Name = "btnSaveConfigs";
+            this.btnSaveConfigs.Size = new System.Drawing.Size(152, 24);
+            this.btnSaveConfigs.TabIndex = 10;
+            this.btnSaveConfigs.Text = "Save Settings";
+            this.btnSaveConfigs.UseVisualStyleBackColor = true;
+            this.btnSaveConfigs.Click += new System.EventHandler(this.btnSaveConfigs_Click);
+            // 
+            // btnRefreshConfigs
+            // 
+            this.btnRefreshConfigs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnRefreshConfigs.Location = new System.Drawing.Point(161, 3);
+            this.btnRefreshConfigs.Name = "btnRefreshConfigs";
+            this.btnRefreshConfigs.Size = new System.Drawing.Size(152, 24);
+            this.btnRefreshConfigs.TabIndex = 11;
+            this.btnRefreshConfigs.Text = "Refresh Configs";
+            this.btnRefreshConfigs.UseVisualStyleBackColor = true;
+            this.btnRefreshConfigs.Click += new System.EventHandler(this.btnRefreshConfigs_Click);
+            // 
+            // btnSelfTest
+            // 
+            this.btnSelfTest.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnSelfTest.Location = new System.Drawing.Point(319, 3);
+            this.btnSelfTest.Name = "btnSelfTest";
+            this.btnSelfTest.Size = new System.Drawing.Size(153, 24);
+            this.btnSelfTest.TabIndex = 9;
+            this.btnSelfTest.Text = "Self-Test";
+            this.btnSelfTest.UseVisualStyleBackColor = true;
+            this.btnSelfTest.Click += new System.EventHandler(this.btnSelfTest_Click);
             // 
             // groupedControls
             // 
@@ -759,7 +846,7 @@
             this.groupedControls.Location = new System.Drawing.Point(3, 1);
             this.groupedControls.Name = "groupedControls";
             this.groupedControls.SelectedIndex = 0;
-            this.groupedControls.Size = new System.Drawing.Size(472, 260);
+            this.groupedControls.Size = new System.Drawing.Size(475, 252);
             this.groupedControls.TabIndex = 2;
             // 
             // txtSelfTestResults
@@ -773,30 +860,6 @@
     " and Press the \"Self Test\" button";
             this.txtSelfTestResults.Visible = false;
             // 
-            // btnSaveConfigs
-            // 
-            this.btnSaveConfigs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSaveConfigs.Location = new System.Drawing.Point(241, 264);
-            this.btnSaveConfigs.Name = "btnSaveConfigs";
-            this.btnSaveConfigs.Size = new System.Drawing.Size(234, 26);
-            this.btnSaveConfigs.TabIndex = 10;
-            this.btnSaveConfigs.Text = "Save Settings";
-            this.btnSaveConfigs.UseVisualStyleBackColor = true;
-            this.btnSaveConfigs.Click += new System.EventHandler(this.btnSaveConfigs_Click);
-            // 
-            // btnSelfTest
-            // 
-            this.btnSelfTest.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSelfTest.Location = new System.Drawing.Point(3, 264);
-            this.btnSelfTest.Name = "btnSelfTest";
-            this.btnSelfTest.Size = new System.Drawing.Size(236, 26);
-            this.btnSelfTest.TabIndex = 9;
-            this.btnSelfTest.Text = "Self-Test";
-            this.btnSelfTest.UseVisualStyleBackColor = true;
-            this.btnSelfTest.Click += new System.EventHandler(this.btnSelfTest_Click);
-            // 
             // tabPage6
             // 
             this.tabPage6.Controls.Add(this.btnJumpToBottom);
@@ -807,7 +870,7 @@
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(956, 490);
+            this.tabPage6.Size = new System.Drawing.Size(959, 477);
             this.tabPage6.TabIndex = 2;
             this.tabPage6.Text = "Web Diagnostics Log";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -860,7 +923,7 @@
             // 
             this.splitContainer2.Panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.splitContainer2.Panel2.Controls.Add(this.browserMessageDisp);
-            this.splitContainer2.Size = new System.Drawing.Size(948, 389);
+            this.splitContainer2.Size = new System.Drawing.Size(951, 376);
             this.splitContainer2.SplitterDistance = 650;
             this.splitContainer2.TabIndex = 3;
             // 
@@ -879,7 +942,7 @@
             this.gridDiagnosticLog.Location = new System.Drawing.Point(0, 0);
             this.gridDiagnosticLog.Name = "gridDiagnosticLog";
             this.gridDiagnosticLog.ReadOnly = true;
-            this.gridDiagnosticLog.Size = new System.Drawing.Size(648, 387);
+            this.gridDiagnosticLog.Size = new System.Drawing.Size(648, 374);
             this.gridDiagnosticLog.TabIndex = 4;
             this.gridDiagnosticLog.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.diagnosticLog_CellClick);
             this.gridDiagnosticLog.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridDiagnosticLog_CellEnter);
@@ -943,7 +1006,7 @@
             this.browserMessageDisp.Location = new System.Drawing.Point(3, 3);
             this.browserMessageDisp.MinimumSize = new System.Drawing.Size(20, 20);
             this.browserMessageDisp.Name = "browserMessageDisp";
-            this.browserMessageDisp.Size = new System.Drawing.Size(286, 381);
+            this.browserMessageDisp.Size = new System.Drawing.Size(289, 368);
             this.browserMessageDisp.TabIndex = 4;
             // 
             // richTextBox2
@@ -953,7 +1016,7 @@
             this.richTextBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.richTextBox2.Location = new System.Drawing.Point(27, 6);
             this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(925, 57);
+            this.richTextBox2.Size = new System.Drawing.Size(928, 57);
             this.richTextBox2.TabIndex = 9;
             this.richTextBox2.Text = resources.GetString("richTextBox2.Text");
             // 
@@ -967,20 +1030,21 @@
             this.tbUnitTesting.Location = new System.Drawing.Point(4, 22);
             this.tbUnitTesting.Name = "tbUnitTesting";
             this.tbUnitTesting.Padding = new System.Windows.Forms.Padding(3);
-            this.tbUnitTesting.Size = new System.Drawing.Size(1002, 490);
+            this.tbUnitTesting.Size = new System.Drawing.Size(959, 477);
             this.tbUnitTesting.TabIndex = 3;
             this.tbUnitTesting.Text = "Unit Testing";
             this.tbUnitTesting.UseVisualStyleBackColor = true;
             // 
             // richTextBox3
             // 
-            this.richTextBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.richTextBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBox3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.richTextBox3.Location = new System.Drawing.Point(548, 38);
             this.richTextBox3.Name = "richTextBox3";
             this.richTextBox3.ReadOnly = true;
-            this.richTextBox3.Size = new System.Drawing.Size(385, 110);
+            this.richTextBox3.Size = new System.Drawing.Size(385, 395);
             this.richTextBox3.TabIndex = 4;
             this.richTextBox3.Text = resources.GetString("richTextBox3.Text");
             // 
@@ -1011,10 +1075,12 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.unitTestingCheckboxes.FormattingEnabled = true;
             this.unitTestingCheckboxes.Items.AddRange(new object[] {
+            "SFTP Binary onto RIO",
             "Check Process Running",
             "Check Version",
             "Check Number of Devices",
             "Check Firmware Flash",
+            "SaveConfigsToDevice",
             "Reboot RIO At End"});
             this.unitTestingCheckboxes.Location = new System.Drawing.Point(8, 35);
             this.unitTestingCheckboxes.Name = "unitTestingCheckboxes";
@@ -1032,18 +1098,11 @@
             this.overnightTestButton.UseVisualStyleBackColor = true;
             this.overnightTestButton.Click += new System.EventHandler(this.overnightTestButton_Click);
             // 
-            // captureAllToolStripMenuItem
-            // 
-            this.captureAllToolStripMenuItem.Name = "captureAllToolStripMenuItem";
-            this.captureAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.captureAllToolStripMenuItem.Text = "Capture All (ZIP file)";
-            this.captureAllToolStripMenuItem.Click += new System.EventHandler(this.captureAllToolStripMenuItem_Click);
-            // 
             // frmDashboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(964, 568);
+            this.ClientSize = new System.Drawing.Size(967, 555);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStripTop);
@@ -1073,6 +1132,7 @@
             this.pnlFirmUpgradeInner.ResumeLayout(false);
             this.pnlFirmUpgradeInner.PerformLayout();
             this.panelSelfTestAndConfigControls.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
             this.tabPage6.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel2.ResumeLayout(false);
@@ -1173,6 +1233,11 @@
         private System.Windows.Forms.Button btnRefreshDevices;
         private System.Windows.Forms.Panel pnlDeviceListInner;
         private System.Windows.Forms.ToolStripMenuItem captureAllToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem dataTransferMethodToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sFTPToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pOSTToolStripMenuItem;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Button btnRefreshConfigs;
     }
 }
 

@@ -6,6 +6,7 @@ namespace CTRE.Phoenix.Diagnostics.JSON.Serializers
     {
         public JsonStatus GeneralReturn;
         public string Version;
+        public string SearchDirectory;
     }
     public class JsonStatus
     {

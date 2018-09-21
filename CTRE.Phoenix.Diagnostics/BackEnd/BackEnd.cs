@@ -42,10 +42,9 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
         private DateTime _lastPoll = DateTime.UtcNow;
         private RioUpdater _rioUpdater;
         private int _refreshRequest = 0;
-        private bool _usingPost = false;
 
+        private string _serverSearchDirectory = "/usr/local/frc/bin/";
 
-        private const string RIO_SEARCH_DIRECTORY = "/usr/local/frc/bin/";
 
         public DateTime GetLastPoll()
         {
@@ -234,6 +233,11 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                     /* if ID change was successful, update our local device list */
                     if (retval == Status.Ok)
                         _descriptors.ChangeID(ddRef, newId);
+                    if (retval == Status.Ok)
+                    {
+                        /* Update device cache with new deviceID, this is important when resolving/creating device ID conflicts */
+                        UpdateConfigs(ddRef);
+                    }
                     break;
 
                 case ActionType.SetConfig:
@@ -246,10 +250,10 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                     byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(serializedData);
 
                     /* If we're using GET we need to send the file up */
-                    if (_usingPost == false)
+                    if (EnableSftpTransfer)
                     {
                         _rioUpdater = new RioUpdater(_hostName);
-                        _rioUpdater.SendFileContents(dataBytes, RIO_SEARCH_DIRECTORY + fileName);
+                        _rioUpdater.SendFileContents(dataBytes, _serverSearchDirectory + fileName);
                         System.Threading.Thread.Sleep(250); //Wait a bit to make sure file got onto the RIO
                     }
 
@@ -260,13 +264,13 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                     if (retval == Status.Ok)
                     {
                         /* Decide if we're posting or getting from the _usingPost flag */
-                        if (_usingPost)
+                        if (EnableSftpTransfer)
                         {
-                            retval = _WebServerScripts.HttpPost(_hostName, ddRef.model, ddRef.deviceID, ActionType.SetConfig, dataBytes, out response, 5000);
+                            retval = _WebServerScripts.HttpGet(_hostName, ddRef.model, ddRef.deviceID, ActionType.SetConfig, out response, "&file=" + fileName, 5000);
                         }
                         else
                         {
-                            retval = _WebServerScripts.HttpGet(_hostName, ddRef.model, ddRef.deviceID, ActionType.SetConfig, out response, "&file=" + fileName, 5000);
+                            retval = _WebServerScripts.HttpPost(_hostName, ddRef.model, ddRef.deviceID, ActionType.SetConfig, dataBytes, out response, 5000);
                         }
                     }
                     /* parse resp */
@@ -275,6 +279,12 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                         SetConfigReturn jsonDeser = JsonConvert.DeserializeObject<SetConfigReturn>(response);
                         retval = (Status)jsonDeser.GeneralReturn.Error;
                     }
+                    if (retval == Status.Ok)
+                    {
+                        /* Backend should immediately update device config cache */
+                        retval = UpdateConfigs(ddRef);
+                    }
+
                     break;
 
                 case ActionType.FieldUpgradeDevice:
@@ -282,10 +292,10 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                     fileName = "firmwarefile.crf";
 
                     /* If we're using POST, we don't need to send the file up */
-                    if (_usingPost == false)
+                    if (EnableSftpTransfer)
                     {
                         /* Create a RioFile to be sent to the server */
-                        RioFile file = new RioFile(_action.filePath, RIO_SEARCH_DIRECTORY + fileName);
+                        RioFile file = new RioFile(_action.filePath, _serverSearchDirectory + fileName);
                         /* First put the files onto the RIO */
                         _rioUpdater = new RioUpdater(_hostName);
                         _rioUpdater.SendFile(file);
@@ -297,7 +307,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                     if (retval == Status.Ok)
                         retval = (foundOk) ? Status.Ok : Status.DeviceNotFound;
                     if (retval == Status.Ok)
-                        retval = ExecuteFieldUpgrade(ddRef, _asyncWebExchange, fileName, _usingPost);
+                        retval = ExecuteFieldUpgrade(ddRef, _asyncWebExchange, fileName, EnableSftpTransfer);
                     /* free resouces */
                     _asyncWebExchange.Dispose();
                     break;
@@ -396,6 +406,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                     {
                         /* decoded okay */
                         _serverVersion = general.Version;
+                        _serverSearchDirectory = general.SearchDirectory;
                     }
                     else
                     {
@@ -575,44 +586,8 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                                 {
                                     /* reset timeout */
                                     _timeSincePollingMs = 0;
-
-                                    /* attempt a fresh copy of devices */
-                                    err = ExecutePollDevices();
-
-                                    if (err == Status.Ok)
-                                    {
-                                        /* produce a copy of the device list */
-                                        var list = _descriptors.ToArray();
-
-                                        /*roll thru the copy of list */
-                                        foreach (var dd in list)
-                                        {
-                                            /* attempt a fresh copy of configs */
-                                            GetConfigsReturn configs;
-                                            Status innerLoopErr = ExecuteGetConfigs(dd, out configs);
-
-                                            /* if transactoin was successful, update the cache */
-                                            if (innerLoopErr == Status.Ok)
-                                            {
-                                                /* form will get this on next poll */
-                                                dd.configCache = configs;
-                                            }
-                                            else
-                                            {
-                                                /* leave the last cache alone, just because 
-                                                 * the connectoin was lost, don't drop anything */
-                                            }
-
-                                            /* let any failure code float up to the outer loop */
-                                            if (err != Status.Ok)
-                                                err = innerLoopErr;
-
-                                            /* frontend has queued an action, take a break from this inner loop */
-                                            if (_action != null) { break; }
-                                            /* if polling is disabled, leave immedietely */
-                                            if (ShouldUpdateDevices() == false) { break; }
-                                        }
-                                    }
+                                    /* check server existance and update devices */
+                                    err = PollingAction();
                                 }
                             }
                             /* if any transaction failed in the tool, something is wrong */
@@ -654,6 +629,63 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                     }
                 }
             }
+        }
+
+        private Status UpdateConfigs(DeviceDescrip dd)
+        {
+            /* attempt a fresh copy of configs */
+            GetConfigsReturn configs;
+            Status innerLoopErr = ExecuteGetConfigs(dd, out configs);
+
+            /* if transactoin was successful, update the cache */
+            if (innerLoopErr == Status.Ok)
+            {
+                /* form will get this on next poll */
+                dd.configCache = configs;
+            }
+            else
+            {
+                /* leave the last cache alone, just because 
+                 * the connectoin was lost, don't drop anything */
+            }
+
+            return innerLoopErr;
+        }
+        /// <summary>
+        /// Updates all the device descriptors on the server
+        /// </summary>
+        /// <returns></returns>
+        private Status PollingAction()
+        {
+            Status err = Status.Ok;
+
+            if (err == Status.Ok)
+            {
+                /* attempt a fresh copy of devices */
+                err = ExecutePollDevices();
+            }
+
+            if (err == Status.Ok)
+            {
+                /* produce a copy of the device list */
+                var list = _descriptors.ToArray();
+
+                /*roll thru the copy of list */
+                foreach (var dd in list)
+                {
+                    Status innerLoopErr = UpdateConfigs(dd);
+
+                    /* let any failure code float up to the outer loop */
+                    if (err == Status.Ok)
+                        err = innerLoopErr;
+
+                    /* frontend has queued an action, take a break from this inner loop */
+                    if (_action != null) { break; }
+                    /* if polling is disabled, leave immedietely */
+                    if (ShouldUpdateDevices() == false) { break; }
+                }
+            }
+            return err;
         }
 
         private bool ActionIsAbortable(ActionType action)
@@ -842,7 +874,13 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
         /// pausing the web exchanges during advanced debugging.
         /// </summary>
         public bool EnableAutoRefresh { set; get; } = true;
- 
+
+        /// <summary>
+        /// Caling application can turn off SFTP data transfer to devices, this is helpful for
+        /// utilizing the speed of POST, but is more likely to cause problems
+        /// </summary>
+        public bool EnableSftpTransfer { set; get; } = true;
+
         /// <summary>
         /// Queues a few rounds of updates/pollings for device and config values.
         /// Typically useful if EnableAutoRefresh is false, but calling app

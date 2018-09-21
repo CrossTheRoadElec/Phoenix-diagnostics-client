@@ -91,18 +91,18 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
 
             return retval;
         }
-        private Status ExecuteFieldUpgrade(DeviceDescrip ddRef, AsyncWebExchange asyncWebExchange, string fileName, bool usingPost)
+        private Status ExecuteFieldUpgrade(DeviceDescrip ddRef, AsyncWebExchange asyncWebExchange, string fileName, bool usingSftp)
         {
             Status retval = Status.Ok;
             String response = string.Empty;
 
             /* let user know action is being processed */
-            SetFieldUpgradeStatus("Starting field-upgrade...", 0);
+            SetFieldUpgradeStatus("Reading CRF...", 0);
 
 
             byte[] fileContents = null;
             /* If we're using POST, we need to make sure the file has contents */
-            if (usingPost)
+            if (!usingSftp)
             {
                 /* copy out CRF */
                 fileContents = File.Read(_action.filePath);
@@ -118,6 +118,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
             if (retval == Status.Ok)
             {
                 SetFieldUpgradeStatus("Confirm server is ready", 0); /* we are confirming if field upgrade is already occuring */
+                /* Make double sure that we aren't field upgrading. Server already does this but there's no harm in checking again */
                 retval = ConfirmIfFieldUpgradeIsOccuring(ddRef, false);
                 SetFieldUpgradeStatus("Confirm server is ready : " + retval, 0); /* display the result of this check */
             }
@@ -127,17 +128,16 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
             {
                 SetFieldUpgradeStatus("Starting field-upgrade", 0); /* now we will request to start a new FU session */
 
-                /* If we're using Post, use Post */
-                if (usingPost)
-                {
-                    /* start firmware-update */
-                    retval = asyncWebExchange.StartHttpPost(_hostName, ddRef.model, ddRef.deviceID, ActionType.FieldUpgradeDevice, fileContents, 60000);
-                }
-                /* Otherwise use Get */
-                else
+                /* If we're using sftp, use Get */
+                if (usingSftp)
                 {
                     /* start firmware-update */
                     retval = asyncWebExchange.StartHttpGet(_hostName, ddRef.model, ddRef.deviceID, ActionType.FieldUpgradeDevice, 60000, "&file=" + fileName);
+                }
+                else /* Otherwise use Post */
+                {
+                    /* start firmware-update */
+                    retval = asyncWebExchange.StartHttpPost(_hostName, ddRef.model, ddRef.deviceID, ActionType.FieldUpgradeDevice, fileContents, 60000);
                 }
             }
             /* confirm FU started okay */
@@ -145,7 +145,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
             { 
                 /* wait until we get the rising edge of the flash event - a percent update with healthy error code, or a failed response from async web request. */
                 int i = 0;
-                const int kMaxLoops = 20;
+                const int kMaxLoops = 50;
                 for (; i < kMaxLoops; ++i)
                 {
                     const int kTimePerLoopMs = 100;
@@ -167,7 +167,8 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                         break;
                     }
                 }
-                SetFieldUpgradeStatus("Starting field-upgrade : " + retval, 0);
+				/* uncomment to help better debug where errors are sourced */
+                //SetFieldUpgradeStatus("Starting field-upgrade : " + retval, 0);
             }
             /* poll status - loop while status is ok and firmUpdate is not complete*/
             int notUpdatingCnt = 0;

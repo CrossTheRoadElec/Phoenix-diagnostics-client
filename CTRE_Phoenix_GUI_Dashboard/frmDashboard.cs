@@ -31,7 +31,9 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         private BottomStatusBar _BottomStatusBar;
         private DeviceListContainer _deviceListContainer;
         int _guiTimeoutMs = 0;
-        private Object _lock = new Object();
+        private Object _guiStateLock = new Object();
+        private Object _deviceIDLock = new Object(); // TODO: this could be cleaned up using the regular action callback mechanism
+        private bool _removeSelectedDevice = false; // TODO: this could be cleaned up using the regular action callback mechanism
         private struct ActionResponse {
             public BackEndAction action;
             public Status error;
@@ -72,6 +74,7 @@ namespace CTRE_Phoenix_GUI_Dashboard {
 
             /* more GUI rendering updates */
             PaintEnablePollingCheckbox();
+            PaintEnableSftpTransferCheckbox();
         }
 
         //--------------- Rendering GUI elements ---------------------------------//
@@ -105,6 +108,8 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         {
             /* disabling the outer tab control is adequeate */
             tabControl.Enabled = enabled;
+            /* disabling upper menu strip is also adequate */
+            menuStripTop.Enabled = enabled;
 
             if (enabled) {
                 RefreshAllDataEntry();
@@ -153,6 +158,11 @@ namespace CTRE_Phoenix_GUI_Dashboard {
                  * don't update anything */
             }
         }
+        void RefreshConfigsOfSelectedDevice()
+        {
+            var selected = _deviceListContainer.SelectedDeviceDescriptor;
+            UpdateTabs(selected, groupedControls);
+        }
 
         void PaintEnablePollingCheckbox()
         {
@@ -160,6 +170,12 @@ namespace CTRE_Phoenix_GUI_Dashboard {
             enableAutoRefreshMenuItem1.Checked = bEnableAutoRefresh;
             disableAutoRefreshMenuItem1.Checked = !bEnableAutoRefresh;
             btnRefreshDevices.Visible = !bEnableAutoRefresh;
+        }
+        void PaintEnableSftpTransferCheckbox()
+        {
+            bool bEnableSftpTransfer = BackEnd.Instance.EnableSftpTransfer;
+            sFTPToolStripMenuItem.Checked = bEnableSftpTransfer;
+            pOSTToolStripMenuItem.Checked = !bEnableSftpTransfer;
         }
         /// Caller must ensure dd is not null
         /// <param name="dd"></param>
@@ -305,6 +321,12 @@ namespace CTRE_Phoenix_GUI_Dashboard {
             _actionResponse.action = action;
             _actionResponse.error = err;
         }
+        public void ClearDeviceCallBack(BackEndAction action, Status err)
+        {
+            _actionResponse.action = action;
+            _actionResponse.error = err;
+            lock(_deviceIDLock) { _removeSelectedDevice = true; } // TODO change this to use regular callback mechanism
+        }
         /// <summary>
         /// Form timer task will call this to poll for status on action.
         /// </summary>
@@ -365,7 +387,7 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         {
             Debug.Print("GUI", newState.ToString());
 
-            lock (_lock) {
+            lock (_guiStateLock) {
                 _guiState = newState;
                 _guiTimeoutMs = timeoutMs;
             }
@@ -373,7 +395,7 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         }
         private GuiState GetGuiState()
         {
-            lock (_lock) { return _guiState; }
+            lock (_guiStateLock) { return _guiState; }
         }
         //-------- Convenient display routines for updating bottom status bar --------------//
         private void DisplayVersionNumber(string vers)
@@ -508,8 +530,10 @@ namespace CTRE_Phoenix_GUI_Dashboard {
             }
             else if(BackEnd.Instance.NewIdConflicts(dd, newID) == false)
             {
-				/* there are no ID conflicts, nothing to do */
-			}
+                /* there are no ID conflicts, request the action */
+                if (er == Status.Ok)
+                    er = BackEnd.Instance.RequestChangeDeviceID(dd, newID, new BackEndAction.CallBack(ActionCallBack));
+            }
 			else if(!PromptUserConflictID())
             {
 				/* user aborted */
@@ -517,11 +541,10 @@ namespace CTRE_Phoenix_GUI_Dashboard {
             }
             else
             {
-                er = _deviceListContainer.RemoveSelectedItem();
+                /* User wants to overwrite, so request the action */
+                if (er == Status.Ok)
+                    er = BackEnd.Instance.RequestChangeDeviceID(dd, newID, new BackEndAction.CallBack(ClearDeviceCallBack));
             }
-            /* request the action */
-            if (er == Status.Ok)
-                er = BackEnd.Instance.RequestChangeDeviceID(dd, newID, new BackEndAction.CallBack(ActionCallBack));
             /* common post-action checks, transition to wait for response handler */
             PostOperation(er, GuiState.Disabled_WaitForAction);
         }
@@ -640,6 +663,16 @@ namespace CTRE_Phoenix_GUI_Dashboard {
 
             /* empty web responses into GUI elements*/
             HttpTelemetryPeriodic();
+
+            /* If there's a device to be removed, remove it */
+            lock (_deviceIDLock)
+            {
+                if (_removeSelectedDevice)
+                {
+                    _deviceListContainer.RemoveSelectedItem();
+                    _removeSelectedDevice = false;
+                }
+            }
 
             /* get devices */
             IEnumerable<DeviceDescrip> devs = BackEnd.Instance.GetDeviceDescriptors();
@@ -783,7 +816,8 @@ namespace CTRE_Phoenix_GUI_Dashboard {
             else
             {
                 /* jump to last one */
-                gridDiagnosticLog.FirstDisplayedScrollingRowIndex = gridDiagnosticLog.RowCount - 1;
+                try { gridDiagnosticLog.FirstDisplayedScrollingRowIndex = gridDiagnosticLog.RowCount - 1; }
+                catch (Exception) { }
             }
 
             /* resume rendering grid */
@@ -818,7 +852,13 @@ namespace CTRE_Phoenix_GUI_Dashboard {
             {
                 tests |= ((uint)1 << unitTestingCheckboxes.Items.IndexOf(item));
             }
-            Status err = UnitTesting.Instance.StartTesting(tests);
+            /* convert GUI settings to json string */
+            var paramData = Newtonsoft.Json.JsonConvert.SerializeObject(GetConfigsFromTabs());
+            /* Start Testing */
+            Status err = UnitTesting.Instance.StartTesting(tests,
+                                                        _deviceListContainer.SelectedDeviceDescriptor,
+                                                        txtDeviceCRFPath.Text,
+                                                        paramData);
             PostOperation(err, GuiState.Disabled_WaitForUnitTest);
         }
 
@@ -924,7 +964,7 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         //--------------------------------------------------------------------------------------------------//
         void GenerateTabs(DeviceDescrip dd, System.Windows.Forms.TabControl tabControl)
         {
-            String strNamespace = "CTRE_Phoenix_GUI_Dashboard";
+            String strNamespace = "CTRE_Phoenix_GUI_Dashboard"; // TODO: can this be retreived using reflection
             /* lots of missing error checking here */
 
             if (dd.configCache != null)
@@ -946,7 +986,27 @@ namespace CTRE_Phoenix_GUI_Dashboard {
                 }
             }
         }
+        void UpdateTabs(DeviceDescrip dd, TabControl tabControl)
+        {
+            String strNamespace = "CTRE_Phoenix_GUI_Dashboard"; // TODO: can this be retreived using reflection
+            /* lots of missing error checking here */
+            int tabIndex = 1; //Index starts at one to pass over self test
 
+            if (dd.configCache != null)
+            {
+                foreach (ConfigGroup group in dd.configCache.Device.Configs)
+                {
+                    GroupTabPage tabReference = (GroupTabPage)tabControl.TabPages[tabIndex++];
+
+                    Type t = Type.GetType(strNamespace + "." + group.Type);
+
+                    IControlGroup newGroup = (IControlGroup)Activator.CreateInstance(t);
+                    newGroup.SetFromValues(group.Values, group.Ordinal ?? 0);
+
+                    newGroup.UpdateFromValues(tabReference);
+                }
+            }
+        }
         DeviceConfigs GetConfigsFromTabs()
         {
             /* Create a DeviceConfigs variable that has all the config data from the tabs */
@@ -1011,7 +1071,14 @@ namespace CTRE_Phoenix_GUI_Dashboard {
             PaintEnablePollingCheckbox();
             SaveStickySettings();
         }
-  
+
+        private void enableDisabledSftpDataTransfer_Click(object sender, EventArgs e) {
+            bool bEnableSftpTransfer = (sender == sFTPToolStripMenuItem);
+            BackEnd.Instance.EnableSftpTransfer = bEnableSftpTransfer;
+            PaintEnableSftpTransferCheckbox();
+            //SaveStickySettings(); //TODO, and add sticky settings to export-all
+        }
+
         private void txtDevicePath_TextChanged(object sender, EventArgs e) { SaveStickySettings(); }
 
         private void tabOptions_SelectedIndexChanged(object sender, EventArgs e) { SaveStickySettings(); }
@@ -1033,6 +1100,8 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         private void cboHostSelectorPrt_TextChanged(object sender, EventArgs e) { UpdateHostNameAndPort(); }
 
         private void btnSaveConfigs_Click(object sender, EventArgs e) { SaveConfigsOfSelectedDevice(); }
+
+        private void btnRefreshConfigs_Click(object sender, EventArgs e) { RefreshConfigsOfSelectedDevice(); }
 
         private void btnFirmwareDialog_Click(object sender, EventArgs e) { OpenFileBrowserCRF(); }
 
@@ -1061,21 +1130,6 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         private void btnPauseTelem_Click(object sender, EventArgs e) { _toggleWebPaused.Toggle(); }
 
         private void btnJumpToBottom_Click(object sender, EventArgs e) { _toggleWebJumpToBtm.Toggle(); }
-
-        private void panelSelfTestAndConfigControls_Resize(object sender, EventArgs e)
-        {
-            /* shape self-test and save-configs buttons to be equidistant.
-               panelWidth = space + btnWidth + space + btnWidth + space */
-            int space = 2;
-            int panelWidth = panelSelfTestAndConfigControls.Width;
-            int btnWidth = (panelWidth - 3 * space) / 2;
-            if (btnWidth < 1) { btnWidth = 1; }
-            /* update btn dimensions */
-            btnSelfTest.Left = space;
-            btnSelfTest.Width = btnWidth;
-            btnSaveConfigs.Left = space + btnWidth + space;
-            btnSaveConfigs.Width = btnWidth;
-        }
 
         private void selectAllCtrlAToolStripMenuItem_Click(object sender, EventArgs e) { gridDiagnosticLog.SelectAll(); }
 

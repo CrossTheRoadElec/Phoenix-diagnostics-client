@@ -37,7 +37,7 @@ namespace CTRE_Phoenix_GUI_Dashboard.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("172.22.11.2 # RoboRIO Over USB")]
         public string hostname {
             get {
                 return ((string)(this["hostname"]));
@@ -49,7 +49,7 @@ namespace CTRE_Phoenix_GUI_Dashboard.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1250 # Default Port")]
         public string hostport {
             get {
                 return ((string)(this["hostport"]));
