@@ -274,6 +274,12 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                         SetConfigReturn jsonDeser = JsonConvert.DeserializeObject<SetConfigReturn>(response);
                         retval = (Status)jsonDeser.GeneralReturn.Error;
                     }
+                    if (retval == Status.Ok)
+                    {
+                        /* Backend should immediately update device config cache */
+                        retval = UpdateDeviceConfigs(false);
+                    }
+
                     break;
 
                 case ActionType.FieldUpgradeDevice:
@@ -576,43 +582,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                                     /* reset timeout */
                                     _timeSincePollingMs = 0;
 
-                                    /* attempt a fresh copy of devices */
-                                    err = ExecutePollDevices();
-
-                                    if (err == Status.Ok)
-                                    {
-                                        /* produce a copy of the device list */
-                                        var list = _descriptors.ToArray();
-
-                                        /*roll thru the copy of list */
-                                        foreach (var dd in list)
-                                        {
-                                            /* attempt a fresh copy of configs */
-                                            GetConfigsReturn configs;
-                                            Status innerLoopErr = ExecuteGetConfigs(dd, out configs);
-
-                                            /* if transactoin was successful, update the cache */
-                                            if (innerLoopErr == Status.Ok)
-                                            {
-                                                /* form will get this on next poll */
-                                                dd.configCache = configs;
-                                            }
-                                            else
-                                            {
-                                                /* leave the last cache alone, just because 
-                                                 * the connectoin was lost, don't drop anything */
-                                            }
-
-                                            /* let any failure code float up to the outer loop */
-                                            if (err != Status.Ok)
-                                                err = innerLoopErr;
-
-                                            /* frontend has queued an action, take a break from this inner loop */
-                                            if (_action != null) { break; }
-                                            /* if polling is disabled, leave immedietely */
-                                            if (ShouldUpdateDevices() == false) { break; }
-                                        }
-                                    }
+                                    err = UpdateDeviceConfigs(true);
                                 }
                             }
                             /* if any transaction failed in the tool, something is wrong */
@@ -654,6 +624,57 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Updates all the device descriptors on the server
+        /// </summary>
+        /// <param name="allowBreakOutOfLoop">Set to true if you want to break out of the loop due to actions or stopping polling</param>
+        /// <returns></returns>
+        private Status UpdateDeviceConfigs(bool allowBreakOutOfLoop)
+        {
+            /* attempt a fresh copy of devices */
+            Status err = ExecutePollDevices();
+
+            if (err == Status.Ok)
+            {
+                /* produce a copy of the device list */
+                var list = _descriptors.ToArray();
+
+                /*roll thru the copy of list */
+                foreach (var dd in list)
+                {
+                    /* attempt a fresh copy of configs */
+                    GetConfigsReturn configs;
+                    Status innerLoopErr = ExecuteGetConfigs(dd, out configs);
+
+                    /* if transactoin was successful, update the cache */
+                    if (innerLoopErr == Status.Ok)
+                    {
+                        /* form will get this on next poll */
+                        dd.configCache = configs;
+                    }
+                    else
+                    {
+                        /* leave the last cache alone, just because 
+                         * the connectoin was lost, don't drop anything */
+                    }
+
+                    /* let any failure code float up to the outer loop */
+                    if (err != Status.Ok)
+                        err = innerLoopErr;
+
+                    /* If we're allowed to break out of the loop, check if we should */
+                    if (allowBreakOutOfLoop)
+                    {
+                        /* frontend has queued an action, take a break from this inner loop */
+                        if (_action != null) { break; }
+                        /* if polling is disabled, leave immedietely */
+                        if (ShouldUpdateDevices() == false) { break; }
+                    }
+                }
+            }
+            return err;
         }
 
         private bool ActionIsAbortable(ActionType action)
