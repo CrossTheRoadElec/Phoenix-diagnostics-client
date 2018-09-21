@@ -854,7 +854,10 @@ namespace CTRE_Phoenix_GUI_Dashboard {
             {
                 tests |= ((uint)1 << unitTestingCheckboxes.Items.IndexOf(item));
             }
-            Status err = UnitTesting.Instance.StartTesting(tests);
+
+            /* Lots of params inside Start Testing */
+            Status err = UnitTesting.Instance.StartTesting(tests, _deviceListContainer.SelectedDeviceDescriptor, txtDeviceCRFPath.Text,
+                Newtonsoft.Json.JsonConvert.SerializeObject(GetConfigsFromTabs()));
             PostOperation(err, GuiState.Disabled_WaitForUnitTest);
         }
 

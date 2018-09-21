@@ -126,6 +126,16 @@
   <metadata name="menuStripTop.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>220, 7</value>
   </metadata>
+  <data name="richTextBox3.Text" xml:space="preserve">
+    <value>This is the "Easter Egg'd" Tab for testing the deployment procedure overnight.
+The checkboxes on the left are the tests to make when going through a run.
+Specify the tests, connect to the RIO over USB, and press Begin Overnight Test to begin.
+The Tests will loop forever until you press the "Stop Test" button or something goes wrong in a test.
+Anything that goes wrong will be printed in the display to the left.
+
+NOTE:
+- If the tests consist of modifying devices or using firmware files, select the device in the device viewer inside "CAN Devices" first.</value>
+  </data>
   <data name="richTextBox1.Text" xml:space="preserve">
     <value>To install binaries, connect a RoboRIO to the PC using USB, and press "Update Binaries"
 To Connect to the Roborio, put  the RoboRIO's Address in the Diagnostic Server Address Box and suffix it with ":1250"
@@ -139,7 +149,7 @@ The Address of the RoboRIO will be 172.22.11.2 if over USB, and 10.TE.AM.x if ov
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABw
-        EAAAAk1TRnQBSQFMAgEBCQEAAbgBAAG4AQABEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        EAAAAk1TRnQBSQFMAgEBCQEAAcABAAHAAQABEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAATADAAEBAQABCAYAAQwYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
@@ -232,13 +242,6 @@ The Address of the RoboRIO will be 172.22.11.2 if over USB, and 10.TE.AM.x if ov
 Every line will display either a URL or a Json object
 URL's are sent from the client to the server, with key points of data specified under the "device", "id", "action" parameters
 Json objects are sent from the server to the client in response to the URL's that the client queries.</value>
-  </data>
-  <data name="richTextBox3.Text" xml:space="preserve">
-    <value>This is the "Easter Egg'd" Tab for testing the deployment procedure overnight.
-The checkboxes on the left are the tests to make when going through a run.
-Specify the tests, connect to the RIO over USB, and press Begin Overnight Test to begin.
-The Tests will loop forever until you press the "Stop Test" button or something goes wrong in a test.
-Anything that goes wrong will be printed in the display to the left.</value>
   </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>33</value>

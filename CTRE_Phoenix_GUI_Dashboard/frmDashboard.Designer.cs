@@ -1038,13 +1038,14 @@
             // 
             // richTextBox3
             // 
-            this.richTextBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.richTextBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBox3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.richTextBox3.Location = new System.Drawing.Point(548, 38);
             this.richTextBox3.Name = "richTextBox3";
             this.richTextBox3.ReadOnly = true;
-            this.richTextBox3.Size = new System.Drawing.Size(385, 110);
+            this.richTextBox3.Size = new System.Drawing.Size(385, 395);
             this.richTextBox3.TabIndex = 4;
             this.richTextBox3.Text = resources.GetString("richTextBox3.Text");
             // 
@@ -1075,10 +1076,12 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.unitTestingCheckboxes.FormattingEnabled = true;
             this.unitTestingCheckboxes.Items.AddRange(new object[] {
+            "SFTP Binary onto RIO",
             "Check Process Running",
             "Check Version",
             "Check Number of Devices",
             "Check Firmware Flash",
+            "SaveConfigsToDevice",
             "Reboot RIO At End"});
             this.unitTestingCheckboxes.Location = new System.Drawing.Point(8, 35);
             this.unitTestingCheckboxes.Name = "unitTestingCheckboxes";

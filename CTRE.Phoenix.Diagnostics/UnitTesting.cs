@@ -18,22 +18,28 @@ namespace CTRE.Phoenix.Diagnostics
             }
         }
 
-        private const uint CHECK_PROCESS_RUNNING = 0x1;
-        private const uint CHECK_VERSION_NUMBER = 0x2;
-        private const uint CHECK_NUM_DEVICES = 0x4;
-        private const uint CHECK_FIRMWARE_FLASH = 0x8;
-        private const uint REBOOT_RIO = 0x10;
+        private const uint SFTP_BINARY_ONTO_RIO = 0x1;
+        private const uint CHECK_PROCESS_RUNNING = 0x2;
+        private const uint CHECK_VERSION_NUMBER = 0x4;
+        private const uint CHECK_NUM_DEVICES = 0x8;
+        private const uint CHECK_FIRMWARE_FLASH = 0x10;
+        private const uint SAVE_CONFIGS_TO_DEVICE = 0x20;
+        private const uint REBOOT_RIO = 0x40;
 
-        private const string VERSION_CHECK = "1.0.0.0 - PreRelease";
+        private const string VERSION_CHECK = "0.3.0.0 - PreRelease";
 
         private dotNET.Thread _runningThread;
         private bool _actionFinished = true;
         private Status _actionStatus = Status.Ok;
         private BackEnd.Action _failedAction;
-        private uint _tests;
         private StringBuilder _sb = new StringBuilder();
         private object _lock = new object();
         private bool _running = false;
+
+        private uint _tests;
+        private DeviceDescrip _device;
+        private string _firmwarePath;
+        private string _configData;
 
         public UnitTesting()
         {
@@ -66,9 +72,12 @@ namespace CTRE.Phoenix.Diagnostics
             return ret;
         }
 
-        public Status StartTesting(uint tests)
+        public Status StartTesting(uint tests, DeviceDescrip deviceToUse, string firmwareFilePath, string paramData)
         {
             _tests = tests;
+            _device = deviceToUse;
+            _firmwarePath = firmwareFilePath;
+            _configData = paramData;
             if (_runningThread == null)
             {
                 dotNET.Thread t = new dotNET.Thread(TestThread);
@@ -89,11 +98,18 @@ namespace CTRE.Phoenix.Diagnostics
             uint testLoops = 0;
             while (_actionStatus == Status.Ok && _running)
             {
-                if (_actionStatus == Status.Ok && _running)
+                /* Put binaries onto RIO */
+                if((_tests & SFTP_BINARY_ONTO_RIO) != SFTP_BINARY_ONTO_RIO)
+                {
+                    //Don't executre Check Process
+                }
+                else if(_actionStatus == Status.Ok && _running)
                 {
                     UpdateRio();
+
                 }
 
+                /* Check if process is running */
                 if ((_tests & CHECK_PROCESS_RUNNING) != CHECK_PROCESS_RUNNING)
                 {
                     //Don't execute Check Process
@@ -103,6 +119,7 @@ namespace CTRE.Phoenix.Diagnostics
                     CheckProcess();
                 }
 
+                /* Check version is correct */
                 if ((_tests & CHECK_VERSION_NUMBER) != CHECK_VERSION_NUMBER)
                 {
                     //Don't execute Check Version Number
@@ -112,6 +129,7 @@ namespace CTRE.Phoenix.Diagnostics
                     CheckVersionNumber();
                 }
 
+                /* Check minimum number of devices */
                 if((_tests & CHECK_NUM_DEVICES) != CHECK_NUM_DEVICES)
                 {
                     //Don't execute Check Num Devices
@@ -119,6 +137,26 @@ namespace CTRE.Phoenix.Diagnostics
                 else if(_actionStatus == Status.Ok && _running)
                 {
                     CheckNumDevices(1);
+                }
+
+                /* Check Firmware flash succeeds */
+                if((_tests & CHECK_FIRMWARE_FLASH) != CHECK_FIRMWARE_FLASH)
+                {
+                    //Don't execute Check Firmware Flash
+                }
+                else if(_actionStatus == Status.Ok && _running)
+                {
+                    CheckFirmwareFlash(_device, _firmwarePath);
+                }
+
+                /* Save configs to device */
+                if((_tests & SAVE_CONFIGS_TO_DEVICE) != SAVE_CONFIGS_TO_DEVICE)
+                {
+                    //Don't execute Save Configs To Device
+                }
+                else if(_actionStatus == Status.Ok && _running)
+                {
+                    SaveConfigsToDevice(_device, _configData);
                 }
 
                 /*------------ This must be at end ------------*/
@@ -208,6 +246,32 @@ namespace CTRE.Phoenix.Diagnostics
             }
             _actionStatus = BE.Instance.GetNumberOfDevices(new BackEnd.Action.CallBack(CallBack), numberToExceed);
             Log("-----------Checking Number Of Devices exceeds " + numberToExceed + "--------------");
+            WaitUntilActionFinished();
+            Log("Callback Received");
+            Log(_actionStatus);
+        }
+
+        private void CheckFirmwareFlash(DeviceDescrip device, string firmwareFilePath)
+        {
+            lock(_lock)
+            {
+                _actionFinished = false;
+            }
+            _actionStatus = BE.Instance.RequestFieldUpgrade(device, firmwareFilePath, new BackEnd.Action.CallBack(CallBack));
+            Log("--------------Updating firmware on " + device.jsonStrings.Name + " -------------------");
+            WaitUntilActionFinished();
+            Log("Callback Received");
+            Log(_actionStatus);
+        }
+
+        private void SaveConfigsToDevice(DeviceDescrip device, string saveParamData)
+        {
+            lock(_lock)
+            {
+                _actionFinished = false;
+            }
+            _actionStatus = BE.Instance.SaveConfigs(device, saveParamData, new BackEnd.Action.CallBack(CallBack));
+            Log("---------------- Saving configs for device " + device.jsonStrings.Name + "------------");
             WaitUntilActionFinished();
             Log("Callback Received");
             Log(_actionStatus);
