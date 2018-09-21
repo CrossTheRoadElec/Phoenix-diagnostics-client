@@ -492,7 +492,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                 }
                 else if (configs.Device == null) /* what does this mean? */
                 {
-                    retval = Status.GeneralError;
+                    retval = (Status)configs.GeneralReturn.Error;
                 }
                 else if (configs.Device.Configs == null) /* what does this mean? */
                 {
@@ -642,6 +642,11 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
             {
                 /* form will get this on next poll */
                 dd.configCache = configs;
+            }
+            else if(innerLoopErr == Status.CTRE_DI_NoConfigs)
+            {
+                /* Device does not support configs, this is not a problem, we just won't set configCache to new configs */
+                innerLoopErr = Status.Ok;
             }
             else
             {
