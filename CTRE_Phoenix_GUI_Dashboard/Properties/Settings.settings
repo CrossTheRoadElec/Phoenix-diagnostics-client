@@ -6,10 +6,10 @@
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="hostname" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">172.22.11.2 # RoboRIO Over USB</Value>
     </Setting>
     <Setting Name="hostport" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">1250 # Default Port</Value>
     </Setting>
     <Setting Name="crfpath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />

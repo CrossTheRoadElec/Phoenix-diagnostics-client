@@ -409,8 +409,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cboHostSelectorAddr.FormattingEnabled = true;
             this.cboHostSelectorAddr.Items.AddRange(new object[] {
-            "localhost # Local PC Development",
-            "172.22.11.2 # RoboRIO Over USB"});
+            "172.22.11.2 # RoboRIO Over USB",
+            "localhost # Local PC Development"});
             this.cboHostSelectorAddr.Location = new System.Drawing.Point(156, 62);
             this.cboHostSelectorAddr.Name = "cboHostSelectorAddr";
             this.cboHostSelectorAddr.Size = new System.Drawing.Size(595, 21);

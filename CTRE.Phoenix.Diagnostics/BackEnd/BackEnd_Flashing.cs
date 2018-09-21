@@ -118,6 +118,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
             if (retval == Status.Ok)
             {
                 SetFieldUpgradeStatus("Confirm server is ready", 0); /* we are confirming if field upgrade is already occuring */
+                /* Make double sure that we aren't field upgrading. Server already does this but there's no harm in checking again */
                 retval = ConfirmIfFieldUpgradeIsOccuring(ddRef, false);
                 SetFieldUpgradeStatus("Confirm server is ready : " + retval, 0); /* display the result of this check */
             }
@@ -145,7 +146,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
             { 
                 /* wait until we get the rising edge of the flash event - a percent update with healthy error code, or a failed response from async web request. */
                 int i = 0;
-                const int kMaxLoops = 20;
+                const int kMaxLoops = 50;
                 for (; i < kMaxLoops; ++i)
                 {
                     const int kTimePerLoopMs = 100;
@@ -162,9 +163,8 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
 
                     /* leave for-loop if FU request completed */
                     if (bIsDone) {
-                        /* since we are leaving the loop because of this, save the error code */
-                        retval = respErr;
-                        break;
+                        /* Since we're done, return with response error */
+                        return respErr;
                     }
                 }
                 SetFieldUpgradeStatus("Starting field-upgrade : " + retval, 0);
