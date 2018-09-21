@@ -233,6 +233,8 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                     /* if ID change was successful, update our local device list */
                     if (retval == Status.Ok)
                         _descriptors.ChangeID(ddRef, newId);
+                    /* Update device cache with new deviceID */
+                    UpdateDeviceConfigs(false);
                     break;
 
                 case ActionType.SetConfig:

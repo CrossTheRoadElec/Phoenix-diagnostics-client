@@ -31,7 +31,9 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         private BottomStatusBar _BottomStatusBar;
         private DeviceListContainer _deviceListContainer;
         int _guiTimeoutMs = 0;
-        private Object _lock = new Object();
+        private Object _guiStateLock = new Object();
+        private Object _deviceIDLock = new Object();
+        private bool _removeSelectedDevice = false;
         private struct ActionResponse {
             public BackEndAction action;
             public Status error;
@@ -319,6 +321,15 @@ namespace CTRE_Phoenix_GUI_Dashboard {
             _actionResponse.action = action;
             _actionResponse.error = err;
         }
+        public void ClearDeviceCallBack(BackEndAction action, Status err)
+        {
+            _actionResponse.action = action;
+            _actionResponse.error = err;
+            lock(_deviceIDLock)
+            {
+                _removeSelectedDevice = true;
+            }
+        }
         /// <summary>
         /// Form timer task will call this to poll for status on action.
         /// </summary>
@@ -379,7 +390,7 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         {
             Debug.Print("GUI", newState.ToString());
 
-            lock (_lock) {
+            lock (_guiStateLock) {
                 _guiState = newState;
                 _guiTimeoutMs = timeoutMs;
             }
@@ -387,7 +398,7 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         }
         private GuiState GetGuiState()
         {
-            lock (_lock) { return _guiState; }
+            lock (_guiStateLock) { return _guiState; }
         }
         //-------- Convenient display routines for updating bottom status bar --------------//
         private void DisplayVersionNumber(string vers)
@@ -522,8 +533,10 @@ namespace CTRE_Phoenix_GUI_Dashboard {
             }
             else if(BackEnd.Instance.NewIdConflicts(dd, newID) == false)
             {
-				/* there are no ID conflicts, nothing to do */
-			}
+                /* there are no ID conflicts, request the action */
+                if (er == Status.Ok)
+                    er = BackEnd.Instance.RequestChangeDeviceID(dd, newID, new BackEndAction.CallBack(ActionCallBack));
+            }
 			else if(!PromptUserConflictID())
             {
 				/* user aborted */
@@ -531,11 +544,10 @@ namespace CTRE_Phoenix_GUI_Dashboard {
             }
             else
             {
-                er = _deviceListContainer.RemoveSelectedItem();
+                /* User wants to overwrite, so request the action */
+                if (er == Status.Ok)
+                    er = BackEnd.Instance.RequestChangeDeviceID(dd, newID, new BackEndAction.CallBack(ClearDeviceCallBack));
             }
-            /* request the action */
-            if (er == Status.Ok)
-                er = BackEnd.Instance.RequestChangeDeviceID(dd, newID, new BackEndAction.CallBack(ActionCallBack));
             /* common post-action checks, transition to wait for response handler */
             PostOperation(er, GuiState.Disabled_WaitForAction);
         }
@@ -654,6 +666,16 @@ namespace CTRE_Phoenix_GUI_Dashboard {
 
             /* empty web responses into GUI elements*/
             HttpTelemetryPeriodic();
+
+            /* If there's a device to be removed, remove it */
+            lock (_deviceIDLock)
+            {
+                if (_removeSelectedDevice)
+                {
+                    _deviceListContainer.RemoveSelectedItem();
+                    _removeSelectedDevice = false;
+                }
+            }
 
             /* get devices */
             IEnumerable<DeviceDescrip> devs = BackEnd.Instance.GetDeviceDescriptors();
