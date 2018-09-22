@@ -1,3 +1,5 @@
 # These are shell scripts, ensure they are Linux compliant
 *Phoenix-diagnostics-server text eol=lf
 *S25Phoenix_diagnostics_server text eol=lf
+# Server binary to deploy to robot controller
+Phoenix-diagnostics-server binary
