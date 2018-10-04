@@ -91,9 +91,9 @@ namespace CTRE_Phoenix_GUI_Dashboard
     {
         public enum eModeOfOperation
         {
-            Disabled = 0,
-            NormallyOpen = 1,
-            NormallyClosed = 2
+            NormallyOpen = 0,
+            NormallyClosed = 1,
+            Disabled = 2
         }
 
         public eModeOfOperation? LimitSwitchForward;
