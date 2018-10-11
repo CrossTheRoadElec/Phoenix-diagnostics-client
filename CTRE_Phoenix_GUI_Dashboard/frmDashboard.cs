@@ -964,14 +964,14 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         //--------------------------------------------------------------------------------------------------//
         void GenerateTabs(DeviceDescrip dd, System.Windows.Forms.TabControl tabControl)
         {
-            String strNamespace = "CTRE_Phoenix_GUI_Dashboard"; // TODO: can this be retreived using reflection
+            String strNamespace = typeof(IControlGroup).Namespace;
             /* lots of missing error checking here */
 
             if (dd.configCache != null)
             {
                 foreach (ConfigGroup group in dd.configCache.Device.Configs)
                 {
-                    Type t = Type.GetType(strNamespace + "." + group.Type);
+                    Type t = Type.GetType($"{strNamespace}.{group.Type}");
 
                     IControlGroup newGroup = (IControlGroup)Activator.CreateInstance(t);
 
@@ -988,7 +988,7 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         }
         void UpdateTabs(DeviceDescrip dd, TabControl tabControl)
         {
-            String strNamespace = "CTRE_Phoenix_GUI_Dashboard"; // TODO: can this be retreived using reflection
+            String strNamespace = typeof(IControlGroup).Namespace;
             /* lots of missing error checking here */
             int tabIndex = 1; //Index starts at one to pass over self test
 
@@ -998,7 +998,7 @@ namespace CTRE_Phoenix_GUI_Dashboard {
                 {
                     GroupTabPage tabReference = (GroupTabPage)tabControl.TabPages[tabIndex++];
 
-                    Type t = Type.GetType(strNamespace + "." + group.Type);
+                    Type t = Type.GetType($"{strNamespace}.{group.Type}");
 
                     IControlGroup newGroup = (IControlGroup)Activator.CreateInstance(t);
                     newGroup.SetFromValues(group.Values, group.Ordinal ?? 0);
