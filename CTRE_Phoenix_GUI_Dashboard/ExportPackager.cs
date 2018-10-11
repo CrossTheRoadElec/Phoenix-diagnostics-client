@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.IO.Compression;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CTRE_Phoenix_GUI_Dashboard
@@ -26,7 +27,7 @@ namespace CTRE_Phoenix_GUI_Dashboard
             this.cboHostSelectorAddr = cboHostSelectorAddr;
             this.cboHostSelectorPrt = cboHostSelectorPrt;
         }
-        public void Export()
+        public async Task Export()
         {
             /* If directory doesn't exist, create it */
             if (!Directory.Exists(".\\Exports"))
@@ -35,27 +36,27 @@ namespace CTRE_Phoenix_GUI_Dashboard
             }
 
             /* Create directory for this specific Export */
-            string newExportPath = String.Format(".\\Exports\\Export {0}", DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss"));
+            string newExportPath = $".\\Exports\\Export {DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss")}";
             Directory.CreateDirectory(newExportPath);
 
             using (FileStream diagLog = new FileStream(newExportPath + "\\Diagnostic Log.txt", FileMode.Create))
             {
                 /* Export data to a file */
-                ExportDiagnosticLog(diagLog);
+                await ExportDiagnosticLog(diagLog);
 
             }
             using (FileStream devLog = new FileStream(newExportPath + "\\Devices Log.txt", FileMode.Create))
             {
                 /* Export data to a file */
-                ExportDevices(devLog);
+                await ExportDevices(devLog);
             }
             using (FileStream info = new FileStream(newExportPath + "\\Client Info.txt", FileMode.Create))
             {
                 /* Export data to a file */
-                ExportClientInfo(info);
+                await ExportClientInfo(info);
             }
             /* Zip up all files */
-            ZipEverythingUp(newExportPath, newExportPath + ".zip");
+            await ZipEverythingUp(newExportPath, newExportPath + ".zip");
 
             /* Delete original directory to save space */
             new DirectoryInfo(newExportPath).Delete(true);
@@ -63,7 +64,7 @@ namespace CTRE_Phoenix_GUI_Dashboard
             System.Diagnostics.Process.Start(".\\Exports");
         }
 
-        private void ExportDiagnosticLog(FileStream diagLog)
+        private async Task ExportDiagnosticLog(FileStream diagLog)
         {
             string content = "";
             foreach (DataGridViewRow row in gridDiagnosticLog.Rows)
@@ -74,10 +75,10 @@ namespace CTRE_Phoenix_GUI_Dashboard
                     row.Cells[2].Value + "\r\n";
             }
             byte[] contentBytes = System.Text.Encoding.UTF8.GetBytes(content);
-            diagLog.Write(contentBytes, 0, contentBytes.Length);
+            await diagLog.WriteAsync(contentBytes, 0, contentBytes.Length);
         }
 
-        private void ExportDevices(FileStream devLog)
+        private async Task ExportDevices(FileStream devLog)
         {
             string content = "";
             foreach (ListViewItem item in lstDevices.Items)
@@ -94,10 +95,10 @@ namespace CTRE_Phoenix_GUI_Dashboard
                     device.jsonStrings.HardwareRev + "\r\n";
             }
             byte[] contentBytes = System.Text.Encoding.UTF8.GetBytes(content);
-            devLog.Write(contentBytes, 0, contentBytes.Length);
+            await devLog.WriteAsync(contentBytes, 0, contentBytes.Length);
         }
 
-        private void ExportClientInfo(FileStream connectionInfo)
+        private async Task ExportClientInfo(FileStream connectionInfo)
         {
             string a, b, c;
             BackEnd.Instance.GetStatus(out a, out b, out c);
@@ -110,12 +111,15 @@ namespace CTRE_Phoenix_GUI_Dashboard
             content += "Client Version is: " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() + "\r\n";
 
             byte[] contentBytes = System.Text.Encoding.UTF8.GetBytes(content);
-            connectionInfo.Write(contentBytes, 0, contentBytes.Length);
+            await connectionInfo.WriteAsync(contentBytes, 0, contentBytes.Length);
         }
 
-        private  void ZipEverythingUp(string sourceDestination, string zipDestination)
+        private Task ZipEverythingUp(string sourceDestination, string zipDestination)
         {
-            ZipFile.CreateFromDirectory(sourceDestination, zipDestination);
+            return Task.Run(() =>
+            {
+                ZipFile.CreateFromDirectory(sourceDestination, zipDestination);
+            });
         }
     }
 }

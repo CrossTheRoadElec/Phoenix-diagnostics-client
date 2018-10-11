@@ -1137,14 +1137,14 @@ namespace CTRE_Phoenix_GUI_Dashboard {
 
         private void txtDeviceCRFPath_TextChanged(object sender, EventArgs e) { SaveStickySettings(); }
 
-        private void captureAllToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void captureAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var exportPackager = new ExportPackager(gridDiagnosticLog,
                                      _deviceListContainer,
                                      lstDevices,
                                      cboHostSelectorAddr,
                                      cboHostSelectorPrt);
-            exportPackager.Export();
+            await exportPackager.Export();
         }
     }
 }
