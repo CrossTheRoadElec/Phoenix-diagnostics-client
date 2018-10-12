@@ -29,7 +29,7 @@ namespace CTRE.Phoenix.dotNET.Form
         {
             try
             {
-                System.Windows.Clipboard.SetText(toCopy, System.Windows.TextDataFormat.Text);
+                System.Windows.Forms.Clipboard.SetText(toCopy, System.Windows.Forms.TextDataFormat.Text);
                 return true;
             }
             catch (Exception)
@@ -41,7 +41,7 @@ namespace CTRE.Phoenix.dotNET.Form
         {
             try
             {
-                System.Windows.Clipboard.SetDataObject(objToCopy, true);
+                System.Windows.Forms.Clipboard.SetDataObject(objToCopy, true);
                 return true;
             }
             catch (Exception)
