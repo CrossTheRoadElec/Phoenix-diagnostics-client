@@ -6,11 +6,11 @@ namespace CTRE.Phoenix.dotNET.Form
     public class ToggleButton
     {
         Button _button;
-        String _notPressedText;
-        String _pressedText;
+        string _notPressedText;
+        string _pressedText;
         bool _isPressed;
 
-        public ToggleButton(Button button, bool IsPressed, String notPressedText, String pressedText)
+        public ToggleButton(Button button, bool IsPressed, string notPressedText, string pressedText)
         {
             _button = button;
             _notPressedText = notPressedText;

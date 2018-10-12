@@ -29,32 +29,32 @@ namespace CTRE.Phoenix.dotNET.Form
             {
                 if (label != null)
                 {
-                    label.Text = String.Empty;
+                    label.Text = string.Empty;
                 }
             }
 
             _tooltip = new CTRE.Phoenix.dotNET.Form.ToolTipContainer(statusStrip);
         }
-        public void SetHoverString(String hoverMsg)
+        public void SetHoverString(string hoverMsg)
         {
             _tooltip.SetText(hoverMsg);
         }
-        public void PrintLeft(Color col, String text)
+        public void PrintLeft(Color col, string text)
         {
             _labels[0].ForeColor = col;
             _labels[0].Text = text;
         }
-        public void PrintMiddleLeft(Color col, String text)
+        public void PrintMiddleLeft(Color col, string text)
         {
             _labels[1].ForeColor = col;
             _labels[1].Text = text;
         }
-        public void PrintMiddleRight(Color col, String text)
+        public void PrintMiddleRight(Color col, string text)
         {
             _labels[2].ForeColor = col;
             _labels[2].Text = text;
         }
-        public void PrintRight(Color col, String text)
+        public void PrintRight(Color col, string text)
         {
             _labels[3].ForeColor = col;
             _labels[3].Text = text;

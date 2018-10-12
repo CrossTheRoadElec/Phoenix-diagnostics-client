@@ -5,14 +5,14 @@ namespace CTRE.Phoenix.dotNET.Form
 {
     public static class FormRoutines
     {
-        public static String GetAppVersion()
+        public static string GetAppVersion()
         {
             System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
             System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
             string version = fvi.FileVersion;
             return version;
         }
-        public static String MakeVersionString(String kAppName)
+        public static string MakeVersionString(string kAppName)
         {
             string appver = GetAppVersion();
             StringBuilder sb = new StringBuilder();
@@ -25,7 +25,7 @@ namespace CTRE.Phoenix.dotNET.Form
             }
             return kAppName + " " + sb.ToString();
         }
-        public static bool ClipboardSet(String toCopy)
+        public static bool ClipboardSet(string toCopy)
         {
             try
             {

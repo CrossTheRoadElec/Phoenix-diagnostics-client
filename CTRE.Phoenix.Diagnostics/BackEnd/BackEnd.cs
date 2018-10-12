@@ -30,9 +30,9 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
         private HostNameAndPort _hostName = new HostNameAndPort();
         private DeviceDescriptors _descriptors = new DeviceDescriptors();
         private State _state = State.Connecting;
-        private Object _lock = new Object();
+        private object _lock = new object();
         private Thread _thread;
-        private string _ConnectionStatus = String.Empty;
+        private string _ConnectionStatus = string.Empty;
         private Action _action;
         private uint _timeSincePollingMs = uint.MaxValue / 2;
         private uint _timeSinceSomeElsesToolTransmit = uint.MaxValue / 2;
@@ -59,7 +59,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
         public struct FirmwareStatus
         {
             public uint progressPerc;
-            public String message;
+            public string message;
         }
         public FirmwareStatus _firmwareStatus;
 
@@ -200,7 +200,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
 
                 case ActionType.SetDeviceName:
                     /* get params for this action */
-                    String newName = _action.stringParam;
+                    string newName = _action.stringParam;
                     /* make sure device was found in our collection */
                     if (retval == Status.Ok)
                         retval = (foundOk) ? Status.Ok : Status.DeviceNotFound;
@@ -392,7 +392,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
         {
             /* attempt requesting an update */
             string response;
-            Status retval = _WebServerScripts.HttpGet(_hostName, "", 0, ActionType.GetVersion, out response, String.Empty, 1000);
+            Status retval = _WebServerScripts.HttpGet(_hostName, "", 0, ActionType.GetVersion, out response, string.Empty, 1000);
 
             /* attempt parsing */
             VersionReturn general = null;
@@ -426,7 +426,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
         {
             /* attempt requesting an update */
             string response;
-            Status retval = _WebServerScripts.HttpGet(_hostName, "", 0, ActionType.GetDeviceList, out response, String.Empty, 2000);
+            Status retval = _WebServerScripts.HttpGet(_hostName, "", 0, ActionType.GetDeviceList, out response, string.Empty, 2000);
 
             /* attempt parsing */
             GetDevicesReturn deviceStatus = null;
@@ -699,12 +699,12 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
         }
 
         //------------------------------- Routines for getting status of BackEnd, these routines must not block -------------------------------------//
-        public String GetConnectionStatus()
+        public string GetConnectionStatus()
         {
             /* return the last rendered tool status from our backEnd Thread */
             return _ConnectionStatus;
         }
-        public State GetStatus(out String message, out String messageColor, out String hoverMsg)
+        public State GetStatus(out string message, out string messageColor, out string hoverMsg)
         {
             State retval = GetState_NoLock();
 
@@ -944,7 +944,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
             Action ac = new Action(callback, dd, ActionType.SelfTest);
             return PushAction(ac);
         }
-        public Status RequestChangeName(DeviceDescrip dd, String newName, Action.CallBack callback)
+        public Status RequestChangeName(DeviceDescrip dd, string newName, Action.CallBack callback)
         {
             Action ac = new Action(callback, dd, ActionType.SetDeviceName);
             ac.stringParam = newName;
@@ -1014,7 +1014,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
             return PushAction(ac);
         }
         //------------ HOST selection ---------------//
-        public Status SetHostName(String hostNewName, String hostPort)
+        public Status SetHostName(string hostNewName, string hostPort)
         {
             _hostName.Set(hostNewName, hostPort);
             return Status.Ok;

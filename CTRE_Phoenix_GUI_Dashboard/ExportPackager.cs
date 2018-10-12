@@ -35,7 +35,7 @@ namespace CTRE_Phoenix_GUI_Dashboard
             }
 
             /* Create directory for this specific Export */
-            string newExportPath = String.Format(".\\Exports\\Export {0}", DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss"));
+            string newExportPath = string.Format(".\\Exports\\Export {0}", DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss"));
             Directory.CreateDirectory(newExportPath);
 
             using (FileStream diagLog = new FileStream(newExportPath + "\\Diagnostic Log.txt", FileMode.Create))

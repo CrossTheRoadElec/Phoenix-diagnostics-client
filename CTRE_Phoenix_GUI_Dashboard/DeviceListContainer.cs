@@ -82,7 +82,7 @@ namespace CTRE_Phoenix_GUI_Dashboard
             }
             return descriptor;
         }
-        bool AssignIfDiff(ListViewItem.ListViewSubItem lhs, String rhs)
+        bool AssignIfDiff(ListViewItem.ListViewSubItem lhs, string rhs)
         {
             if (lhs.Text.Equals(rhs))
             {

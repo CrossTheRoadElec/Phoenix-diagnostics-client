@@ -42,13 +42,13 @@ namespace CTRE.Phoenix.dotNET.Form
         }
 
         //--------------- Static routines for lazy updating ----------//
-        public static void AssignIfDiff(ListViewItem.ListViewSubItem lhs, String rhs)
+        public static void AssignIfDiff(ListViewItem.ListViewSubItem lhs, string rhs)
         {
             if (lhs.Text.Equals(rhs)) { }
             else { lhs.Text = rhs; }
         }
 
-        public static void AssignIfDiff(System.Windows.Forms.Label lhs, String rhs)
+        public static void AssignIfDiff(System.Windows.Forms.Label lhs, string rhs)
         {
             if (lhs.Text.Equals(rhs)) { }
             else { lhs.Text = rhs; }
@@ -58,7 +58,7 @@ namespace CTRE.Phoenix.dotNET.Form
             if (lhs.BackColor.Equals(rhs)) { }
             else { lhs.BackColor = rhs; }
         }
-        public static void AssignIfDiff(System.Windows.Forms.GroupBox lhs, String rhs)
+        public static void AssignIfDiff(System.Windows.Forms.GroupBox lhs, string rhs)
         {
             if (lhs.Text.Equals(rhs)) { }
             else { lhs.Text = rhs; }

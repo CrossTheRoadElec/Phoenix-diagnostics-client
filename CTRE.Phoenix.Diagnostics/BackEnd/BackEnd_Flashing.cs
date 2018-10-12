@@ -10,7 +10,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
     {
         private Status ConfirmIfFieldUpgradeIsOccuring(DeviceDescrip ddRef, bool bExpectToBeFlashing)
         {
-            String response = String.Empty;
+            string response = string.Empty;
             Status retval = Status.Ok;
 
             /* get status update */
@@ -48,7 +48,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
 
         private Status CheckAsyncWebServerResp(AsyncWebExchange asyncWebExchange, int timeoutMs, out bool isDone)
         {
-            String response = String.Empty;
+            string response = string.Empty;
             Status retval = Status.Ok;
 
             isDone = false;
@@ -94,7 +94,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
         private Status ExecuteFieldUpgrade(DeviceDescrip ddRef, AsyncWebExchange asyncWebExchange, string fileName, bool usingSftp)
         {
             Status retval = Status.Ok;
-            String response = string.Empty;
+            string response = string.Empty;
 
             /* let user know action is being processed */
             SetFieldUpgradeStatus("Reading CRF...", 0);
