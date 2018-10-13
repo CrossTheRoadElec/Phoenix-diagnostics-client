@@ -13,7 +13,7 @@ namespace CTRE.Phoenix.Diagnostics
         private bool _isStopped = false;
         private int _error = 0;
         private StringBuilder _sb = new StringBuilder();
-        private readonly Object _lock = new Object();
+        private readonly object _lock = new object();
         private bool _started;
         HostNameAndPort _host;
 
@@ -247,7 +247,7 @@ namespace CTRE.Phoenix.Diagnostics
                 sb.Clear();
                 _started = false;
             }
-            String temp = string.Empty;
+            string temp = string.Empty;
             bool retval = false;
             /* lock and copy */
             lock (_lock)
@@ -278,7 +278,7 @@ namespace CTRE.Phoenix.Diagnostics
                 _error = error;
             }
         }
-        public void Log(String s)
+        public void Log(string s)
         {
             lock (_lock)
             {
@@ -487,7 +487,7 @@ namespace CTRE.Phoenix.Diagnostics
             OnFinished(error);
             stopWatch.Stop();
             TimeSpan ts = stopWatch.Elapsed;
-            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+            string elapsedTime = string.Format("{0:00}:{1:00}:{2:00}.{3:00}",
                 ts.Hours, ts.Minutes, ts.Seconds,
                 ts.Milliseconds / 10);
             Log("\nDuration: " + elapsedTime);
@@ -604,7 +604,7 @@ namespace CTRE.Phoenix.Diagnostics
             OnFinished(error);
             stopWatch.Stop();
             TimeSpan ts = stopWatch.Elapsed;
-            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+            string elapsedTime = string.Format("{0:00}:{1:00}:{2:00}.{3:00}",
                 ts.Hours, ts.Minutes, ts.Seconds,
                 ts.Milliseconds / 10);
             Log("\nDuration: " + elapsedTime);

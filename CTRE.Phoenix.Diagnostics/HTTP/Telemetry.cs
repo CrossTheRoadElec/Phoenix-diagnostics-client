@@ -13,14 +13,14 @@ namespace CTRE.Phoenix.Diagnostics.HTTP
         public class ExchangeLog
         {
             public int lineNumber;
-            public String type;
-            public String request;
-            public String response;
+            public string type;
+            public string request;
+            public string response;
             public ActionType actionType;
 
             private static int counter = 0;
 
-            public ExchangeLog(String type, String request, String response, ActionType actionType)
+            public ExchangeLog(string type, string request, string response, ActionType actionType)
             {
                 this.lineNumber = ++counter;
                 this.type = type;

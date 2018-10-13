@@ -31,8 +31,8 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         private BottomStatusBar _BottomStatusBar;
         private DeviceListContainer _deviceListContainer;
         int _guiTimeoutMs = 0;
-        private Object _guiStateLock = new Object();
-        private Object _deviceIDLock = new Object(); // TODO: this could be cleaned up using the regular action callback mechanism
+        private object _guiStateLock = new object();
+        private object _deviceIDLock = new object(); // TODO: this could be cleaned up using the regular action callback mechanism
         private bool _removeSelectedDevice = false; // TODO: this could be cleaned up using the regular action callback mechanism
         private struct ActionResponse {
             public BackEndAction action;
@@ -45,7 +45,7 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         private ToggleButton _toggleWebPaused = null;
         private ToggleButton _toggleWebJumpToBtm = null;
         /* ----------- Constants -------- */
-        private readonly String kAppName = "Dashboard";
+        private readonly string kAppName = "Dashboard";
 
         public frmDashboard()
         {
@@ -78,7 +78,7 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         }
 
         //--------------- Rendering GUI elements ---------------------------------//
-        Color DecodeMessageColor(String colorString)
+        Color DecodeMessageColor(string colorString)
         {
             switch (colorString[0]) {
                 case 'G':
@@ -402,7 +402,7 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         {
             _BottomStatusBar.PrintRight(Color.Black, "Server Version: " + vers);
         }
-        private void PrintBackEndStatus(Color col, String text, String hoverMsg)
+        private void PrintBackEndStatus(Color col, string text, string hoverMsg)
         {
             _BottomStatusBar.SetHoverString(hoverMsg);
             _BottomStatusBar.PrintMiddleLeft(col, text);
@@ -428,7 +428,7 @@ namespace CTRE_Phoenix_GUI_Dashboard {
                 return false;
             return true;
         }
-        private void PrintConnectionStatus(Color col, String text)
+        private void PrintConnectionStatus(Color col, string text)
         {
             _BottomStatusBar.PrintRight(col, text);
         }
@@ -646,9 +646,9 @@ namespace CTRE_Phoenix_GUI_Dashboard {
             timer1.Interval = 40; /* 10ms => 40ms */
 
             /* get backup status, color, and hover message */
-            String msg, messageColor, hoverMsg;
+            string msg, messageColor, hoverMsg;
             BackEnd.State state = BackEnd.Instance.GetStatus(out msg, out messageColor, out hoverMsg);
-            String connectionStatus = BackEnd.Instance.GetConnectionStatus();
+            string connectionStatus = BackEnd.Instance.GetConnectionStatus();
 
             /* its up to the GUI how much of this stuff to show */
             PrintConnectionStatus(Color.Blue, connectionStatus);
@@ -964,7 +964,7 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         //--------------------------------------------------------------------------------------------------//
         void GenerateTabs(DeviceDescrip dd, System.Windows.Forms.TabControl tabControl)
         {
-            String strNamespace = "CTRE_Phoenix_GUI_Dashboard"; // TODO: can this be retreived using reflection
+            string strNamespace = "CTRE_Phoenix_GUI_Dashboard"; // TODO: can this be retreived using reflection
             /* lots of missing error checking here */
 
             if (dd.configCache != null)
@@ -988,7 +988,7 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         }
         void UpdateTabs(DeviceDescrip dd, TabControl tabControl)
         {
-            String strNamespace = "CTRE_Phoenix_GUI_Dashboard"; // TODO: can this be retreived using reflection
+            string strNamespace = "CTRE_Phoenix_GUI_Dashboard"; // TODO: can this be retreived using reflection
             /* lots of missing error checking here */
             int tabIndex = 1; //Index starts at one to pass over self test
 

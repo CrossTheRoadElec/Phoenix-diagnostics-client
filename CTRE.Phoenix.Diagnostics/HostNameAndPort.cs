@@ -4,11 +4,11 @@ namespace CTRE.Phoenix.Diagnostics
 {
     public class HostNameAndPort
     {
-        private String _name = String.Empty;
-        private String _port = String.Empty;
+        private string _name = string.Empty;
+        private string _port = string.Empty;
 
-        private String _newName = String.Empty;
-        private String _newPort = String.Empty;
+        private string _newName = string.Empty;
+        private string _newPort = string.Empty;
 
         private bool _changed = false;
 

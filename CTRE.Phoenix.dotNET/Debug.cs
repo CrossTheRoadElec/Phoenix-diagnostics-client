@@ -14,7 +14,7 @@ namespace CTRE.Phoenix.dotNET
                 Print("Assert","Assert failed");
             }
         }
-        public static void Print(String tag, String message)
+        public static void Print(string tag, string message)
         {
             long milliseconds = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             milliseconds -= _bootTime;
