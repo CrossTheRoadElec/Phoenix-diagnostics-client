@@ -10,7 +10,11 @@ namespace CTRE_Phoenix_GUI_Dashboard
         IControlGroup GetFromValues(GroupTabPage tab);
         void UpdateFromValues(GroupTabPage tab);
     }
-
+    /// <summary>
+    /// Basically a TabPage, with a reference to the control group.
+    /// This way we can insert this into the Windows Forms Framework,
+    /// but also retrieve the control group when we need it.
+    /// </summary>
     class GroupTabPage : TabPage
     {
         public IControlGroup group;

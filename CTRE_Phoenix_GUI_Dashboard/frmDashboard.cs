@@ -964,46 +964,62 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         //--------------------------------------------------------------------------------------------------//
         void GenerateTabs(DeviceDescrip dd, System.Windows.Forms.TabControl tabControl)
         {
+            /* get the c# namespace of all the classes in ConfigGroups.cs */
             string strNamespace = typeof(IControlGroup).Namespace;
-            /* lots of missing error checking here */
 
-            if (dd.configCache != null)
+            /* does this device even have configs to paint onto the form ? */
+            if (dd.configCache == null)
             {
-                foreach (ConfigGroup group in dd.configCache.Device.Configs)
+                /* Diagnostic Server did not give us any config params in the JSON response */
+            }
+            else
+            {
+                /* device has configs, loop through the setting-groups in the JSON response */
+                foreach (ConfigGroup jsonGroup in dd.configCache.Device.Configs)
                 {
-                    Type t = Type.GetType($"{strNamespace}.{group.Type}");
-
-                    IControlGroup newGroup = (IControlGroup)Activator.CreateInstance(t);
-
-                    GroupTabPage newTab = new GroupTabPage(newGroup);
-                    newTab.Text = group.Name;
-
-                    newGroup.SetFromValues(group.Values, group.Ordinal.Value);
-
-                    newTab.Controls.Add(newGroup.CreateLayout());
-
-                    tabControl.TabPages.Add(newTab);
+                    /* there is a matching class in ConfigGroups.cs, get the C# type via reflection */
+                    Type type = Type.GetType($"{strNamespace}.{jsonGroup.Type}");
+                    /* create a class instance of "type", this object knows how to parse the JSON and how to make the Form elements.*/
+                    IControlGroup newGroup = (IControlGroup)Activator.CreateInstance(type);
+                    /* this class instance knows what elems to expect in JSON respn, let it decode it */
+                    newGroup.SetFromValues(jsonGroup.Values, jsonGroup.Ordinal.Value);
+                    /* create a group tab, basically a System.Windows.Forms.TabPage with a reference to the controlGroup*/
+                    GroupTabPage tabPage = new GroupTabPage(newGroup);
+                    tabPage.Text = jsonGroup.Name;
+                    tabPage.Controls.Add(newGroup.CreateLayout()); /* render the Windows GUI elems */
+                    /* add our freshly filled tab into the tab control */
+                    tabControl.TabPages.Add(tabPage);
                 }
             }
         }
         void UpdateTabs(DeviceDescrip dd, TabControl tabControl)
         {
+            /* get the c# namespace of all the classes in ConfigGroups.cs */
             string strNamespace = typeof(IControlGroup).Namespace;
-            /* lots of missing error checking here */
+
+            /* the goal is to loop thru all tabs (expect for the self-test:idx=0) */
             int tabIndex = 1; //Index starts at one to pass over self test
 
-            if (dd.configCache != null)
+            /* does this device even have configs to update ? */
+            if (dd.configCache == null)
             {
-                foreach (ConfigGroup group in dd.configCache.Device.Configs)
+                /* Diagnostic Server did not give us any config params in the JSON response */
+            }
+            else
+            {
+                /* the first tab after self-test corresponds to the config group in the JSON */
+                foreach (ConfigGroup jsonGroup in dd.configCache.Device.Configs)
                 {
-                    GroupTabPage tabReference = (GroupTabPage)tabControl.TabPages[tabIndex++];
-
-                    Type t = Type.GetType($"{strNamespace}.{group.Type}");
-
-                    IControlGroup newGroup = (IControlGroup)Activator.CreateInstance(t);
-                    newGroup.SetFromValues(group.Values, group.Ordinal ?? 0);
-
-                    newGroup.UpdateFromValues(tabReference);
+                    /* there is a matching class in ConfigGroups.cs, get the C# type via reflection */
+                    Type type = Type.GetType($"{strNamespace}.{jsonGroup.Type}");
+                    /* get the existing group tab, basically a System.Windows.Forms.TabPage with a reference to the controlGroup*/
+                    GroupTabPage tabPage = (GroupTabPage)tabControl.TabPages[tabIndex++];
+                    /* make/get the control group that understans what to do with the JSON strings.  
+                     * Not sure why we don't just use tabPage.group, instead of making a fresh one */
+                    IControlGroup newGroup = (IControlGroup)Activator.CreateInstance(type);
+                    newGroup.SetFromValues(jsonGroup.Values, jsonGroup.Ordinal ?? 0);
+                    /* refill the GUI elems inside tabPage with the parsed setting values from newGroup */
+                    newGroup.UpdateFromValues(tabPage);
                 }
             }
         }
