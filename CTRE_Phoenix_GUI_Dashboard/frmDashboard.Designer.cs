@@ -70,6 +70,7 @@
             this.manDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.bootRev = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.hardVers = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.vendor = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.imgLstDevices = new System.Windows.Forms.ImageList(this.components);
             this.btnRefreshDevices = new System.Windows.Forms.Button();
             this.pnlGenDevConfigOuter = new System.Windows.Forms.Panel();
@@ -482,7 +483,8 @@
             this.firmwareVers,
             this.manDate,
             this.bootRev,
-            this.hardVers});
+            this.hardVers,
+            this.vendor});
             this.lstDevices.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lstDevices.ForeColor = System.Drawing.SystemColors.WindowText;
             this.lstDevices.FullRowSelect = true;
@@ -538,6 +540,11 @@
             // 
             this.hardVers.Text = "Hardware Version";
             this.hardVers.Width = 125;
+            //
+            // vendor
+            //
+            this.vendor.Text = "Vendor";
+            this.vendor.Width = 125;
             // 
             // imgLstDevices
             // 
@@ -1193,6 +1200,7 @@
         private System.Windows.Forms.ContextMenuStrip popupHttpLog;
         private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
         private System.Windows.Forms.ColumnHeader hardVers;
+        private System.Windows.Forms.ColumnHeader vendor;
         private System.Windows.Forms.Button btnRevertBinaries;
         private System.Windows.Forms.Button btnUpdateBinaries;
         private System.Windows.Forms.RichTextBox rtbRioUpdateBox;

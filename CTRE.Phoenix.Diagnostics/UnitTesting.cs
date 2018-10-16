@@ -26,7 +26,7 @@ namespace CTRE.Phoenix.Diagnostics
         private const uint SAVE_CONFIGS_TO_DEVICE = 0x20;
         private const uint REBOOT_RIO = 0x40;
 
-        private const string VERSION_CHECK = "0.3.0.0 - PreRelease";
+        private const string VERSION_CHECK = "0.3.2.0 - PreRelease";
 
         private dotNET.Thread _runningThread;
         private bool _actionFinished = true;

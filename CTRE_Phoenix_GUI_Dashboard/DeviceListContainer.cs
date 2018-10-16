@@ -101,14 +101,15 @@ namespace CTRE_Phoenix_GUI_Dashboard
         {
             ListViewItem item = new ListViewItem();
             item.SubItems.Clear();
-            item.Text= descriptor.jsonStrings.Name;                             // Name
-            item.SubItems.Add((descriptor.jsonStrings.SoftStatus));           // Status
-            item.SubItems.Add((descriptor.jsonStrings.Model));                // Model
-            item.SubItems.Add((descriptor.deviceID.ToString()));                  // devID
-            item.SubItems.Add((descriptor.jsonStrings.CurrentVers));          // Firm
-            item.SubItems.Add((descriptor.jsonStrings.ManDate));              // Man Date
-            item.SubItems.Add((descriptor.jsonStrings.BootloaderRev));        // Btld
+            item.Text= descriptor.jsonStrings.Name;                         // Name
+            item.SubItems.Add((descriptor.jsonStrings.SoftStatus));         // Status
+            item.SubItems.Add((descriptor.jsonStrings.Model));              // Model
+            item.SubItems.Add((descriptor.deviceID.ToString()));            // devID
+            item.SubItems.Add((descriptor.jsonStrings.CurrentVers));        // Firm
+            item.SubItems.Add((descriptor.jsonStrings.ManDate));            // Man Date
+            item.SubItems.Add((descriptor.jsonStrings.BootloaderRev));      // Btld
             item.SubItems.Add(descriptor.jsonStrings.HardwareRev);          // Hard Rev
+            item.SubItems.Add(descriptor.jsonStrings.Vendor);               // Vendor
             item.ImageIndex = ModelToInt(descriptor.model);    /* icon index, same as model */
 
             return item;
@@ -117,14 +118,15 @@ namespace CTRE_Phoenix_GUI_Dashboard
         {
             bool ValueChanged = false; /* this can be used to count the tree changes */
             int i = 0;
-            ValueChanged |= AssignIfDiff(item.SubItems[i++], descriptor.jsonStrings.Name);                    // Name
-            ValueChanged |= AssignIfDiff(item.SubItems[i++], descriptor.jsonStrings.SoftStatus);              // Status
-            ValueChanged |= AssignIfDiff(item.SubItems[i++], descriptor.jsonStrings.Model);                   // Model
-            ValueChanged |= AssignIfDiff(item.SubItems[i++], descriptor.deviceID.ToString());                 // devID
-            ValueChanged |= AssignIfDiff(item.SubItems[i++], descriptor.jsonStrings.CurrentVers);             // Firm
-            ValueChanged |= AssignIfDiff(item.SubItems[i++], descriptor.jsonStrings.ManDate);                 // Man Date
-            ValueChanged |= AssignIfDiff(item.SubItems[i++], descriptor.jsonStrings.BootloaderRev);           // Btld
-            ValueChanged |= AssignIfDiff(item.SubItems[i++], descriptor.jsonStrings.HardwareRev);             // Man Rev
+            ValueChanged |= AssignIfDiff(item.SubItems[i++], descriptor.jsonStrings.Name);              // Name
+            ValueChanged |= AssignIfDiff(item.SubItems[i++], descriptor.jsonStrings.SoftStatus);        // Status
+            ValueChanged |= AssignIfDiff(item.SubItems[i++], descriptor.jsonStrings.Model);             // Model
+            ValueChanged |= AssignIfDiff(item.SubItems[i++], descriptor.deviceID.ToString());           // devID
+            ValueChanged |= AssignIfDiff(item.SubItems[i++], descriptor.jsonStrings.CurrentVers);       // Firm
+            ValueChanged |= AssignIfDiff(item.SubItems[i++], descriptor.jsonStrings.ManDate);           // Man Date
+            ValueChanged |= AssignIfDiff(item.SubItems[i++], descriptor.jsonStrings.BootloaderRev);     // Btld
+            ValueChanged |= AssignIfDiff(item.SubItems[i++], descriptor.jsonStrings.HardwareRev);       // Hard Rev
+            ValueChanged |= AssignIfDiff(item.SubItems[i++], descriptor.jsonStrings.Vendor);            // Vendor
 
             /* icon index, same as model */
             int imageIndex = ModelToInt(descriptor.model);   

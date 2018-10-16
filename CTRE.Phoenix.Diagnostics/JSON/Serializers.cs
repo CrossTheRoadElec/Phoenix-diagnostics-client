@@ -22,6 +22,7 @@ namespace CTRE.Phoenix.Diagnostics.JSON.Serializers
         public string CurrentVers;
         public int? DynID;
         public string HardwareRev;
+        public string Vendor;
         public long? ID;
         public string ManDate;
         public string Model;
