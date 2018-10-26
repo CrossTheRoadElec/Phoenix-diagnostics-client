@@ -74,6 +74,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Binary\cci\libCTRE_PhoenixCCI.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Binary\ctre\Phoenix-diagnostics-server">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
