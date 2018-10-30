@@ -366,6 +366,7 @@ namespace CTRE.Phoenix.Diagnostics
                     }
                 }
             }
+
             /* write new files  */
             if (error == 0)
             {
@@ -423,19 +424,14 @@ namespace CTRE.Phoenix.Diagnostics
                     
                     Log("Updating File Write Permissions");
                     term.SendCommand("chmod 777 /etc/init.d/Phoenix-diagnostics-server");
-                    term.SendCommand("chmod 777 /etc/rc5.d/S25Phoenix-diagnostics-server");
                     term.SendCommand("chmod 777 /usr/local/frc/bin/Phoenix-diagnostics-server");
-
 
                     //Wait a bit to make sure any file changes actually took
                     Thread.Sleep(1000);
                     Log("Syncing RoboRIO to ensure files are on the flash");
                     term.SendCommand("sync");
-                    
                 }
-                catch (Exception)
-                {
-                }
+                catch (Exception){ }
                 finally
                 {
                     if (term != null)
@@ -444,8 +440,31 @@ namespace CTRE.Phoenix.Diagnostics
                     }
                 }
             }
-            //Wait some more to allow sync ot take affect
+
+            /* Allow more time to ensure sync */
             Thread.Sleep(1000);
+
+            /* Create Symlink for Phoenix-diagnostics-server in etc/rc5.d/ */
+            if (error == 0)
+            {
+                CtrSshClient term = null;
+                try
+                {
+                    term = new CtrSshClient(_host, this);
+
+                    Log("Creating/Updating Symlink for rc5.d");
+                    term.SendCommand("ln -sf /etc/init.d/Phoenix-diagnostics-server /etc/rc5.d/S25Phoenix-diagnostics-server");
+                }
+                catch (Exception) { }
+                finally
+                {
+                    if (term != null)
+                    {
+                        term.Close();
+                    }
+                }
+            }
+
             /* restart server */
             if (error == 0)
             {
@@ -609,7 +628,5 @@ namespace CTRE.Phoenix.Diagnostics
                 ts.Milliseconds / 10);
             Log("\nDuration: " + elapsedTime);
         }
-
-
     }
 }

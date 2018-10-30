@@ -15,6 +15,9 @@ namespace CTRE_Phoenix_GUI_Dashboard
     /// </summary>
     public class DeviceListContainer
     {
+        /* Device timeout before graying-out, Original value of 5 */
+        private double kDeviceTimeout = 2.5;    //Seconds
+
         private Dictionary<ListViewItem, DeviceDescrip> _mapDescriptors = new Dictionary<ListViewItem, DeviceDescrip>();
 
         private System.Windows.Forms.ListView lstDevices;
@@ -200,7 +203,7 @@ namespace CTRE_Phoenix_GUI_Dashboard
                     /* go to next one */
                     ++i;
 
-                    if (currentTimeStamp - oldDD.updateTimestamp > TimeSpan.FromSeconds(5))
+                    if (currentTimeStamp - oldDD.updateTimestamp > TimeSpan.FromSeconds(kDeviceTimeout))
                     {
                         // Old, gray it out
                         CTRE.Phoenix.dotNET.Form.FastUpdate.AssignIfDiff(oldListViewItem, System.Drawing.Color.Gray, System.Drawing.Color.LightGray);

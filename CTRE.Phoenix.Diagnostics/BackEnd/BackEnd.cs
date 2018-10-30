@@ -593,6 +593,8 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                             /* if any transaction failed in the tool, something is wrong */
                             if (err != Status.Ok)
                             {
+								/* Clear devices from container to allow for rediscovery when RIO is found again */
+                                _descriptors.Clear();
                                 SetState(State.Connecting);
                             }
                             break;
