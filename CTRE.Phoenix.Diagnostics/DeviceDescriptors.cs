@@ -59,6 +59,10 @@ namespace CTRE.Phoenix.Diagnostics
 
             return existed;
         }
+        public void Clear()
+        {
+            _map.Clear();
+        }
         /// <summary>
         /// Creates a flat array with every element at the moment of the call.  This is useful
         /// for looping through each discovered ECU while removing stale ECUs in the inner loop.

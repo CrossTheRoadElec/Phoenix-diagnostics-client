@@ -550,6 +550,9 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                         //fall thru...
                         case State.Connecting:
 
+							/* Clear any previously discovered devices, these will get discovered again in polling State */
+                            _descriptors.Clear();
+
                             /* abort action if one is occuring */
                             if (_action != null)
                             {
