@@ -271,14 +271,12 @@
             this.menuItemTools.Name = "menuItemTools";
             this.menuItemTools.Size = new System.Drawing.Size(47, 20);
             this.menuItemTools.Text = "Tools";
-            this.menuItemTools.Click += new System.EventHandler(this.btnEasterEgg_Click);
             // 
             // captureAllToolStripMenuItem
             // 
             this.captureAllToolStripMenuItem.Name = "captureAllToolStripMenuItem";
             this.captureAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.captureAllToolStripMenuItem.Text = "Capture All (ZIP file)";
-            this.captureAllToolStripMenuItem.Click += new System.EventHandler(this.captureAllToolStripMenuItem_Click);
             // 
             // tabControl
             // 
@@ -426,6 +424,7 @@
             this.label3.Size = new System.Drawing.Size(135, 13);
             this.label3.TabIndex = 7;
             this.label3.Text = "Diagnostic Server Address:";
+            this.label3.Click += new System.EventHandler(this.btnEasterEgg_Click);
             // 
             // tabPage3
             // 
