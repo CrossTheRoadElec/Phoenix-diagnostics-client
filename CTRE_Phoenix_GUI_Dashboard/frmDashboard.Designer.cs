@@ -271,14 +271,12 @@
             this.menuItemTools.Name = "menuItemTools";
             this.menuItemTools.Size = new System.Drawing.Size(47, 20);
             this.menuItemTools.Text = "Tools";
-            this.menuItemTools.Click += new System.EventHandler(this.btnEasterEgg_Click);
             // 
             // captureAllToolStripMenuItem
             // 
             this.captureAllToolStripMenuItem.Name = "captureAllToolStripMenuItem";
             this.captureAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.captureAllToolStripMenuItem.Text = "Capture All (ZIP file)";
-            this.captureAllToolStripMenuItem.Click += new System.EventHandler(this.captureAllToolStripMenuItem_Click);
             // 
             // tabControl
             // 
@@ -426,6 +424,7 @@
             this.label3.Size = new System.Drawing.Size(135, 13);
             this.label3.TabIndex = 7;
             this.label3.Text = "Diagnostic Server Address:";
+            this.label3.Click += new System.EventHandler(this.btnEasterEgg_Click);
             // 
             // tabPage3
             // 
@@ -540,9 +539,9 @@
             // 
             this.hardVers.Text = "Hardware Version";
             this.hardVers.Width = 125;
-            //
+            // 
             // vendor
-            //
+            // 
             this.vendor.Text = "Vendor";
             this.vendor.Width = 125;
             // 
@@ -1107,8 +1106,7 @@
             // 
             // frmDashboard
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(967, 555);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.statusStrip1);
