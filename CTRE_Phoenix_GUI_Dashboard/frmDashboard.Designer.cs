@@ -540,9 +540,9 @@
             // 
             this.hardVers.Text = "Hardware Version";
             this.hardVers.Width = 125;
-            //
+            // 
             // vendor
-            //
+            // 
             this.vendor.Text = "Vendor";
             this.vendor.Width = 125;
             // 
@@ -1107,8 +1107,7 @@
             // 
             // frmDashboard
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(967, 555);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.statusStrip1);
@@ -1116,7 +1115,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStripTop;
             this.Name = "frmDashboard";
-            this.Text = "Dashboard";
+            this.Text = "Dashboard - NoAutoScale";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();

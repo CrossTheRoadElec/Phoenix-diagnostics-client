@@ -45,7 +45,7 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         private ToggleButton _toggleWebPaused = null;
         private ToggleButton _toggleWebJumpToBtm = null;
         /* ----------- Constants -------- */
-        private readonly string kAppName = "Dashboard";
+        private readonly string kAppName = "Dashboard - no auto mode scale";
 
         public frmDashboard()
         {
