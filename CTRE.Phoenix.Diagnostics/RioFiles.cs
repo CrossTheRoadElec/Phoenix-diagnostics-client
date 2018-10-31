@@ -67,7 +67,6 @@ namespace CTRE.Phoenix.Diagnostics
         {
             new RioFile("Binary/ctre/Phoenix-diagnostics-server", "/usr/local/frc/bin/Phoenix-diagnostics-server"),
             new RioFile("Binary/etc/init.d/Phoenix-diagnostics-server", "/etc/init.d/Phoenix-diagnostics-server"),
-            new RioFile("Binary/etc/rc5.d/S25Phoenix-diagnostics-server", "/etc/rc5.d/S25Phoenix-diagnostics-server"),
             new RioFile("Binary/cci/libCTRE_PhoenixCCI.so", "/usr/local/frc/lib/libCTRE_PhoenixCCI.so"),
         };
     }

@@ -423,7 +423,6 @@ namespace CTRE.Phoenix.Diagnostics
                     
                     Log("Updating File Write Permissions");
                     term.SendCommand("chmod 777 /etc/init.d/Phoenix-diagnostics-server");
-                    term.SendCommand("chmod 777 /etc/rc5.d/S25Phoenix-diagnostics-server");
                     term.SendCommand("chmod 777 /usr/local/frc/bin/Phoenix-diagnostics-server");
 
 
@@ -446,6 +445,28 @@ namespace CTRE.Phoenix.Diagnostics
             }
             //Wait some more to allow sync ot take affect
             Thread.Sleep(1000);
+
+
+            /* Create Symlink for Phoenix-diagnostics-server in etc/rc5.d/ */
+            if (error == 0)
+            {
+                CtrSshClient term = null;
+                try
+                {
+                    term = new CtrSshClient(_host, this);
+
+                    Log("Creating/Updating Symlink for rc5.d");
+                    term.SendCommand("ln -sf /etc/init.d/Phoenix-diagnostics-server /etc/rc5.d/S25Phoenix-diagnostics-server");
+                }
+                catch (Exception) { }
+                finally
+                {
+                    if (term != null)
+                    {
+                        term.Close();
+                    }
+                }
+            }
             /* restart server */
             if (error == 0)
             {
