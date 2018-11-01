@@ -51,7 +51,10 @@ namespace CTRE.Phoenix.Diagnostics
                 /* pass response to caller for processing */
                 /* throw out newlines */
                 var toPrint = TrimNewlines(response);
-                _rioReference.Log(" " + toPrint); /* indent for clarity */
+                if (toPrint.Length != 0)
+                {
+                    _rioReference.Log(" " + toPrint); /* indent for clarity */
+                }
             }
             else
             {

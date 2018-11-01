@@ -314,14 +314,15 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
 
                 case ActionType.InstallDiagServerToRobotController:
                     _rioUpdater = new RioUpdater(_hostName);
-                    _rioUpdater.StartUpdate();
+                    bool bInsertRioAnimInWebServer = _action.param != 0;
+                    _rioUpdater.UpdateRobotController(bInsertRioAnimInWebServer);
                     retval = Status.Ok;
                     setStateToConnecting = true;
                     break;
 
                 case ActionType.UninstallDiagServerToRobotController:
                     _rioUpdater = new RioUpdater(_hostName);
-                    _rioUpdater.StartRevert();
+                    _rioUpdater.RevertRobotController();
                     retval = Status.Ok;
                     setStateToConnecting = true;
                     break;
@@ -973,9 +974,10 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
         }
 
         //------------- Robot Controller Commands --------//
-        public Status UpdateRIO(Action.CallBack callback)
+        public Status UpdateRIO(bool bInsertRioAnimInWebServer, Action.CallBack callback)
         {
             Action ac = new Action(callback, ActionType.InstallDiagServerToRobotController);
+            ac.param = bInsertRioAnimInWebServer ? 1u : 0u;
             return PushAction(ac, false); //Server may not be on RIO yet, so we must force this actino past connection
         }
         public Status RevertRIO(Action.CallBack callback)

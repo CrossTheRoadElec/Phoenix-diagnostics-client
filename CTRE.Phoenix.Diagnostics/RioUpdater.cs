@@ -25,15 +25,7 @@ namespace CTRE.Phoenix.Diagnostics
                 _host = host;
             }
         }
-        
-        public void StartUpdate()
-        {
-            ThreadProcUpdate();
-        }
-        public void StartRevert()
-        {
-            ThreadProcRestore();
-        }
+
         /// <summary>
         /// Method to send arbitrary files to server at target location
         /// </summary>
@@ -242,7 +234,7 @@ namespace CTRE.Phoenix.Diagnostics
         }
         public bool Poll(ref StringBuilder sb, ref int error)
         {
-            if(_started)
+            if (_started)
             {
                 sb.Clear();
                 _started = false;
@@ -291,10 +283,42 @@ namespace CTRE.Phoenix.Diagnostics
             /* throw out newlines */
             return term.Replace('\n', ' ').Replace('\r', ' ');
         }
-
-        private void ThreadProcUpdate()
+        bool SendCommand(string text, string command, out string response)
         {
-            SftpClient client = null;
+            CtrSshClient term = null;
+            response = null;
+            try
+            {
+                term = new CtrSshClient(_host, this);
+
+                Log(text);
+                term.SendCommand(command, out response);
+
+                return true;
+            }
+            catch (Exception) { }
+            finally
+            {
+                if (term != null)
+                {
+                    term.Close();
+                }
+            }
+
+            return false;
+        }
+        bool SendCommand(string text, string command)
+        {
+            string response;
+            return SendCommand(text, command, out response);
+        }
+        bool SendCommand(string command)
+        {
+            return SendCommand(command, command);
+        }
+        public void UpdateRobotController(bool bInstallAnimIntoRioWebServer)
+        {
+            SftpClient ftpClient = null;
             int error = 0;
 
             /* start stop watch */
@@ -303,53 +327,47 @@ namespace CTRE.Phoenix.Diagnostics
 
             /* copy a mutable list of File objects */
             ArrayList files = new ArrayList();
-            foreach (RioFile sourceFile in RioFiles.kFiles)
+            foreach (RioFile sourceFile in RioFiles.kFilesToCreate) { files.Add(sourceFile); }
+
+            /* throw out whatever needs to be removed */
+            if (bInstallAnimIntoRioWebServer == false)
             {
-                files.Add(sourceFile);
+                /* loop thru all tentaive target filesand throw out js files */
+                for (int i = 0; i < files.Count;)
+                {
+                    RioFile file = (RioFile)files[i];
+                    if (file.Sourcename.Contains(".js"))
+                    {
+                        /* remove file, now i will point to next elem */
+                        files.RemoveAt(i);
+                    }
+                    else
+                    {
+                        /* go to next elem */
+                        ++i;
+                    }
+                }
             }
 
             /* start connection */
             if (error == 0)
             {
                 Log("Connecting to roboRIO " + DateTime.Now.ToString("MM/dd/yyyy h:mm tt"));
-                client = new SftpClient(_host.GetHostName(), "admin", "");
-                client.ConnectionInfo.Timeout = new TimeSpan(0, 0, 0, 0, 6000);
-                try
-                {
-                    client.Connect();
-                }
-                catch (Exception)
-                {
-                    error = -1;
-                }
+                ftpClient = new SftpClient(_host.GetHostName(), "admin", "");
+                ftpClient.ConnectionInfo.Timeout = new TimeSpan(0, 0, 0, 0, 6000);
+                try { ftpClient.Connect(); }
+                catch (Exception) { error = -1; }
                 if (error == 0)
-                    Log("  Connected sucessfully.");
+                    Log("Connected sucessfully.");
                 else
-                    Log("  Could not connect.");
+                    Log("Could not connect.");
             }
 
-            /* ldconfig */
+            /* stop diag server if running already */
             if (error == 0)
             {
-                CtrSshClient term = null;
-                try
-                {
-                    term = new CtrSshClient(_host, this);
-
-                    Log("Attempting to close server");
-                    term.SendCommand("/etc/init.d/Phoenix-diagnostics-server stop");
-
-                }
-                catch (Exception)
-                {
-                }
-                finally
-                {
-                    if (term != null)
-                    {
-                        term.Close();
-                    }
-                }
+                SendCommand("Attempting to close server", "/etc/init.d/Phoenix-diagnostics-server stop");
+                /* even if this fails, keep going */
             }
 
             /* check file presence */
@@ -357,8 +375,7 @@ namespace CTRE.Phoenix.Diagnostics
             {
                 foreach (RioFile file in files)
                 {
-                    bool exists = file.CheckExistanceOnPC();
-                    if (exists == false)
+                    if (file.CheckExistanceOnPC() == false)
                     {
                         /* could not open file? */
                         Log("  Could not open file:" + file.TargetPath);
@@ -366,9 +383,33 @@ namespace CTRE.Phoenix.Diagnostics
                     }
                 }
             }
+            /* backup what needs to be backed up */
+            if (error == 0)
+            {
+                foreach (string filepath in RioFiles.kFilesToBackup)
+                {
+                    string backUpPath = filepath + ".bak";
+                    if (ftpClient.Exists(backUpPath))
+                    {
+                        /* already there, don't change anything */
+                    }
+                    else if (ftpClient.Exists(filepath) == false)
+                    {
+                        /* not there, don't bother */
+                    }
+                    else
+                    {
+                        /* copy command */
+                        String command = "cp " + filepath + " " + backUpPath;
+                        SendCommand(command);
+                    }
+                }
+            }
+
             /* write new files  */
             if (error == 0)
             {
+                Log("Writing files...");
                 foreach (RioFile file in files)
                 {
                     byte[] content = file.GetContents();
@@ -382,16 +423,14 @@ namespace CTRE.Phoenix.Diagnostics
                         /* delete file first, regardless of success, continue */
                         try
                         {
-                            if (client.Exists(file.TargetPath))
-                            {
-                                client.DeleteFile(file.TargetPath);
-                            }
+                            /* if file exists, delete it */
+                            if (ftpClient.Exists(file.TargetPath)) { ftpClient.DeleteFile(file.TargetPath); }
                         }
                         catch (Exception) { }
                         /* write it */
                         try
                         {
-                            client.WriteAllBytes(file.TargetPath, content);
+                            ftpClient.WriteAllBytes(file.TargetPath, content);
                             Log("Written file: " + file.TargetPath + " (" + file.Sourcename + ")");
                         }
                         catch (Exception)
@@ -404,104 +443,46 @@ namespace CTRE.Phoenix.Diagnostics
             }
 
             /* always close the sftp */
-            if (client != null)
+            if (ftpClient != null)
             {
-                try
-                {
-                    client.Disconnect();
-                }
+                try { ftpClient.Disconnect(); }
                 catch (Exception) { }
             }
 
-            /* ldconfig */
+            /* permissions */
             if (error == 0)
             {
-                CtrSshClient term = null;
-                try
-                {
-                    term = new CtrSshClient(_host, this);
-                    
-                    Log("Updating File Write Permissions");
-                    term.SendCommand("chmod 777 /etc/init.d/Phoenix-diagnostics-server");
-                    term.SendCommand("chmod 777 /usr/local/frc/bin/Phoenix-diagnostics-server");
-
-
-                    //Wait a bit to make sure any file changes actually took
-                    Thread.Sleep(1000);
-                    Log("Syncing RoboRIO to ensure files are on the flash");
-                    term.SendCommand("sync");
-                    
-                }
-                catch (Exception)
-                {
-                }
-                finally
-                {
-                    if (term != null)
-                    {
-                        term.Close();
-                    }
-                }
+                Log("Updating File Write Permissions");
+                SendCommand("chmod 777 /etc/init.d/Phoenix-diagnostics-server");
+                SendCommand("chmod 777 /usr/local/frc/bin/Phoenix-diagnostics-server");
+                Thread.Sleep(1000); //Wait a bit to make sure any file changes actually took
             }
-            //Wait some more to allow sync ot take affect
-            Thread.Sleep(1000);
-
+            /* sync */
+            if (error == 0)
+            {
+                Log("Syncing RoboRIO to ensure files are on the flash");
+                SendCommand("sync");
+                Thread.Sleep(1000); //Wait a bit to make sure any file changes actually took
+            }
 
             /* Create Symlink for Phoenix-diagnostics-server in etc/rc5.d/ */
             if (error == 0)
             {
-                CtrSshClient term = null;
-                try
+                Log("Creating/Updating Symlink for startup");
+                if (false == SendCommand("ln -sf /etc/init.d/Phoenix-diagnostics-server /etc/rc5.d/S25Phoenix-diagnostics-server"))
                 {
-                    term = new CtrSshClient(_host, this);
-
-                    Log("Creating/Updating Symlink for rc5.d");
-                    term.SendCommand("ln -sf /etc/init.d/Phoenix-diagnostics-server /etc/rc5.d/S25Phoenix-diagnostics-server");
-                }
-                catch (Exception) { }
-                finally
-                {
-                    if (term != null)
-                    {
-                        term.Close();
-                    }
+                    error = -39;
                 }
             }
             /* restart server */
             if (error == 0)
             {
-                bool webRestartOk = true;
-                CtrSshClient term = null;
-                try
-                {
-                    term = new CtrSshClient(_host, this);
-                    
-                    Log("Starting Server");
-                    if (false == term.SendCommand("/etc/init.d/Phoenix-diagnostics-server start"))
-                    {
-                        webRestartOk = false;
-                    }
-                }
-                catch (Exception)
-                {
-                    webRestartOk = false;
-                }
-                finally
-                {
-                    if (term != null)
-                    {
-                        term.Close();
-                    }
-                }
-                if (false == webRestartOk)
+                if (false == SendCommand("Starting Server", "/etc/init.d/Phoenix-diagnostics-server start"))
                 {
                     error = -40;
                     Log("Server could not be started, you many need to restart the RoboRIO. ");
                 }
-                else
-                {
-                    Log("Server has successfully started.");
-                }
+                else { Log("Server has successfully started."); }
             }
 
             /* stop and report time */
@@ -514,113 +495,89 @@ namespace CTRE.Phoenix.Diagnostics
             Log("\nDuration: " + elapsedTime);
         }
 
-        private void ThreadProcRestore()
+        public void RevertRobotController()
         {
-            SftpClient client = null;
+            SftpClient ftpClient = null;
             int error = 0;
 
             /* start stop watch */
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
 
-            /* copy a mutable list of File objects */
-            ArrayList files = new ArrayList();
-            foreach (RioFile sourceFile in RioFiles.kFiles)
-            {
-                files.Add(sourceFile);
-            }
+            /* copy a mutable list of File objects to delete */
+            ArrayList filesToDel = new ArrayList();
+            foreach (string sourceFile in RioFiles.kFilesToDeleteOnRevert) { filesToDel.Add(sourceFile); }
 
             /* start connection */
             if (error == 0)
             {
                 Log("Connecting to roboRIO " + DateTime.Now.ToString("MM/dd/yyyy h:mm tt"));
-                client = new SftpClient(_host.GetHostName(), "admin", "");
-                client.ConnectionInfo.Timeout = new TimeSpan(0, 0, 0, 0, 6000);
-                try
-                {
-                    client.Connect();
-                }
-                catch (Exception)
-                {
-                    error = -1;
-                }
+                ftpClient = new SftpClient(_host.GetHostName(), "admin", "");
+                ftpClient.ConnectionInfo.Timeout = new TimeSpan(0, 0, 0, 0, 6000);
+                try { ftpClient.Connect(); }
+                catch (Exception) { error = -1; }
                 if (error == 0)
-                    Log("  Connected sucessfully.");
+                    Log("Connected sucessfully.");
                 else
-                    Log("  Could not connect.");
+                    Log("Could not connect.");
             }
 
-            /* ldconfig */
+            /* stop diag server if running already */
             if (error == 0)
             {
-                CtrSshClient term = null;
-                try
-                {
-                    term = new CtrSshClient(_host, this);
-
-                    Log("Attempting to close server");
-                    term.SendCommand("/etc/init.d/Phoenix-diagnostics-server stop");
-
-                }
-                catch (Exception)
-                {
-                }
-                finally
-                {
-                    if (term != null)
-                    {
-                        term.Close();
-                    }
-                }
+                SendCommand("Attempting to close server", "/etc/init.d/Phoenix-diagnostics-server stop");
+                /* even if this fails, keep going */
             }
 
-            /* check file presence */
+            /* delete them the diag related files */
             if (error == 0)
             {
-                foreach (RioFile file in files)
+                foreach (string filePathToDel in filesToDel)
                 {
-                    bool exists = file.CheckExistanceOnPC();
-                    if (exists == false)
-                    {
-                        /* could not open file? */
-                        Log("  Could not open file:" + file.TargetPath);
-                        error = -10;
-                    }
-                }
-            }
-            /* old files, make them or restore them depending on action  */
-            if (error == 0)
-            {
-                foreach (RioFile file in files)
-                {
-                    if (client.Exists(file.TargetPath) == false)
+                    if (ftpClient.Exists(filePathToDel) == false)
                     {
                         /* do nothing */
-                        Log("File does not exist for " + file.TargetPath);
+                        Log("File does not exist for " + filePathToDel);
                     }
                     else
                     {
                         /* delete the target */
-                        try { client.DeleteFile(file.TargetPath); } catch (Exception) { }
+                        try { ftpClient.DeleteFile(filePathToDel); } catch (Exception) { }
+                    }
+                }
+            }
+
+            /* restore files that are were backed up via .bak extension*/
+            if (error == 0)
+            {
+                foreach (string filepath in RioFiles.kFilesToBackup)
+                {
+                    string destPath = filepath;
+                    string sourcePath = filepath + ".bak";
+
+                    if (ftpClient.Exists(sourcePath) == false)
+                    {
+                        /* file has no backup, move on */
+                    }
+                    else
+                    {
+                        /* delete the newer file if it exists */
+                        if (ftpClient.Exists(destPath)) { ftpClient.DeleteFile(destPath); }
+
+                        /* copy bak file to original path */
+                        String command = "cp " + sourcePath + " " + destPath;
+                        SendCommand(command);
                     }
                 }
             }
 
             /* always close the sftp */
-            if (client != null)
+            if (ftpClient != null)
             {
-                try
-                {
-                    client.Disconnect();
-                }
-                catch (Exception) { }
+                try { ftpClient.Disconnect(); } catch (Exception) { }
             }
             /* restart server */
-            if (error == 0)
-            {
-                Log("Binaries have successfully been removed from the RIO");
-            }
-
+            if (error == 0) { Log("Binaries have successfully been removed from the RIO"); }
             /* stop and report time */
             OnFinished(error);
             stopWatch.Stop();
@@ -630,7 +587,5 @@ namespace CTRE.Phoenix.Diagnostics
                 ts.Milliseconds / 10);
             Log("\nDuration: " + elapsedTime);
         }
-
-
     }
 }

@@ -150,14 +150,15 @@
             // 
             // statusStrip1
             // 
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.bottomStrip_L,
             this.bottomStrip_ML,
             this.bottomStrip_MR,
             this.bottomStrip_R});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 533);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 530);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(967, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(967, 25);
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -165,7 +166,7 @@
             // 
             this.bottomStrip_L.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.bottomStrip_L.Name = "bottomStrip_L";
-            this.bottomStrip_L.Size = new System.Drawing.Size(397, 17);
+            this.bottomStrip_L.Size = new System.Drawing.Size(377, 20);
             this.bottomStrip_L.Spring = true;
             this.bottomStrip_L.Text = "????????????";
             // 
@@ -173,7 +174,7 @@
             // 
             this.bottomStrip_ML.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bottomStrip_ML.Name = "bottomStrip_ML";
-            this.bottomStrip_ML.Size = new System.Drawing.Size(91, 17);
+            this.bottomStrip_ML.Size = new System.Drawing.Size(104, 20);
             this.bottomStrip_ML.Text = "????????????";
             this.bottomStrip_ML.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -181,7 +182,7 @@
             // 
             this.bottomStrip_MR.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.bottomStrip_MR.Name = "bottomStrip_MR";
-            this.bottomStrip_MR.Size = new System.Drawing.Size(397, 17);
+            this.bottomStrip_MR.Size = new System.Drawing.Size(377, 20);
             this.bottomStrip_MR.Spring = true;
             this.bottomStrip_MR.Text = "????????????";
             // 
@@ -189,7 +190,7 @@
             // 
             this.bottomStrip_R.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.bottomStrip_R.Name = "bottomStrip_R";
-            this.bottomStrip_R.Size = new System.Drawing.Size(67, 17);
+            this.bottomStrip_R.Size = new System.Drawing.Size(93, 20);
             this.bottomStrip_R.Text = "????????????";
             // 
             // timer1
@@ -200,12 +201,13 @@
             // 
             // menuStripTop
             // 
+            this.menuStripTop.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStripTop.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuItemOptions,
             this.menuItemTools});
             this.menuStripTop.Location = new System.Drawing.Point(0, 0);
             this.menuStripTop.Name = "menuStripTop";
-            this.menuStripTop.Size = new System.Drawing.Size(967, 24);
+            this.menuStripTop.Size = new System.Drawing.Size(967, 28);
             this.menuStripTop.TabIndex = 1;
             this.menuStripTop.Text = "menuStripTop";
             // 
@@ -215,7 +217,7 @@
             this.devicePollingToolStripMenuItem,
             this.dataTransferMethodToolStripMenuItem});
             this.menuItemOptions.Name = "menuItemOptions";
-            this.menuItemOptions.Size = new System.Drawing.Size(61, 20);
+            this.menuItemOptions.Size = new System.Drawing.Size(73, 24);
             this.menuItemOptions.Text = "Options";
             // 
             // devicePollingToolStripMenuItem
@@ -224,20 +226,20 @@
             this.enableAutoRefreshMenuItem1,
             this.disableAutoRefreshMenuItem1});
             this.devicePollingToolStripMenuItem.Name = "devicePollingToolStripMenuItem";
-            this.devicePollingToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.devicePollingToolStripMenuItem.Size = new System.Drawing.Size(228, 26);
             this.devicePollingToolStripMenuItem.Text = "Auto Refresh Devices";
             // 
             // enableAutoRefreshMenuItem1
             // 
             this.enableAutoRefreshMenuItem1.Name = "enableAutoRefreshMenuItem1";
-            this.enableAutoRefreshMenuItem1.Size = new System.Drawing.Size(112, 22);
+            this.enableAutoRefreshMenuItem1.Size = new System.Drawing.Size(134, 26);
             this.enableAutoRefreshMenuItem1.Text = "Enable";
             this.enableAutoRefreshMenuItem1.Click += new System.EventHandler(this.enableDisableDeviceAutoRefresh_Click);
             // 
             // disableAutoRefreshMenuItem1
             // 
             this.disableAutoRefreshMenuItem1.Name = "disableAutoRefreshMenuItem1";
-            this.disableAutoRefreshMenuItem1.Size = new System.Drawing.Size(112, 22);
+            this.disableAutoRefreshMenuItem1.Size = new System.Drawing.Size(134, 26);
             this.disableAutoRefreshMenuItem1.Text = "Disable";
             this.disableAutoRefreshMenuItem1.Click += new System.EventHandler(this.enableDisableDeviceAutoRefresh_Click);
             // 
@@ -247,20 +249,20 @@
             this.sFTPToolStripMenuItem,
             this.pOSTToolStripMenuItem});
             this.dataTransferMethodToolStripMenuItem.Name = "dataTransferMethodToolStripMenuItem";
-            this.dataTransferMethodToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.dataTransferMethodToolStripMenuItem.Size = new System.Drawing.Size(228, 26);
             this.dataTransferMethodToolStripMenuItem.Text = "Data Transfer Method";
             // 
             // sFTPToolStripMenuItem
             // 
             this.sFTPToolStripMenuItem.Name = "sFTPToolStripMenuItem";
-            this.sFTPToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.sFTPToolStripMenuItem.Size = new System.Drawing.Size(119, 26);
             this.sFTPToolStripMenuItem.Text = "SFTP";
             this.sFTPToolStripMenuItem.Click += new System.EventHandler(this.enableDisabledSftpDataTransfer_Click);
             // 
             // pOSTToolStripMenuItem
             // 
             this.pOSTToolStripMenuItem.Name = "pOSTToolStripMenuItem";
-            this.pOSTToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.pOSTToolStripMenuItem.Size = new System.Drawing.Size(119, 26);
             this.pOSTToolStripMenuItem.Text = "POST";
             this.pOSTToolStripMenuItem.Click += new System.EventHandler(this.enableDisabledSftpDataTransfer_Click);
             // 
@@ -269,13 +271,13 @@
             this.menuItemTools.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.captureAllToolStripMenuItem});
             this.menuItemTools.Name = "menuItemTools";
-            this.menuItemTools.Size = new System.Drawing.Size(47, 20);
+            this.menuItemTools.Size = new System.Drawing.Size(56, 24);
             this.menuItemTools.Text = "Tools";
             // 
             // captureAllToolStripMenuItem
             // 
             this.captureAllToolStripMenuItem.Name = "captureAllToolStripMenuItem";
-            this.captureAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.captureAllToolStripMenuItem.Size = new System.Drawing.Size(218, 26);
             this.captureAllToolStripMenuItem.Text = "Capture All (ZIP file)";
             // 
             // tabControl
@@ -306,10 +308,10 @@
             this.tabPage2.Controls.Add(this.richTextBox1);
             this.tabPage2.Controls.Add(this.cboHostSelectorAddr);
             this.tabPage2.Controls.Add(this.label3);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Location = new System.Drawing.Point(4, 25);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(959, 477);
+            this.tabPage2.Size = new System.Drawing.Size(959, 474);
             this.tabPage2.TabIndex = 0;
             this.tabPage2.Text = "Prepare the Target Robot Controller";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -320,7 +322,7 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(760, 66);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(29, 13);
+            this.label5.Size = new System.Drawing.Size(38, 17);
             this.label5.TabIndex = 15;
             this.label5.Text = "Port:";
             // 
@@ -332,7 +334,7 @@
             "1250 # Default Port"});
             this.cboHostSelectorPrt.Location = new System.Drawing.Point(795, 62);
             this.cboHostSelectorPrt.Name = "cboHostSelectorPrt";
-            this.cboHostSelectorPrt.Size = new System.Drawing.Size(153, 21);
+            this.cboHostSelectorPrt.Size = new System.Drawing.Size(153, 24);
             this.cboHostSelectorPrt.TabIndex = 1;
             this.cboHostSelectorPrt.TextChanged += new System.EventHandler(this.cboHostSelectorPrt_TextChanged);
             // 
@@ -365,7 +367,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.rtbRioUpdateBox.Location = new System.Drawing.Point(18, 93);
             this.rtbRioUpdateBox.Name = "rtbRioUpdateBox";
-            this.rtbRioUpdateBox.Size = new System.Drawing.Size(680, 391);
+            this.rtbRioUpdateBox.Size = new System.Drawing.Size(680, 388);
             this.rtbRioUpdateBox.TabIndex = 11;
             this.rtbRioUpdateBox.Text = "";
             // 
@@ -412,7 +414,7 @@
             "localhost # Local PC Development"});
             this.cboHostSelectorAddr.Location = new System.Drawing.Point(156, 62);
             this.cboHostSelectorAddr.Name = "cboHostSelectorAddr";
-            this.cboHostSelectorAddr.Size = new System.Drawing.Size(595, 21);
+            this.cboHostSelectorAddr.Size = new System.Drawing.Size(595, 24);
             this.cboHostSelectorAddr.TabIndex = 0;
             this.cboHostSelectorAddr.TextChanged += new System.EventHandler(this.cboHostSelector_TextChanged);
             // 
@@ -421,7 +423,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(15, 66);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(135, 13);
+            this.label3.Size = new System.Drawing.Size(180, 17);
             this.label3.TabIndex = 7;
             this.label3.Text = "Diagnostic Server Address:";
             this.label3.Click += new System.EventHandler(this.btnEasterEgg_Click);
@@ -429,10 +431,10 @@
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.splitContainer1);
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Location = new System.Drawing.Point(4, 25);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(959, 477);
+            this.tabPage3.Size = new System.Drawing.Size(959, 474);
             this.tabPage3.TabIndex = 1;
             this.tabPage3.Text = "CAN Devices";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -455,8 +457,8 @@
             this.splitContainer1.Panel2.Controls.Add(this.pnlGenDevConfigOuter);
             this.splitContainer1.Panel2.Controls.Add(this.pnlFirmUpgradeOuter);
             this.splitContainer1.Panel2.Controls.Add(this.panelSelfTestAndConfigControls);
-            this.splitContainer1.Size = new System.Drawing.Size(953, 471);
-            this.splitContainer1.SplitterDistance = 172;
+            this.splitContainer1.Size = new System.Drawing.Size(953, 468);
+            this.splitContainer1.SplitterDistance = 170;
             this.splitContainer1.TabIndex = 48;
             // 
             // pnlDeviceListInner
@@ -469,7 +471,7 @@
             this.pnlDeviceListInner.Controls.Add(this.btnRefreshDevices);
             this.pnlDeviceListInner.Location = new System.Drawing.Point(3, 3);
             this.pnlDeviceListInner.Name = "pnlDeviceListInner";
-            this.pnlDeviceListInner.Size = new System.Drawing.Size(943, 162);
+            this.pnlDeviceListInner.Size = new System.Drawing.Size(943, 160);
             this.pnlDeviceListInner.TabIndex = 5;
             // 
             // lstDevices
@@ -492,7 +494,7 @@
             this.lstDevices.Location = new System.Drawing.Point(0, 0);
             this.lstDevices.MultiSelect = false;
             this.lstDevices.Name = "lstDevices";
-            this.lstDevices.Size = new System.Drawing.Size(943, 132);
+            this.lstDevices.Size = new System.Drawing.Size(943, 130);
             this.lstDevices.SmallImageList = this.imgLstDevices;
             this.lstDevices.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lstDevices.TabIndex = 3;
@@ -563,7 +565,7 @@
             // 
             this.btnRefreshDevices.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.btnRefreshDevices.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRefreshDevices.Location = new System.Drawing.Point(0, 132);
+            this.btnRefreshDevices.Location = new System.Drawing.Point(0, 130);
             this.btnRefreshDevices.Name = "btnRefreshDevices";
             this.btnRefreshDevices.Size = new System.Drawing.Size(943, 30);
             this.btnRefreshDevices.TabIndex = 0;
@@ -606,7 +608,7 @@
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point(142, 12);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(174, 13);
+            this.label4.Size = new System.Drawing.Size(222, 17);
             this.label4.TabIndex = 48;
             this.label4.Text = "General Device Configuration";
             // 
@@ -635,7 +637,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(69, 85);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(270, 13);
+            this.label1.Size = new System.Drawing.Size(358, 17);
             this.label1.TabIndex = 43;
             this.label1.Text = "Press to animate device LEDs and confirm ID is correct.";
             // 
@@ -643,7 +645,7 @@
             // 
             this.txtDeviceNewName.Location = new System.Drawing.Point(145, 57);
             this.txtDeviceNewName.Name = "txtDeviceNewName";
-            this.txtDeviceNewName.Size = new System.Drawing.Size(194, 20);
+            this.txtDeviceNewName.Size = new System.Drawing.Size(194, 22);
             this.txtDeviceNewName.TabIndex = 2;
             this.txtDeviceNewName.TextChanged += new System.EventHandler(this.txtDeviceNewName_TextChanged);
             // 
@@ -652,7 +654,7 @@
             this.label50.AutoSize = true;
             this.label50.Location = new System.Drawing.Point(45, 60);
             this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(94, 13);
+            this.label50.Size = new System.Drawing.Size(124, 17);
             this.label50.TabIndex = 42;
             this.label50.Text = "Change the name:";
             // 
@@ -675,7 +677,7 @@
             0,
             0});
             this.numNewDevId.Name = "numNewDevId";
-            this.numNewDevId.Size = new System.Drawing.Size(44, 20);
+            this.numNewDevId.Size = new System.Drawing.Size(44, 22);
             this.numNewDevId.TabIndex = 1;
             this.numNewDevId.ValueChanged += new System.EventHandler(this.numNewDevId_ValueChanged);
             // 
@@ -684,7 +686,7 @@
             this.label15.AutoSize = true;
             this.label15.Location = new System.Drawing.Point(216, 35);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(79, 13);
+            this.label15.Size = new System.Drawing.Size(102, 17);
             this.label15.TabIndex = 41;
             this.label15.Text = "Change the ID:";
             // 
@@ -721,7 +723,7 @@
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(135, 10);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(184, 13);
+            this.label2.Size = new System.Drawing.Size(235, 17);
             this.label2.TabIndex = 47;
             this.label2.Text = "Field-Upgrade Device Firmware";
             // 
@@ -730,7 +732,7 @@
             this.label17.AutoSize = true;
             this.label17.Location = new System.Drawing.Point(25, 34);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(309, 13);
+            this.label17.Size = new System.Drawing.Size(407, 17);
             this.label17.TabIndex = 46;
             this.label17.Text = "Select CRF and Press \"Update Firmware\" to flash new firmware.";
             // 
@@ -738,7 +740,7 @@
             // 
             this.txtDeviceCRFPath.Location = new System.Drawing.Point(27, 51);
             this.txtDeviceCRFPath.Name = "txtDeviceCRFPath";
-            this.txtDeviceCRFPath.Size = new System.Drawing.Size(361, 20);
+            this.txtDeviceCRFPath.Size = new System.Drawing.Size(361, 22);
             this.txtDeviceCRFPath.TabIndex = 5;
             this.txtDeviceCRFPath.TextChanged += new System.EventHandler(this.txtDeviceCRFPath_TextChanged);
             // 
@@ -789,7 +791,7 @@
             this.panelSelfTestAndConfigControls.Controls.Add(this.txtSelfTestResults);
             this.panelSelfTestAndConfigControls.Location = new System.Drawing.Point(465, 3);
             this.panelSelfTestAndConfigControls.Name = "panelSelfTestAndConfigControls";
-            this.panelSelfTestAndConfigControls.Size = new System.Drawing.Size(481, 289);
+            this.panelSelfTestAndConfigControls.Size = new System.Drawing.Size(481, 288);
             this.panelSelfTestAndConfigControls.TabIndex = 48;
             // 
             // tableLayoutPanel1
@@ -803,7 +805,7 @@
             this.tableLayoutPanel1.Controls.Add(this.btnSaveConfigs, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnRefreshConfigs, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnSelfTest, 2, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 256);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 255);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -852,7 +854,7 @@
             this.groupedControls.Location = new System.Drawing.Point(3, 1);
             this.groupedControls.Name = "groupedControls";
             this.groupedControls.SelectedIndex = 0;
-            this.groupedControls.Size = new System.Drawing.Size(475, 252);
+            this.groupedControls.Size = new System.Drawing.Size(475, 251);
             this.groupedControls.TabIndex = 2;
             // 
             // txtSelfTestResults
@@ -873,10 +875,10 @@
             this.tabPage6.Controls.Add(this.btnClrDiagLog);
             this.tabPage6.Controls.Add(this.splitContainer2);
             this.tabPage6.Controls.Add(this.richTextBox2);
-            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Location = new System.Drawing.Point(4, 25);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(959, 477);
+            this.tabPage6.Size = new System.Drawing.Size(959, 474);
             this.tabPage6.TabIndex = 2;
             this.tabPage6.Text = "Web Diagnostics Log";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -929,7 +931,7 @@
             // 
             this.splitContainer2.Panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.splitContainer2.Panel2.Controls.Add(this.browserMessageDisp);
-            this.splitContainer2.Size = new System.Drawing.Size(951, 376);
+            this.splitContainer2.Size = new System.Drawing.Size(951, 373);
             this.splitContainer2.SplitterDistance = 650;
             this.splitContainer2.TabIndex = 3;
             // 
@@ -948,7 +950,7 @@
             this.gridDiagnosticLog.Location = new System.Drawing.Point(0, 0);
             this.gridDiagnosticLog.Name = "gridDiagnosticLog";
             this.gridDiagnosticLog.ReadOnly = true;
-            this.gridDiagnosticLog.Size = new System.Drawing.Size(648, 374);
+            this.gridDiagnosticLog.Size = new System.Drawing.Size(648, 371);
             this.gridDiagnosticLog.TabIndex = 4;
             this.gridDiagnosticLog.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.diagnosticLog_CellClick);
             this.gridDiagnosticLog.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridDiagnosticLog_CellEnter);
@@ -983,23 +985,24 @@
             // 
             // popupHttpLog
             // 
+            this.popupHttpLog.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.popupHttpLog.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.copyToolStripMenuItem,
             this.selectAllCtrlAToolStripMenuItem});
             this.popupHttpLog.Name = "popupHttpLog";
-            this.popupHttpLog.Size = new System.Drawing.Size(169, 48);
+            this.popupHttpLog.Size = new System.Drawing.Size(198, 52);
             // 
             // copyToolStripMenuItem
             // 
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(197, 24);
             this.copyToolStripMenuItem.Text = "Copy (Ctrl+C)";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.btnCopyHttpLog_Click);
             // 
             // selectAllCtrlAToolStripMenuItem
             // 
             this.selectAllCtrlAToolStripMenuItem.Name = "selectAllCtrlAToolStripMenuItem";
-            this.selectAllCtrlAToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.selectAllCtrlAToolStripMenuItem.Size = new System.Drawing.Size(197, 24);
             this.selectAllCtrlAToolStripMenuItem.Text = "Select All (Ctrl+A)";
             this.selectAllCtrlAToolStripMenuItem.Click += new System.EventHandler(this.selectAllCtrlAToolStripMenuItem_Click);
             // 
@@ -1012,7 +1015,7 @@
             this.browserMessageDisp.Location = new System.Drawing.Point(3, 3);
             this.browserMessageDisp.MinimumSize = new System.Drawing.Size(20, 20);
             this.browserMessageDisp.Name = "browserMessageDisp";
-            this.browserMessageDisp.Size = new System.Drawing.Size(289, 368);
+            this.browserMessageDisp.Size = new System.Drawing.Size(289, 365);
             this.browserMessageDisp.TabIndex = 4;
             // 
             // richTextBox2
@@ -1033,10 +1036,10 @@
             this.tbUnitTesting.Controls.Add(this.rtbUnitTestBox);
             this.tbUnitTesting.Controls.Add(this.unitTestingCheckboxes);
             this.tbUnitTesting.Controls.Add(this.overnightTestButton);
-            this.tbUnitTesting.Location = new System.Drawing.Point(4, 22);
+            this.tbUnitTesting.Location = new System.Drawing.Point(4, 25);
             this.tbUnitTesting.Name = "tbUnitTesting";
             this.tbUnitTesting.Padding = new System.Windows.Forms.Padding(3);
-            this.tbUnitTesting.Size = new System.Drawing.Size(959, 477);
+            this.tbUnitTesting.Size = new System.Drawing.Size(959, 474);
             this.tbUnitTesting.TabIndex = 3;
             this.tbUnitTesting.Text = "Unit Testing";
             this.tbUnitTesting.UseVisualStyleBackColor = true;
@@ -1050,7 +1053,7 @@
             this.richTextBox3.Location = new System.Drawing.Point(548, 38);
             this.richTextBox3.Name = "richTextBox3";
             this.richTextBox3.ReadOnly = true;
-            this.richTextBox3.Size = new System.Drawing.Size(385, 395);
+            this.richTextBox3.Size = new System.Drawing.Size(385, 392);
             this.richTextBox3.TabIndex = 4;
             this.richTextBox3.Text = resources.GetString("richTextBox3.Text");
             // 
@@ -1071,7 +1074,7 @@
             this.rtbUnitTestBox.Location = new System.Drawing.Point(183, 8);
             this.rtbUnitTestBox.Name = "rtbUnitTestBox";
             this.rtbUnitTestBox.ReadOnly = true;
-            this.rtbUnitTestBox.Size = new System.Drawing.Size(358, 425);
+            this.rtbUnitTestBox.Size = new System.Drawing.Size(358, 422);
             this.rtbUnitTestBox.TabIndex = 2;
             this.rtbUnitTestBox.Text = "";
             // 
@@ -1091,7 +1094,7 @@
             this.unitTestingCheckboxes.Location = new System.Drawing.Point(8, 35);
             this.unitTestingCheckboxes.Name = "unitTestingCheckboxes";
             this.unitTestingCheckboxes.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.unitTestingCheckboxes.Size = new System.Drawing.Size(169, 379);
+            this.unitTestingCheckboxes.Size = new System.Drawing.Size(169, 361);
             this.unitTestingCheckboxes.TabIndex = 1;
             // 
             // overnightTestButton

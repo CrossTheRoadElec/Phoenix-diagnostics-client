@@ -598,7 +598,7 @@ namespace CTRE_Phoenix_GUI_Dashboard {
             /* common post-action checks, transition to wait for FIELD UPGRADE progress */
             PostOperation(er, GuiState.Disabled_WaitForAction);
         }
-        void InstallDiagServerToRobotController()
+        void InstallDiagServerToRobotController(bool bInsertRioAnimInWebServer)
         {
             rtbRioUpdateBox.Clear(); //Clear text
 
@@ -606,7 +606,7 @@ namespace CTRE_Phoenix_GUI_Dashboard {
             Status er = PreOperation();
             /* request the action */
             if (er == Status.Ok) {
-                er = BackEnd.Instance.UpdateRIO(new BackEndAction.CallBack(ActionCallBack));
+                er = BackEnd.Instance.UpdateRIO(bInsertRioAnimInWebServer, new BackEndAction.CallBack(ActionCallBack));
 			}
             /* common post-action checks, transition to wait for FIELD UPGRADE progress */
             PostOperation(er, GuiState.Disabled_WaitForInstallIntoRobotController);
@@ -1123,7 +1123,7 @@ namespace CTRE_Phoenix_GUI_Dashboard {
 
         private void btnCopyHttpLog_Click(object sender, EventArgs e) { CopyDiagnosticLogToClipboard(); }
 
-        private void btnUpdateBinaries_Click(object sender, EventArgs e) { InstallDiagServerToRobotController(); }
+        private void btnUpdateBinaries_Click(object sender, EventArgs e) { InstallDiagServerToRobotController(false); }
 
         private void btnRevertBinaries_Click(object sender, EventArgs e) { UninstallDiagServerToRobotController(); }
 

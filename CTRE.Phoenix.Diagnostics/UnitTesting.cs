@@ -198,7 +198,7 @@ namespace CTRE.Phoenix.Diagnostics
             }
 
             
-            _actionStatus = BE.Instance.UpdateRIO(new BackEnd.Action.CallBack(CallBack));
+            _actionStatus = BE.Instance.UpdateRIO(false, new BackEnd.Action.CallBack(CallBack));
             Log("------------------------Updating RIO--------------------------");
             WaitUntilRIOFinished();
             Log("Files sent");

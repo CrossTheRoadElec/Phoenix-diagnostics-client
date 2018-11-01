@@ -39,13 +39,6 @@ namespace CTRE.Phoenix.Diagnostics
                 return _targetPath;
             }
         }
-        public virtual string BackUpPath
-        {
-            get
-            {
-                return _targetPath + ".orig";
-            }
-        }
         public virtual string SourcePath
         {
             get
@@ -63,11 +56,24 @@ namespace CTRE.Phoenix.Diagnostics
     }
     public class RioFiles
     {
-        public static readonly RioFile[] kFiles = new RioFile[]
+        public static readonly RioFile[] kFilesToCreate = new RioFile[]
         {
             new RioFile("Binary/ctre/Phoenix-diagnostics-server", "/usr/local/frc/bin/Phoenix-diagnostics-server"),
             new RioFile("Binary/etc/init.d/Phoenix-diagnostics-server", "/etc/init.d/Phoenix-diagnostics-server"),
             new RioFile("Binary/cci/libCTRE_PhoenixCCI.so", "/usr/local/frc/lib/libCTRE_PhoenixCCI.so"),
+            new RioFile("Binary/js/SystemConfig.js", "/var/local/natinst/www/HUFF/pages/SystemConfig.js"),
+        };
+        /// <summary>
+        /// Also is the files to restore using .bak file
+        /// </summary>
+        public static readonly string[] kFilesToBackup = new string[]
+        {
+            "/var/local/natinst/www/HUFF/pages/SystemConfig.js",
+        };
+        public static readonly string[] kFilesToDeleteOnRevert = new string[]
+        {
+            "/usr/local/frc/bin/Phoenix-diagnostics-server",
+            "/etc/init.d/Phoenix-diagnostics-server",
         };
     }
 }
