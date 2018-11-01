@@ -55,7 +55,7 @@
             this.rtbRioUpdateBox = new System.Windows.Forms.RichTextBox();
             this.btnRevertBinaries = new System.Windows.Forms.Button();
             this.btnUpdateBinaries = new System.Windows.Forms.Button();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.rtbRobotController = new System.Windows.Forms.RichTextBox();
             this.cboHostSelectorAddr = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -121,6 +121,9 @@
             this.rtbUnitTestBox = new System.Windows.Forms.RichTextBox();
             this.unitTestingCheckboxes = new System.Windows.Forms.CheckedListBox();
             this.overnightTestButton = new System.Windows.Forms.Button();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.chkRioWebReminder = new System.Windows.Forms.CheckBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.statusStrip1.SuspendLayout();
             this.menuStripTop.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -146,6 +149,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.gridDiagnosticLog)).BeginInit();
             this.popupHttpLog.SuspendLayout();
             this.tbUnitTesting.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -299,14 +304,12 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.groupBox1);
+            this.tabPage2.Controls.Add(this.groupBox2);
             this.tabPage2.Controls.Add(this.label5);
             this.tabPage2.Controls.Add(this.cboHostSelectorPrt);
-            this.tabPage2.Controls.Add(this.btnStopServer);
-            this.tabPage2.Controls.Add(this.btnStartServer);
             this.tabPage2.Controls.Add(this.rtbRioUpdateBox);
-            this.tabPage2.Controls.Add(this.btnRevertBinaries);
-            this.tabPage2.Controls.Add(this.btnUpdateBinaries);
-            this.tabPage2.Controls.Add(this.richTextBox1);
+            this.tabPage2.Controls.Add(this.rtbRobotController);
             this.tabPage2.Controls.Add(this.cboHostSelectorAddr);
             this.tabPage2.Controls.Add(this.label3);
             this.tabPage2.Location = new System.Drawing.Point(4, 25);
@@ -321,7 +324,7 @@
             // 
             this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(760, 66);
+            this.label5.Location = new System.Drawing.Point(760, 136);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(38, 17);
             this.label5.TabIndex = 15;
@@ -333,7 +336,7 @@
             this.cboHostSelectorPrt.FormattingEnabled = true;
             this.cboHostSelectorPrt.Items.AddRange(new object[] {
             "1250 # Default Port"});
-            this.cboHostSelectorPrt.Location = new System.Drawing.Point(795, 62);
+            this.cboHostSelectorPrt.Location = new System.Drawing.Point(795, 132);
             this.cboHostSelectorPrt.Name = "cboHostSelectorPrt";
             this.cboHostSelectorPrt.Size = new System.Drawing.Size(153, 24);
             this.cboHostSelectorPrt.TabIndex = 1;
@@ -342,9 +345,11 @@
             // btnStopServer
             // 
             this.btnStopServer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnStopServer.Location = new System.Drawing.Point(833, 122);
+            this.btnStopServer.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnStopServer.ForeColor = System.Drawing.Color.Maroon;
+            this.btnStopServer.Location = new System.Drawing.Point(6, 61);
             this.btnStopServer.Name = "btnStopServer";
-            this.btnStopServer.Size = new System.Drawing.Size(114, 23);
+            this.btnStopServer.Size = new System.Drawing.Size(219, 29);
             this.btnStopServer.TabIndex = 5;
             this.btnStopServer.Text = "Force Stop Server";
             this.btnStopServer.UseVisualStyleBackColor = true;
@@ -353,9 +358,11 @@
             // btnStartServer
             // 
             this.btnStartServer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnStartServer.Location = new System.Drawing.Point(704, 122);
+            this.btnStartServer.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnStartServer.ForeColor = System.Drawing.Color.Green;
+            this.btnStartServer.Location = new System.Drawing.Point(6, 21);
             this.btnStartServer.Name = "btnStartServer";
-            this.btnStartServer.Size = new System.Drawing.Size(123, 23);
+            this.btnStartServer.Size = new System.Drawing.Size(219, 34);
             this.btnStartServer.TabIndex = 4;
             this.btnStartServer.Text = "Force Start Server";
             this.btnStartServer.UseVisualStyleBackColor = true;
@@ -366,44 +373,48 @@
             this.rtbRioUpdateBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.rtbRioUpdateBox.Location = new System.Drawing.Point(18, 93);
+            this.rtbRioUpdateBox.Location = new System.Drawing.Point(8, 163);
             this.rtbRioUpdateBox.Name = "rtbRioUpdateBox";
-            this.rtbRioUpdateBox.Size = new System.Drawing.Size(680, 388);
+            this.rtbRioUpdateBox.Size = new System.Drawing.Size(690, 305);
             this.rtbRioUpdateBox.TabIndex = 11;
             this.rtbRioUpdateBox.Text = "";
             // 
             // btnRevertBinaries
             // 
             this.btnRevertBinaries.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRevertBinaries.Location = new System.Drawing.Point(833, 93);
+            this.btnRevertBinaries.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRevertBinaries.ForeColor = System.Drawing.Color.Maroon;
+            this.btnRevertBinaries.Location = new System.Drawing.Point(6, 130);
             this.btnRevertBinaries.Name = "btnRevertBinaries";
-            this.btnRevertBinaries.Size = new System.Drawing.Size(115, 23);
+            this.btnRevertBinaries.Size = new System.Drawing.Size(231, 45);
             this.btnRevertBinaries.TabIndex = 3;
-            this.btnRevertBinaries.Text = "Revert Binaries";
+            this.btnRevertBinaries.Text = "Uninstall Phoenix Diagnostics";
             this.btnRevertBinaries.UseVisualStyleBackColor = true;
             this.btnRevertBinaries.Click += new System.EventHandler(this.btnRevertBinaries_Click);
             // 
             // btnUpdateBinaries
             // 
             this.btnUpdateBinaries.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUpdateBinaries.Location = new System.Drawing.Point(704, 93);
+            this.btnUpdateBinaries.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnUpdateBinaries.ForeColor = System.Drawing.Color.Green;
+            this.btnUpdateBinaries.Location = new System.Drawing.Point(6, 80);
             this.btnUpdateBinaries.Name = "btnUpdateBinaries";
-            this.btnUpdateBinaries.Size = new System.Drawing.Size(123, 23);
+            this.btnUpdateBinaries.Size = new System.Drawing.Size(231, 44);
             this.btnUpdateBinaries.TabIndex = 2;
-            this.btnUpdateBinaries.Text = "Update Binaries";
+            this.btnUpdateBinaries.Text = "Install Phoenix Library/Diagnostics";
             this.btnUpdateBinaries.UseVisualStyleBackColor = true;
             this.btnUpdateBinaries.Click += new System.EventHandler(this.btnUpdateBinaries_Click);
             // 
-            // richTextBox1
+            // rtbRobotController
             // 
-            this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.rtbRobotController.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.richTextBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.richTextBox1.Location = new System.Drawing.Point(8, 6);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(940, 49);
-            this.richTextBox1.TabIndex = 8;
-            this.richTextBox1.Text = resources.GetString("richTextBox1.Text");
+            this.rtbRobotController.BackColor = System.Drawing.Color.White;
+            this.rtbRobotController.Location = new System.Drawing.Point(8, 6);
+            this.rtbRobotController.Name = "rtbRobotController";
+            this.rtbRobotController.Size = new System.Drawing.Size(940, 120);
+            this.rtbRobotController.TabIndex = 8;
+            this.rtbRobotController.Text = resources.GetString("rtbRobotController.Text");
             // 
             // cboHostSelectorAddr
             // 
@@ -413,7 +424,7 @@
             this.cboHostSelectorAddr.Items.AddRange(new object[] {
             "172.22.11.2 # RoboRIO Over USB",
             "localhost # Local PC Development"});
-            this.cboHostSelectorAddr.Location = new System.Drawing.Point(156, 62);
+            this.cboHostSelectorAddr.Location = new System.Drawing.Point(156, 132);
             this.cboHostSelectorAddr.Name = "cboHostSelectorAddr";
             this.cboHostSelectorAddr.Size = new System.Drawing.Size(595, 24);
             this.cboHostSelectorAddr.TabIndex = 0;
@@ -422,7 +433,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(15, 66);
+            this.label3.Location = new System.Drawing.Point(15, 136);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(180, 17);
             this.label3.TabIndex = 7;
@@ -1108,6 +1119,41 @@
             this.overnightTestButton.UseVisualStyleBackColor = true;
             this.overnightTestButton.Click += new System.EventHandler(this.overnightTestButton_Click);
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.chkRioWebReminder);
+            this.groupBox2.Controls.Add(this.btnUpdateBinaries);
+            this.groupBox2.Controls.Add(this.btnRevertBinaries);
+            this.groupBox2.Location = new System.Drawing.Point(710, 163);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(243, 181);
+            this.groupBox2.TabIndex = 19;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Install/Uninstall";
+            // 
+            // chkRioWebReminder
+            // 
+            this.chkRioWebReminder.AutoSize = true;
+            this.chkRioWebReminder.Location = new System.Drawing.Point(6, 19);
+            this.chkRioWebReminder.Name = "chkRioWebReminder";
+            this.chkRioWebReminder.Size = new System.Drawing.Size(232, 55);
+            this.chkRioWebReminder.TabIndex = 16;
+            this.chkRioWebReminder.Text = "Insert helpful animation in \r\nroboRIO WebServer\r\nOnly select for 2019 FRC BETA.";
+            this.chkRioWebReminder.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.btnStartServer);
+            this.groupBox1.Controls.Add(this.btnStopServer);
+            this.groupBox1.Location = new System.Drawing.Point(710, 350);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(231, 96);
+            this.groupBox1.TabIndex = 20;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Force Diagnostic Server On/Off";
+            // 
             // frmDashboard
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -1150,6 +1196,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.gridDiagnosticLog)).EndInit();
             this.popupHttpLog.ResumeLayout(false);
             this.tbUnitTesting.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1190,7 +1239,7 @@
         private System.Windows.Forms.NumericUpDown numNewDevId;
         private System.Windows.Forms.Button btnNameChange;
         private System.Windows.Forms.TextBox txtDeviceNewName;
-        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.RichTextBox rtbRobotController;
         private System.Windows.Forms.RichTextBox richTextBox2;
         private System.Windows.Forms.ToolStripMenuItem menuItemTools;
         private System.Windows.Forms.Label label50;
@@ -1248,6 +1297,9 @@
         private System.Windows.Forms.ToolStripMenuItem pOSTToolStripMenuItem;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Button btnRefreshConfigs;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.CheckBox chkRioWebReminder;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }
 

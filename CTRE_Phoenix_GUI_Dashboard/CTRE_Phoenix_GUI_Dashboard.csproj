@@ -99,6 +99,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Resources\rio.rtf" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
@@ -113,9 +114,7 @@
       <Name>CTRE.Phoenix.dotNET</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

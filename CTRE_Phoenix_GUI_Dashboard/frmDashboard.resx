@@ -126,7 +126,7 @@
   <metadata name="menuStripTop.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>220, 7</value>
   </metadata>
-  <data name="richTextBox1.Text" xml:space="preserve">
+  <data name="rtbRobotController.Text" xml:space="preserve">
     <value>To install binaries, connect a RoboRIO to the PC using USB, and press "Update Binaries"
 To Connect to the Roborio, put  the RoboRIO's Address in the Diagnostic Server Address Box and suffix it with ":1250"
 The Address of the RoboRIO will be 172.22.11.2 if over USB, and 10.TE.AM.x if over ethernet or WiFi</value>
@@ -139,7 +139,7 @@ The Address of the RoboRIO will be 172.22.11.2 if over USB, and 10.TE.AM.x if ov
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABw
-        EAAAAk1TRnQBSQFMAgEBCQEAAcgBAAHIAQABEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        EAAAAk1TRnQBSQFMAgEBCQEAAdABAAHQAQABEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAATADAAEBAQABCAYAAQwYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA

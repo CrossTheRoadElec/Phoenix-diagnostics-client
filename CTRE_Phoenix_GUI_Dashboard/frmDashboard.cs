@@ -75,6 +75,9 @@ namespace CTRE_Phoenix_GUI_Dashboard {
             /* more GUI rendering updates */
             PaintEnablePollingCheckbox();
             PaintEnableSftpTransferCheckbox();
+
+            /* update the docs */
+            FillRtb(rtbRobotController, Properties.Resources.rio);
         }
 
         //--------------- Rendering GUI elements ---------------------------------//
@@ -184,6 +187,21 @@ namespace CTRE_Phoenix_GUI_Dashboard {
             /* update all the data entry related to this */
             numNewDevId.Value = dd.deviceID;
             txtDeviceNewName.Text = dd.jsonStrings.Name;
+        }
+        /// <summary>
+        /// Enable readonly for RTB
+        /// </summary>
+        /// <param name="rtb"></param>
+        void EnableReadonly(RichTextBox rtb)
+        {
+            Color col = rtb.BackColor;
+            rtb.ReadOnly = true;
+            rtb.BackColor = col;
+        }
+        private void FillRtb(RichTextBox rtb, string rtbContents)
+        {
+            rtb.Rtf = rtbContents;
+            EnableReadonly(rtb);
         }
         /// <summary>
         /// Change any unapplied settings BLUE so user knows to save settings.
@@ -1123,7 +1141,7 @@ namespace CTRE_Phoenix_GUI_Dashboard {
 
         private void btnCopyHttpLog_Click(object sender, EventArgs e) { CopyDiagnosticLogToClipboard(); }
 
-        private void btnUpdateBinaries_Click(object sender, EventArgs e) { InstallDiagServerToRobotController(false); }
+        private void btnUpdateBinaries_Click(object sender, EventArgs e) { InstallDiagServerToRobotController(chkRioWebReminder.Checked); }
 
         private void btnRevertBinaries_Click(object sender, EventArgs e) { UninstallDiagServerToRobotController(); }
 
