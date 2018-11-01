@@ -359,7 +359,7 @@
             // 
             this.btnStartServer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnStartServer.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnStartServer.ForeColor = System.Drawing.Color.Green;
+            this.btnStartServer.ForeColor = System.Drawing.Color.DarkGreen;
             this.btnStartServer.Location = new System.Drawing.Point(6, 21);
             this.btnStartServer.Name = "btnStartServer";
             this.btnStartServer.Size = new System.Drawing.Size(219, 34);
@@ -396,7 +396,7 @@
             // 
             this.btnUpdateBinaries.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnUpdateBinaries.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnUpdateBinaries.ForeColor = System.Drawing.Color.Green;
+            this.btnUpdateBinaries.ForeColor = System.Drawing.Color.DarkGreen;
             this.btnUpdateBinaries.Location = new System.Drawing.Point(6, 80);
             this.btnUpdateBinaries.Name = "btnUpdateBinaries";
             this.btnUpdateBinaries.Size = new System.Drawing.Size(231, 44);
