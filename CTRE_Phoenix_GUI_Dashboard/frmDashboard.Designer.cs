@@ -279,6 +279,7 @@
             this.captureAllToolStripMenuItem.Name = "captureAllToolStripMenuItem";
             this.captureAllToolStripMenuItem.Size = new System.Drawing.Size(218, 26);
             this.captureAllToolStripMenuItem.Text = "Capture All (ZIP file)";
+            this.captureAllToolStripMenuItem.Click += new System.EventHandler(this.captureAllToolStripMenuItem_Click);
             // 
             // tabControl
             // 
