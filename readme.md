@@ -1,10 +1,10 @@
-# Phoenix Diagnostics Client
-
+## Phoenix Diagnostics Client
 ![image](https://user-images.githubusercontent.com/28712271/45908233-7db6ac80-bdc9-11e8-970b-1b5e313c55bf.png)
-
-
 ### What is this?
 This is a repository that provides everything someone will need to put the 2018 Diagnostic Server onto a RoboRIO and test with it. The Diagnostic Server is the 2019 replacement for the Web-Based Configuration Utility that was provided during the previous years. It currently includes all the features of the Web-Based Config with aspirations to include more.
+
+Note **2019 beta FRC teams** should use the release that is packaged with *Phoenix 2019 Installer* as it contains the 2019 binaries.
+Otherwise download the binary [releases](https://github.com/CrossTheRoadElec/Phoenix-diagnostics-client/releases).
 
 ### Contents:
  - Source Code for the client, ready to be built and ran out of the box.
