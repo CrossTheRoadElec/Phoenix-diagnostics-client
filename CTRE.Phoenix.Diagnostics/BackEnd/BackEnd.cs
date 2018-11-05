@@ -214,6 +214,27 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                         retval = (Status)jsonDeser.GeneralReturn.Error;
                     }
                     break;
+                case ActionType.FactoryDefault:
+                    /* make sure device was found in our collection */
+                    if (retval == Status.Ok)
+                        retval = (foundOk) ? Status.Ok : Status.DeviceNotFound;
+                    /* perform http exchange */
+                    if (retval == Status.Ok)
+                        retval = _WebServerScripts.HttpGet(_hostName, ddRef.model, ddRef.deviceID, ActionType.FactoryDefault, out response,"", 2000);
+                    /* parse resp */
+                    if (retval == Status.Ok)
+                    {
+                        NameReturn jsonDeser = JsonConvert.DeserializeObject<NameReturn>(response);
+                        retval = (Status)jsonDeser.GeneralReturn.Error;
+                    }
+                    /* Backend should immediately update device config cache */
+                    if (retval == Status.Ok)
+                    {
+                        /* do we need to wait a bit before polling the configs out? */
+                        System.Threading.Thread.Sleep(2000);
+                        retval = UpdateConfigs(ddRef);
+                    }
+                    break;
 
                 case ActionType.SetID:
                     /* get params for this action */
@@ -241,21 +262,10 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                     break;
 
                 case ActionType.SetConfig:
-                    /* Specify the filename so it's somewhat unique */
-                    fileName = (ddRef.model + ": " + ddRef.deviceID + ".json").ToLower(); //ToLower Everything to make it parsable in URL
-
                     /* get params for this action */
                     string serializedData = _action.stringParam;
                     /* Get content payload from action */
                     byte[] dataBytes = System.Text.Encoding.UTF8.GetBytes(serializedData);
-
-                    /* If we're using GET we need to send the file up */
-                    if (EnableSftpTransfer)
-                    {
-                        _rioUpdater = new RioUpdater(_hostName);
-                        _rioUpdater.SendFileContents(dataBytes, _serverSearchDirectory + fileName);
-                        System.Threading.Thread.Sleep(250); //Wait a bit to make sure file got onto the RIO
-                    }
 
                     /* make sure device was found in our collection */
                     if (retval == Status.Ok)
@@ -263,13 +273,26 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                     /* perform http exchange */
                     if (retval == Status.Ok)
                     {
-                        /* Decide if we're posting or getting from the _usingPost flag */
+                        /* Decide if we're SFTPing of sending with POST. */
                         if (EnableSftpTransfer)
                         {
-                            retval = _WebServerScripts.HttpGet(_hostName, ddRef.model, ddRef.deviceID, ActionType.SetConfig, out response, "&file=" + fileName, 5000);
+                            /* Specify the filename so it's somewhat unique */
+                            fileName = (ddRef.model + ": " + ddRef.deviceID + ".json").ToLower(); //ToLower Everything to make it parsable in URL
+
+							/* If we're using GET we need to send the file up */
+                            _rioUpdater = new RioUpdater(_hostName);
+                            retval = _rioUpdater.SendFileContents(dataBytes, _serverSearchDirectory + fileName);
+                            System.Threading.Thread.Sleep(250); //Wait a bit to make sure file got onto the RIO
+
+                            if (retval == Status.Ok)
+                            {
+                                /* perform http exchange */
+                                retval = _WebServerScripts.HttpGet(_hostName, ddRef.model, ddRef.deviceID, ActionType.SetConfig, out response, "&file=" + fileName, 5000);
+                            }
                         }
                         else
                         {
+                            /* perform http exchange */
                             retval = _WebServerScripts.HttpPost(_hostName, ddRef.model, ddRef.deviceID, ActionType.SetConfig, dataBytes, out response, 5000);
                         }
                     }
@@ -946,6 +969,11 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
         public Status RequestSelfTest(DeviceDescrip dd, Action.CallBack callback)
         {
             Action ac = new Action(callback, dd, ActionType.SelfTest);
+            return PushAction(ac);
+        }
+        public Status RequestFactoryDefault(DeviceDescrip dd, Action.CallBack callback)
+        {
+            Action ac = new Action(callback, dd, ActionType.FactoryDefault);
             return PushAction(ac);
         }
         public Status RequestChangeName(DeviceDescrip dd, string newName, Action.CallBack callback)

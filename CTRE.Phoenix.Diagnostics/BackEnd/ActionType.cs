@@ -12,6 +12,7 @@
         SetID,
         SetDeviceName,
         SelfTest,
+        FactoryDefault,
         FieldUpgradeDevice,
         CheckUpdateProgress,
         GetConfig,

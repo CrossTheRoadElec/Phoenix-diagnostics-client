@@ -24,6 +24,7 @@ namespace CTRE_Phoenix_GUI_Dashboard {
             Disabled_waitForReflash, //!< Waiting for field-upgrade to finish
             Disabled_WaitForInstallIntoRobotController,  //!< Waiting for installing into RIO/RaspPi/etc.
             Disabled_WaitForUnitTest,
+            Disabled_WaitForSettingsChanged,
         }
 
         /* ----------- state variables -------- */
@@ -590,6 +591,17 @@ namespace CTRE_Phoenix_GUI_Dashboard {
             /* common post-action checks, transition to wait for response handler */
             PostOperation(er, GuiState.Disabled_WaitForSelfTest);
         }
+        void FactoryDefaultSelectedDevice()
+        {
+            /* common pre-action checks, including getting the selected device */
+            DeviceDescrip dd;
+            Status er = PreOperation(out dd);
+            /* request the action */
+            if (er == Status.Ok)
+                er = BackEnd.Instance.RequestFactoryDefault(dd, new BackEndAction.CallBack(ActionCallBack));
+            /* common post-action checks, transition to wait for response handler */
+            PostOperation(er, GuiState.Disabled_WaitForSettingsChanged);
+        }
         void FieldUpgradeSelectedDevice()
         {
             /* common pre-action checks, including getting the selected device */
@@ -728,6 +740,20 @@ namespace CTRE_Phoenix_GUI_Dashboard {
                             groupedControls.SelectedTab = GetSelfTestTabPage();
                         }
                         break;
+
+                    case GuiState.Disabled_WaitForSettingsChanged:
+                        /* if response is captured, transition */
+                        if (HasReceivedActionResponse())
+                        {
+                            /* refresh viewed settings */
+                            RefreshConfigsOfSelectedDevice();
+                            /* back to normal */
+                            EnableDisableEntireGui(true);
+                            /* back to enabled */
+                            SetGuiState(GuiState.Enabled, 0);
+                        }
+                        break;
+
                     case GuiState.Disabled_waitForReflash:
                         /* periodically update progress bar */
                         int prog = (int)BackEnd.Instance.FieldUpgradeProgressPerc;
@@ -807,6 +833,7 @@ namespace CTRE_Phoenix_GUI_Dashboard {
                     case ActionType.SetConfig:
                     case ActionType.SetDeviceName:
                     case ActionType.SetID:
+                    case ActionType.FactoryDefault:
                         color = Color.Gold;
                         break;
                     case ActionType.SelfTest:
@@ -1128,6 +1155,8 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         private void btnUpdateDevice_Click(object sender, EventArgs e) { FieldUpgradeSelectedDevice(); }
 
         private void btnSelfTest_Click(object sender, EventArgs e) { FetchSelfTestOfSelectedDevice(); }
+
+        private void btnFactoryDefault_Click(object sender, EventArgs e) { FactoryDefaultSelectedDevice(); }
 
         private void cboHostSelector_TextChanged(object sender, EventArgs e) { UpdateHostNameAndPort(); }
 
