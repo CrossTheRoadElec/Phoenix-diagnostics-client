@@ -164,8 +164,13 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         }
         void RefreshConfigsOfSelectedDevice()
         {
-            var selected = _deviceListContainer.SelectedDeviceDescriptor;
-            UpdateTabs(selected, groupedControls);
+            /* Common pre-action checks, including getting the selected device */
+            DeviceDescrip dd;
+            Status er = PreOperation(out dd);
+            if(er == Status.Ok)
+                UpdateTabs(dd, groupedControls);
+            /* Common post-action checks, Update status bar based on status */
+            PostOperation(er, GuiState.Enabled);
         }
 
         void PaintEnablePollingCheckbox()
@@ -295,7 +300,6 @@ namespace CTRE_Phoenix_GUI_Dashboard {
             groupedControls.TabPages.Add(GetSelfTestTabPage());
             /* ... then paint the device specific tabs*/
             GenerateTabs(deviceToGenFrom, groupedControls);
-
         }
         void ClearSelfTestAndConfigParamsTabs()
         {
@@ -512,13 +516,15 @@ namespace CTRE_Phoenix_GUI_Dashboard {
 
         void PostOperation(Status er, GuiState nextSt = GuiState.Disabled_WaitForAction)
         {
+            /* Always report action's status */
+            PrintActionError(er);
             if (er == Status.Ok) {
                 /* since the status is OK, that means the action is being performed, so 
                  wait for the callback before re-enabling GUI. */
                 SetGuiState(nextSt, 0);
             } else {
                 /* action was not started, report why */
-                PrintActionError(er);
+                //PrintActionError(er);
                 /* restore GUI so user can press buttons again */
                 EnableDisableEntireGui(true);
             }
@@ -1200,14 +1206,18 @@ namespace CTRE_Phoenix_GUI_Dashboard {
 
         private void txtDeviceCRFPath_TextChanged(object sender, EventArgs e) { SaveStickySettings(); }
 
+        /* Used to generate log file, and export to a zip file */
         private void captureAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            /* PreOperation not needed as we don't care about having a selected device */
             var exportPackager = new ExportPackager(gridDiagnosticLog,
                                      _deviceListContainer,
                                      lstDevices,
                                      cboHostSelectorAddr,
                                      cboHostSelectorPrt);
-            exportPackager.Export();
+            Status er = exportPackager.Export();
+            /* Only perform post operation to update ToolStrip Status */
+            PostOperation(er, GuiState.Enabled);
         }
     }
 }

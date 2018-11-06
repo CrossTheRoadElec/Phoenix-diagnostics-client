@@ -1,4 +1,5 @@
 ﻿using CTRE.Phoenix.Diagnostics.BackEnd;
+using CTRE.Phoenix.Diagnostics;
 using System;
 using System.IO;
 using System.IO.Compression;
@@ -26,41 +27,51 @@ namespace CTRE_Phoenix_GUI_Dashboard
             this.cboHostSelectorAddr = cboHostSelectorAddr;
             this.cboHostSelectorPrt = cboHostSelectorPrt;
         }
-        public void Export()
+        public Status Export()
         {
-            /* If directory doesn't exist, create it */
-            if (!Directory.Exists(".\\Exports"))
+            try
             {
-                Directory.CreateDirectory(".\\Exports");
+                /* If directory doesn't exist, create it */
+                if (!Directory.Exists(".\\Exports"))
+                {
+                    Directory.CreateDirectory(".\\Exports");
+                }
+
+                /* Create directory for this specific Export */
+                string newExportPath = string.Format(".\\Exports\\Export {0}", DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss"));
+                Directory.CreateDirectory(newExportPath);
+
+                using (FileStream diagLog = new FileStream(newExportPath + "\\Diagnostic Log.txt", FileMode.Create))
+                {
+                    /* Export data to a file */
+                    ExportDiagnosticLog(diagLog);
+
+                }
+                using (FileStream devLog = new FileStream(newExportPath + "\\Devices Log.txt", FileMode.Create))
+                {
+                    /* Export data to a file */
+                    ExportDevices(devLog);
+                }
+                using (FileStream info = new FileStream(newExportPath + "\\Client Info.txt", FileMode.Create))
+                {
+                    /* Export data to a file */
+                    ExportClientInfo(info);
+                }
+                /* Zip up all files */
+                ZipEverythingUp(newExportPath, newExportPath + ".zip");
+
+                /* Delete original directory to save space */
+                new DirectoryInfo(newExportPath).Delete(true);
+
+                System.Diagnostics.Process.Start(".\\Exports");
+
+                /* Action Completed, report success */
+                return Status.Ok;
             }
-
-            /* Create directory for this specific Export */
-            string newExportPath = string.Format(".\\Exports\\Export {0}", DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss"));
-            Directory.CreateDirectory(newExportPath);
-
-            using (FileStream diagLog = new FileStream(newExportPath + "\\Diagnostic Log.txt", FileMode.Create))
-            {
-                /* Export data to a file */
-                ExportDiagnosticLog(diagLog);
-
-            }
-            using (FileStream devLog = new FileStream(newExportPath + "\\Devices Log.txt", FileMode.Create))
-            {
-                /* Export data to a file */
-                ExportDevices(devLog);
-            }
-            using (FileStream info = new FileStream(newExportPath + "\\Client Info.txt", FileMode.Create))
-            {
-                /* Export data to a file */
-                ExportClientInfo(info);
-            }
-            /* Zip up all files */
-            ZipEverythingUp(newExportPath, newExportPath + ".zip");
-
-            /* Delete original directory to save space */
-            new DirectoryInfo(newExportPath).Delete(true);
-
-            System.Diagnostics.Process.Start(".\\Exports");
+            catch (FileNotFoundException){
+                /*  Export Folder/File could not be found, return code (Security/Permission settings) */
+                return Status.CouldNotFindExportFolder;
+            };
         }
 
         private void ExportDiagnosticLog(FileStream diagLog)

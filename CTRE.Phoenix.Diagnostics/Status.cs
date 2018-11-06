@@ -22,6 +22,7 @@ namespace CTRE.Phoenix.Diagnostics
         ServerIsFlashingAlready, //!< Attempted to field upgrade, but server is already flashing a device.
         CouldNotSFTPToServer,
         CouldNotWriteFile,
+        CouldNotFindExportFolder, //!< Client attempted to create Export folder because it could not find one but failed.
 
         /* Error codes pertinent solely to Unit Testing */
         ProcessNotRunning,
@@ -60,6 +61,7 @@ namespace CTRE.Phoenix.Diagnostics
         CTRE_DI_CorruptedPOST = (-127),
         CTRE_DI_NoConfigs = (-128),
         CTRE_DI_ConfigFailed = (-129),
+        CTRE_DI_CouldNotReqFactoryDefault = (-130),
         CTRE_DI_InvalidCrfBadHeader = (-200),
         CTRE_DI_InvalidCrfFileSzInvald = (-201),
         CTRE_DI_InvalidCrfWrongProduct = (-202),
