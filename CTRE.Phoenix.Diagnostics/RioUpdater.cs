@@ -89,7 +89,6 @@ namespace CTRE.Phoenix.Diagnostics
         {
             /* This will only happen on second tab, so don't bother logging */
             Status error = Status.Ok;
-            SftpClient client = new SftpClient(_host.GetHostName(), "admin", "");
 
             /* Check if file exists on PC */
             if (error == Status.Ok)
@@ -102,7 +101,11 @@ namespace CTRE.Phoenix.Diagnostics
                 }
             }
 
-            return SendFileContents(file.GetContents(), file.TargetPath);
+			if (error == Status.Ok) 
+			{
+				error = SendFileContents (file.GetContents (), file.TargetPath);
+			}
+			return error;
         }
         public Status StartServer()
         {

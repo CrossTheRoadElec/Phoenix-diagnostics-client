@@ -280,9 +280,13 @@ namespace CTRE_Phoenix_GUI_Dashboard {
 
                 /* dump html into GUI component */
                 browserMessageDisp.Navigate("about:blank");
-                browserMessageDisp.Document.OpenNew(false);
-                browserMessageDisp.Document.Write(textBox);
-                browserMessageDisp.Refresh();
+				if (browserMessageDisp.Document == null) {
+					/* TODO: do something, this happens on Ubuntu/Mono */
+				} else {
+					browserMessageDisp.Document.OpenNew (false);
+					browserMessageDisp.Document.Write (textBox);
+					browserMessageDisp.Refresh ();
+				}
             }
         }
 
@@ -644,16 +648,22 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         }
         void StartServer()
         {
-            rtbRioUpdateBox.Clear(); //Clear text
-
-            Status er = BackEnd.Instance.StartServer(new BackEndAction.CallBack(ActionCallBack));
+			rtbRioUpdateBox.Clear(); //Clear text
+			Status er = PreOperation();
+			/* request the action */
+			if (er == Status.Ok) {
+				er = BackEnd.Instance.StartServer(new BackEndAction.CallBack(ActionCallBack));
+			}
             PostOperation(er, GuiState.Disabled_WaitForInstallIntoRobotController);
         }
         void StopServer()
         {
-            rtbRioUpdateBox.Clear(); //Clear text
-
-            Status er = BackEnd.Instance.StopServer(new BackEndAction.CallBack(ActionCallBack));
+			rtbRioUpdateBox.Clear(); //Clear text
+			Status er = PreOperation();
+			/* request the action */
+			if (er == Status.Ok) {
+				er = BackEnd.Instance.StopServer (new BackEndAction.CallBack (ActionCallBack));
+			}
             PostOperation(er, GuiState.Disabled_WaitForInstallIntoRobotController);
         }
 
@@ -665,7 +675,7 @@ namespace CTRE_Phoenix_GUI_Dashboard {
 
             /* get backup status, color, and hover message */
             string msg, messageColor, hoverMsg;
-            BackEnd.State state = BackEnd.Instance.GetStatus(out msg, out messageColor, out hoverMsg);
+            BackEnd.Instance.GetStatus(out msg, out messageColor, out hoverMsg);
             string connectionStatus = BackEnd.Instance.GetConnectionStatus();
 
             /* its up to the GUI how much of this stuff to show */
@@ -905,9 +915,11 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         }
         private void EasterEggHandler()
         {
-            if (System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.LeftShift)) {
-                EasterEgg_Show();
-			}
+			/* don't use IsKeyDown, don't want to requre System.Windows.Presentation */
+            //if (System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.LeftShift)) {
+			//	EasterEgg_Show();
+			//}
+			EasterEgg_Show();
         }
         //--------------------------------------------------------------------------------------------------//
         //----------------------------------------- User Prompts -------------------------------------------//
@@ -923,11 +935,11 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         }        
         private void PromptClipboardNotAvailable()
         {
-               var result = MessageBox.Show("Application could not get access to clipboard.",
-                                            "Clipboard not available",
-                                            MessageBoxButtons.OK,
-                                            MessageBoxIcon.Information,
-                                            MessageBoxDefaultButton.Button1); // Default to OK
+               MessageBox.Show(	"Application could not get access to clipboard.",
+                                "Clipboard not available",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information,
+                                MessageBoxDefaultButton.Button1); // Default to OK
         }
 
         void OpenFileBrowserCRF()
