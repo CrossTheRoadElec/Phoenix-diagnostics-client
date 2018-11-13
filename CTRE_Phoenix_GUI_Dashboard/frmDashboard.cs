@@ -164,13 +164,22 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         }
         void RefreshConfigsOfSelectedDevice()
         {
-            /* Common pre-action checks, including getting the selected device */
-            DeviceDescrip dd;
-            Status er = PreOperation(out dd);
-            if(er == Status.Ok)
+            /* Locally do similiar actions as pre/post operation without affecting GUI */
+
+            /* Get selected device's device descriptor */
+            DeviceDescrip dd = _deviceListContainer.SelectedDeviceDescriptor;
+
+            /* Check to see if device exists */
+            Status er = Status.Ok;
+            if (dd == null) { er = Status.DeviceNotSelected; }
+
+            /* Update configs is device found */
+            if (er == Status.Ok) {
                 UpdateTabs(dd, groupedControls);
-            /* Common post-action checks, Update status bar based on status */
-            PostOperation(er, GuiState.Enabled);
+            }
+
+            /* Update Status bar for refresh configs */
+            PrintActionError(er);
         }
 
         void PaintEnablePollingCheckbox()
@@ -516,15 +525,13 @@ namespace CTRE_Phoenix_GUI_Dashboard {
 
         void PostOperation(Status er, GuiState nextSt = GuiState.Disabled_WaitForAction)
         {
-            /* Always report action's status */
-            PrintActionError(er);
             if (er == Status.Ok) {
                 /* since the status is OK, that means the action is being performed, so 
                  wait for the callback before re-enabling GUI. */
                 SetGuiState(nextSt, 0);
             } else {
                 /* action was not started, report why */
-                //PrintActionError(er);
+                PrintActionError(er);
                 /* restore GUI so user can press buttons again */
                 EnableDisableEntireGui(true);
             }
