@@ -945,9 +945,12 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         }
         private void EasterEggHandler()
         {
-            if (System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.LeftShift)) {
+            /* Use of ModifierKeys rather the isKeyDown prevents unscaling of application */
+            if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift)
+            {
+                /* Show EasterEgg tab when either shift is held down while the button is pressed */
                 EasterEgg_Show();
-			}
+            }
         }
         //--------------------------------------------------------------------------------------------------//
         //----------------------------------------- User Prompts -------------------------------------------//
