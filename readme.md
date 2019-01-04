@@ -1,7 +1,12 @@
 ## Phoenix Diagnostics Client
 **Note has been replaced with https://github.com/CrossTheRoadElec/Phoenix-Tuner-Release.**
 
-**However this can be used as a reference for custome diagnostics interfaces.**
+**However this can be used as a reference for customer diagnostics interfaces.**
+
+**Teams should use Phoenix Tuner to ensure proper functionality of all features.**
+
+**This repository is slightly behind maintenance against the latest diagnostic server**
+
 
 ![image](https://user-images.githubusercontent.com/28712271/45908233-7db6ac80-bdc9-11e8-970b-1b5e313c55bf.png)
 ### What is this?
