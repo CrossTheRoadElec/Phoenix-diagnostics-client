@@ -62,8 +62,8 @@ window.HUFF.registerPage(function(globals) {
 	/* BEGIN - CTRE */
 	var iCtreSplashIdx = 4;
 	function SplashCtrePhoenixMessage() {
-		var canBusLink = "<a href=https://github.com/CrossTheRoadElec/Phoenix-diagnostics-client/blob/master/readme.md#phoenix-diagnostics-client>Phoenix Diagnostics Client</a>";
-		var innerHTML = "<font color='darkgreen'>CAN Bus</font> features have been moved to " + canBusLink;
+		//var canBusLink = "<a href=https://github.com/CrossTheRoadElec/Phoenix-diagnostics-client/blob/master/readme.md#phoenix-diagnostics-client>Phoenix Diagnostics Client</a>";
+		var innerHTML = "<font color='darkgreen'>CAN Bus</font> features have been moved to <b>Phoenix Tuner</b>";
 
 		var temp = document.getElementById("saveStatus");
 		if(temp == null) {
@@ -78,15 +78,15 @@ window.HUFF.registerPage(function(globals) {
 	}
 	/* END - CTRE */
 
-	var onLoad = function() {
+   var onLoad = function() {
       var filter = new SystemAPI.PropertyBag;
       filter.setProperty(SystemAPI.PropertyID.ItemIsDevice, new SystemAPI.BoolProperty(true));
       filter.setProperty(SystemAPI.PropertyID.ItemIsChassis, new SystemAPI.BoolProperty(true));
       filter.setProperty(SystemAPI.PropertyID.ItemHasService, new SystemAPI.BoolProperty(true));
 
-	  
-	  setTimeout(SplashCtrePhoenixMessage, 500); /* CTRE */
-	 
+
+      setTimeout(SplashCtrePhoenixMessage, 500); /* CTRE */
+
       SystemAPI.searchForItemsAndPropertiesFiltered(
          "", SystemAPI.FilterMode.Any, filter
       ).then(function (bagResults) {
@@ -103,7 +103,6 @@ window.HUFF.registerPage(function(globals) {
    };
 
    var onUnload = function () {
-	   
       return true;
    };
 

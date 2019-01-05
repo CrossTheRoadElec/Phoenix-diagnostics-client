@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace CTRE_Phoenix_GUI_Dashboard
+namespace CTRE_Phoenix_DiagClient
 {
     static class Program
     {
@@ -13,7 +13,7 @@ namespace CTRE_Phoenix_GUI_Dashboard
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmDashboard());
+            Application.Run(new frmMain());
         }
     }
 }

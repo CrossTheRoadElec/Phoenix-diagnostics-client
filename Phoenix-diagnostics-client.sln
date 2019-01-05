@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTRE_Phoenix_GUI_Dashboard", "CTRE_Phoenix_GUI_Dashboard\CTRE_Phoenix_GUI_Dashboard.csproj", "{13ECF34D-207F-40AC-B61C-5ACABEE50EBE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTRE_Phoenix_DiagClient", "CTRE_Phoenix_DiagClient\CTRE_Phoenix_DiagClient.csproj", "{13ECF34D-207F-40AC-B61C-5ACABEE50EBE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTRE.Phoenix.dotNET", "CTRE.Phoenix.dotNET\CTRE.Phoenix.dotNET.csproj", "{E06A709B-1658-40A5-AA92-D0434F495C6B}"
 EndProject

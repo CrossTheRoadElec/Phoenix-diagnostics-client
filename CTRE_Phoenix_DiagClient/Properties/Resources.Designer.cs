@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CTRE_Phoenix_GUI_Dashboard.Properties {
+namespace CTRE_Phoenix_DiagClient.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace CTRE_Phoenix_GUI_Dashboard.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CTRE_Phoenix_GUI_Dashboard.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CTRE_Phoenix_DiagClient.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

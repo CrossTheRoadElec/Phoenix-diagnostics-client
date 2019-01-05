@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace CTRE_Phoenix_GUI_Dashboard
+namespace CTRE_Phoenix_DiagClient
 {
     /// <summary>
     /// Container class that will take ownership of a device tree view.  Form will pass relevent data from backend to this object,

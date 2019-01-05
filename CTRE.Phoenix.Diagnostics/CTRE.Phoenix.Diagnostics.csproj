@@ -65,7 +65,6 @@
     <Compile Include="RioFiles.cs" />
     <Compile Include="RioUpdater.cs" />
     <Compile Include="Status.cs" />
-    <Compile Include="UnitTesting.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CTRE.Phoenix.dotNET\CTRE.Phoenix.dotNET.csproj">

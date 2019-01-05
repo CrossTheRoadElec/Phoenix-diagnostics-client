@@ -1,7 +1,7 @@
 ﻿using System.Windows.Forms;
 using Newtonsoft.Json;
 
-namespace CTRE_Phoenix_GUI_Dashboard
+namespace CTRE_Phoenix_DiagClient
 {
     interface IControlGroup
     {

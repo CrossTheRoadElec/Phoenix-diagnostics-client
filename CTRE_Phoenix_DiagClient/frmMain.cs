@@ -11,8 +11,8 @@ using BackEndAction = CTRE.Phoenix.Diagnostics.BackEnd.Action;
 using System.IO;
 using System.IO.Compression;
 
-namespace CTRE_Phoenix_GUI_Dashboard {
-    public partial class frmDashboard : Form {
+namespace CTRE_Phoenix_DiagClient {
+    public partial class frmMain : Form {
         
         /// <summary>
         /// GUI state (machine)
@@ -23,7 +23,6 @@ namespace CTRE_Phoenix_GUI_Dashboard {
             Disabled_WaitForSelfTest, //!< Waiting for selt-test to finish
             Disabled_waitForReflash, //!< Waiting for field-upgrade to finish
             Disabled_WaitForInstallIntoRobotController,  //!< Waiting for installing into RIO/RaspPi/etc.
-            Disabled_WaitForUnitTest,
         }
 
         /* ----------- state variables -------- */
@@ -45,9 +44,9 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         private ToggleButton _toggleWebPaused = null;
         private ToggleButton _toggleWebJumpToBtm = null;
         /* ----------- Constants -------- */
-        private readonly string kAppName = "Dashboard";
+        private readonly string kAppName = "DiagClient";
 
-        public frmDashboard()
+        public frmMain()
         {
             InitializeComponent();
             /* update form caption */
@@ -163,8 +162,27 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         }
         void RefreshConfigsOfSelectedDevice()
         {
-            var selected = _deviceListContainer.SelectedDeviceDescriptor;
-            UpdateTabs(selected, groupedControls);
+            string jsonContents = null;
+
+            if (_deviceListContainer.SelectedDeviceDescriptor != null)
+            {
+                if (_deviceListContainer.SelectedDeviceDescriptor.configCache != null)
+                {
+                    jsonContents = Newtonsoft.Json.JsonConvert.SerializeObject(_deviceListContainer.SelectedDeviceDescriptor.configCache.Device, Newtonsoft.Json.Formatting.Indented);
+
+                    if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                    {
+                        try
+                        {
+                            System.IO.File.WriteAllText(saveFileDialog1.FileName, jsonContents);
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                    }
+                }
+            }
         }
 
         void PaintEnablePollingCheckbox()
@@ -601,20 +619,31 @@ namespace CTRE_Phoenix_GUI_Dashboard {
             /* common post-action checks, transition to wait for FIELD UPGRADE progress */
             PostOperation(er, GuiState.Disabled_waitForReflash);
         }
-        void SaveConfigsOfSelectedDevice()
+        void ReadAndSaveConfigsOfSelectedDevice()
         {
-            /* First prep by getting all the objects required together and filling them with data */
-            DeviceConfigs configs = GetConfigsFromTabs();
-            /* Then serialize the data to be sent to the backend */
-            string serializedData = Newtonsoft.Json.JsonConvert.SerializeObject(configs);
-            /* common pre-action checks, including getting the selected device */
-            DeviceDescrip dd;
-            Status er = PreOperation(out dd);
-            /* request the action */
-            if (er == Status.Ok)
-                er = BackEnd.Instance.SaveConfigs(dd, serializedData, new BackEndAction.CallBack(ActionCallBack));
-            /* common post-action checks, transition to wait for FIELD UPGRADE progress */
-            PostOperation(er, GuiState.Disabled_WaitForAction);
+            if(openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                string jsonString = null;
+                try
+                {
+                    jsonString = System.IO.File.ReadAllText(openFileDialog1.FileName);
+                }
+                catch (Exception) { }
+                /* common pre-action checks, including getting the selected device */
+                DeviceDescrip dd = null;
+                Status er = Status.Ok;
+                /* check file success */
+                if (er == Status.Ok)
+                    er = (jsonString == null) ? Status.CouldNotOpenFile : Status.Ok;
+                /* pre-op*/
+                if (er == Status.Ok)
+                    er = PreOperation(out dd);
+                /* request the action */
+                if (er == Status.Ok)
+                    er = BackEnd.Instance.SaveConfigs(dd, jsonString, new BackEndAction.CallBack(ActionCallBack));
+                /* common post-action checks, transition to wait for FIELD UPGRADE progress */
+                PostOperation(er, GuiState.Disabled_WaitForAction);
+            }
         }
         void InstallDiagServerToRobotController(bool bInsertRioAnimInWebServer)
         {
@@ -764,12 +793,6 @@ namespace CTRE_Phoenix_GUI_Dashboard {
                             SetGuiState(GuiState.Enabled, 0);
                         }
                         break;
-                    case GuiState.Disabled_WaitForUnitTest:
-                        rtbUnitTestBox.HideSelection = false;
-                        rtbUnitTestBox.AppendText(UnitTesting.Instance.GetLog());
-                        if (UnitTesting.Instance.Done())
-                            SetGuiState(GuiState.Enabled, 0);
-                        break;
 
                     case GuiState.Enabled:
                         /* nothing to do but wait for user */
@@ -858,32 +881,6 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         void TestingPeriodic()
         {
             /* do nothing */
-        }
-
-        //--------------------------------------------------------------------------------------------------//
-        //------------------------------------------- Unit Tests -------------------------------------------//
-        //--------------------------------------------------------------------------------------------------//
-        private void StartTests()
-        {
-            uint tests = 0;
-            foreach(var item in unitTestingCheckboxes.CheckedItems)
-            {
-                tests |= ((uint)1 << unitTestingCheckboxes.Items.IndexOf(item));
-            }
-            /* convert GUI settings to json string */
-            var paramData = Newtonsoft.Json.JsonConvert.SerializeObject(GetConfigsFromTabs());
-            /* Start Testing */
-            Status err = UnitTesting.Instance.StartTesting(tests,
-                                                        _deviceListContainer.SelectedDeviceDescriptor,
-                                                        txtDeviceCRFPath.Text,
-                                                        paramData);
-            PostOperation(err, GuiState.Disabled_WaitForUnitTest);
-        }
-
-        private void StopTests()
-        {
-            Status err = UnitTesting.Instance.Dispose();
-            PostOperation(err, GuiState.Disabled_WaitForUnitTest);
         }
 
         //--------------------------------------------------------------------------------------------------//
@@ -995,81 +992,9 @@ namespace CTRE_Phoenix_GUI_Dashboard {
                 /* device has configs, loop through the setting-groups in the JSON response */
                 foreach (ConfigGroup jsonGroup in dd.configCache.Device.Configs)
                 {
-                    /* there is a matching class in ConfigGroups.cs, get the C# type via reflection */
-                    Type type = Type.GetType($"{strNamespace}.{jsonGroup.Type}");
-                    /* create a class instance of "type", this object knows how to parse the JSON and how to make the Form elements.*/
-                    IControlGroup newGroup = (IControlGroup)Activator.CreateInstance(type);
-                    /* this class instance knows what elems to expect in JSON respn, let it decode it */
-                    newGroup.SetFromValues(jsonGroup.Values, jsonGroup.Ordinal.Value);
-                    /* create a group tab, basically a System.Windows.Forms.TabPage with a reference to the controlGroup*/
-                    GroupTabPage tabPage = new GroupTabPage(newGroup);
-                    tabPage.Text = jsonGroup.Name;
-                    tabPage.Controls.Add(newGroup.CreateLayout()); /* render the Windows GUI elems */
-                    /* add our freshly filled tab into the tab control */
-                    tabControl.TabPages.Add(tabPage);
+
                 }
             }
-        }
-        void UpdateTabs(DeviceDescrip dd, TabControl tabControl)
-        {
-            /* get the c# namespace of all the classes in ConfigGroups.cs */
-            string strNamespace = typeof(IControlGroup).Namespace;
-
-            /* the goal is to loop thru all tabs (expect for the self-test:idx=0) */
-            int tabIndex = 1; //Index starts at one to pass over self test
-
-            /* does this device even have configs to update ? */
-            if (dd.configCache == null)
-            {
-                /* Diagnostic Server did not give us any config params in the JSON response */
-            }
-            else
-            {
-                /* the first tab after self-test corresponds to the config group in the JSON */
-                foreach (ConfigGroup jsonGroup in dd.configCache.Device.Configs)
-                {
-                    /* there is a matching class in ConfigGroups.cs, get the C# type via reflection */
-                    Type type = Type.GetType($"{strNamespace}.{jsonGroup.Type}");
-                    /* get the existing group tab, basically a System.Windows.Forms.TabPage with a reference to the controlGroup*/
-                    GroupTabPage tabPage = (GroupTabPage)tabControl.TabPages[tabIndex++];
-                    /* make/get the control group that understans what to do with the JSON strings.  
-                     * Not sure why we don't just use tabPage.group, instead of making a fresh one */
-                    IControlGroup newGroup = (IControlGroup)Activator.CreateInstance(type);
-                    newGroup.SetFromValues(jsonGroup.Values, jsonGroup.Ordinal ?? 0);
-                    /* refill the GUI elems inside tabPage with the parsed setting values from newGroup */
-                    newGroup.UpdateFromValues(tabPage);
-                }
-            }
-        }
-        DeviceConfigs GetConfigsFromTabs()
-        {
-            /* Create a DeviceConfigs variable that has all the config data from the tabs */
-            DeviceConfigs allConfigs = new DeviceConfigs();
-            List<ConfigGroup> listOfConfigs = new List<ConfigGroup>();
-            foreach (TabPage tab in groupedControls.TabPages)
-            {
-                if (tab is GroupTabPage)
-                {
-                    /* Cast tab as a GroupTabPage */
-                    GroupTabPage groupTab = (GroupTabPage)tab;
-                    /* Fill its group with data */
-                    groupTab.group.GetFromValues(groupTab);
-
-                    /* Take ConfigGroup and fill it with relevant data */
-                    ConfigGroup newGroup = new ConfigGroup();
-                    newGroup.Name = groupTab.Text;
-                    newGroup.Type = groupTab.group.GetType().Name;
-                    newGroup.Ordinal = 0;
-                    if (groupTab.group is SlotGroup)
-                        newGroup.Ordinal = (int)((SlotGroup)groupTab.group).SlotNumber;
-                    newGroup.Values = groupTab.group;
-                    
-                    /* Add ConfigGroup to list */
-                    listOfConfigs.Add(newGroup);
-                }
-            }
-            allConfigs.Configs = listOfConfigs.ToArray();
-            return allConfigs;
         }
         //--------------------------------------------------------------------------------------------------//
         //----------------------------------------- GUI EVENTS----------------------------------------------//
@@ -1082,7 +1007,6 @@ namespace CTRE_Phoenix_GUI_Dashboard {
             Debug.Print("GUI", "Shutting Down Backend...");
             /* shutdown back end */
             BackEnd.Instance.Dispose();
-            UnitTesting.Instance.Dispose();
         }
 
         private void lstDevices_SelectedIndexChanged(object sender, EventArgs e) { _deviceListContainer.SelectedIndexChanged(sender, e); }
@@ -1133,7 +1057,7 @@ namespace CTRE_Phoenix_GUI_Dashboard {
 
         private void cboHostSelectorPrt_TextChanged(object sender, EventArgs e) { UpdateHostNameAndPort(); }
 
-        private void btnSaveConfigs_Click(object sender, EventArgs e) { SaveConfigsOfSelectedDevice(); }
+        private void btnSaveConfigs_Click(object sender, EventArgs e) { ReadAndSaveConfigsOfSelectedDevice(); }
 
         private void btnRefreshConfigs_Click(object sender, EventArgs e) { RefreshConfigsOfSelectedDevice(); }
 
@@ -1146,10 +1070,6 @@ namespace CTRE_Phoenix_GUI_Dashboard {
         private void btnRevertBinaries_Click(object sender, EventArgs e) { UninstallDiagServerToRobotController(); }
 
         private void btnEasterEgg_Click(object sender, EventArgs e) { EasterEggHandler(); }
-
-        private void overnightTestButton_Click(object sender, EventArgs e) { StartTests(); }
-
-        private void btnStopUnitTest_Click(object sender, EventArgs e) { StopTests(); }
 
         private void btnStartServer_Click(object sender, EventArgs e) { StartServer(); }
 

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CTRE_Phoenix_GUI_Dashboard.Properties {
+namespace CTRE_Phoenix_DiagClient.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

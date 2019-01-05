@@ -1,6 +1,6 @@
-﻿namespace CTRE_Phoenix_GUI_Dashboard
+﻿namespace CTRE_Phoenix_DiagClient
 {
-    partial class frmDashboard
+    partial class frmMain
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmDashboard));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.bottomStrip_L = new System.Windows.Forms.ToolStripStatusLabel();
             this.bottomStrip_ML = new System.Windows.Forms.ToolStripStatusLabel();
@@ -48,13 +48,16 @@
             this.captureAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnStartServer = new System.Windows.Forms.Button();
+            this.btnStopServer = new System.Windows.Forms.Button();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.chkRioWebReminder = new System.Windows.Forms.CheckBox();
+            this.btnUpdateBinaries = new System.Windows.Forms.Button();
+            this.btnRevertBinaries = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.cboHostSelectorPrt = new System.Windows.Forms.ComboBox();
-            this.btnStopServer = new System.Windows.Forms.Button();
-            this.btnStartServer = new System.Windows.Forms.Button();
             this.rtbRioUpdateBox = new System.Windows.Forms.RichTextBox();
-            this.btnRevertBinaries = new System.Windows.Forms.Button();
-            this.btnUpdateBinaries = new System.Windows.Forms.Button();
             this.rtbRobotController = new System.Windows.Forms.RichTextBox();
             this.cboHostSelectorAddr = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -121,13 +124,14 @@
             this.rtbUnitTestBox = new System.Windows.Forms.RichTextBox();
             this.unitTestingCheckboxes = new System.Windows.Forms.CheckedListBox();
             this.overnightTestButton = new System.Windows.Forms.Button();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.chkRioWebReminder = new System.Windows.Forms.CheckBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.statusStrip1.SuspendLayout();
             this.menuStripTop.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -149,8 +153,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.gridDiagnosticLog)).BeginInit();
             this.popupHttpLog.SuspendLayout();
             this.tbUnitTesting.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -161,9 +163,9 @@
             this.bottomStrip_ML,
             this.bottomStrip_MR,
             this.bottomStrip_R});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 530);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 533);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(967, 25);
+            this.statusStrip1.Size = new System.Drawing.Size(967, 22);
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -171,7 +173,7 @@
             // 
             this.bottomStrip_L.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.bottomStrip_L.Name = "bottomStrip_L";
-            this.bottomStrip_L.Size = new System.Drawing.Size(377, 20);
+            this.bottomStrip_L.Size = new System.Drawing.Size(397, 17);
             this.bottomStrip_L.Spring = true;
             this.bottomStrip_L.Text = "????????????";
             // 
@@ -179,7 +181,7 @@
             // 
             this.bottomStrip_ML.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bottomStrip_ML.Name = "bottomStrip_ML";
-            this.bottomStrip_ML.Size = new System.Drawing.Size(104, 20);
+            this.bottomStrip_ML.Size = new System.Drawing.Size(91, 17);
             this.bottomStrip_ML.Text = "????????????";
             this.bottomStrip_ML.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -187,7 +189,7 @@
             // 
             this.bottomStrip_MR.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.bottomStrip_MR.Name = "bottomStrip_MR";
-            this.bottomStrip_MR.Size = new System.Drawing.Size(377, 20);
+            this.bottomStrip_MR.Size = new System.Drawing.Size(397, 17);
             this.bottomStrip_MR.Spring = true;
             this.bottomStrip_MR.Text = "????????????";
             // 
@@ -195,7 +197,7 @@
             // 
             this.bottomStrip_R.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.bottomStrip_R.Name = "bottomStrip_R";
-            this.bottomStrip_R.Size = new System.Drawing.Size(93, 20);
+            this.bottomStrip_R.Size = new System.Drawing.Size(67, 17);
             this.bottomStrip_R.Text = "????????????";
             // 
             // timer1
@@ -212,7 +214,7 @@
             this.menuItemTools});
             this.menuStripTop.Location = new System.Drawing.Point(0, 0);
             this.menuStripTop.Name = "menuStripTop";
-            this.menuStripTop.Size = new System.Drawing.Size(967, 28);
+            this.menuStripTop.Size = new System.Drawing.Size(967, 24);
             this.menuStripTop.TabIndex = 1;
             this.menuStripTop.Text = "menuStripTop";
             // 
@@ -222,7 +224,7 @@
             this.devicePollingToolStripMenuItem,
             this.dataTransferMethodToolStripMenuItem});
             this.menuItemOptions.Name = "menuItemOptions";
-            this.menuItemOptions.Size = new System.Drawing.Size(73, 24);
+            this.menuItemOptions.Size = new System.Drawing.Size(61, 20);
             this.menuItemOptions.Text = "Options";
             // 
             // devicePollingToolStripMenuItem
@@ -231,20 +233,20 @@
             this.enableAutoRefreshMenuItem1,
             this.disableAutoRefreshMenuItem1});
             this.devicePollingToolStripMenuItem.Name = "devicePollingToolStripMenuItem";
-            this.devicePollingToolStripMenuItem.Size = new System.Drawing.Size(228, 26);
+            this.devicePollingToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.devicePollingToolStripMenuItem.Text = "Auto Refresh Devices";
             // 
             // enableAutoRefreshMenuItem1
             // 
             this.enableAutoRefreshMenuItem1.Name = "enableAutoRefreshMenuItem1";
-            this.enableAutoRefreshMenuItem1.Size = new System.Drawing.Size(134, 26);
+            this.enableAutoRefreshMenuItem1.Size = new System.Drawing.Size(112, 22);
             this.enableAutoRefreshMenuItem1.Text = "Enable";
             this.enableAutoRefreshMenuItem1.Click += new System.EventHandler(this.enableDisableDeviceAutoRefresh_Click);
             // 
             // disableAutoRefreshMenuItem1
             // 
             this.disableAutoRefreshMenuItem1.Name = "disableAutoRefreshMenuItem1";
-            this.disableAutoRefreshMenuItem1.Size = new System.Drawing.Size(134, 26);
+            this.disableAutoRefreshMenuItem1.Size = new System.Drawing.Size(112, 22);
             this.disableAutoRefreshMenuItem1.Text = "Disable";
             this.disableAutoRefreshMenuItem1.Click += new System.EventHandler(this.enableDisableDeviceAutoRefresh_Click);
             // 
@@ -254,20 +256,20 @@
             this.sFTPToolStripMenuItem,
             this.pOSTToolStripMenuItem});
             this.dataTransferMethodToolStripMenuItem.Name = "dataTransferMethodToolStripMenuItem";
-            this.dataTransferMethodToolStripMenuItem.Size = new System.Drawing.Size(228, 26);
+            this.dataTransferMethodToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.dataTransferMethodToolStripMenuItem.Text = "Data Transfer Method";
             // 
             // sFTPToolStripMenuItem
             // 
             this.sFTPToolStripMenuItem.Name = "sFTPToolStripMenuItem";
-            this.sFTPToolStripMenuItem.Size = new System.Drawing.Size(119, 26);
+            this.sFTPToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.sFTPToolStripMenuItem.Text = "SFTP";
             this.sFTPToolStripMenuItem.Click += new System.EventHandler(this.enableDisabledSftpDataTransfer_Click);
             // 
             // pOSTToolStripMenuItem
             // 
             this.pOSTToolStripMenuItem.Name = "pOSTToolStripMenuItem";
-            this.pOSTToolStripMenuItem.Size = new System.Drawing.Size(119, 26);
+            this.pOSTToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.pOSTToolStripMenuItem.Text = "POST";
             this.pOSTToolStripMenuItem.Click += new System.EventHandler(this.enableDisabledSftpDataTransfer_Click);
             // 
@@ -276,13 +278,13 @@
             this.menuItemTools.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.captureAllToolStripMenuItem});
             this.menuItemTools.Name = "menuItemTools";
-            this.menuItemTools.Size = new System.Drawing.Size(56, 24);
+            this.menuItemTools.Size = new System.Drawing.Size(47, 20);
             this.menuItemTools.Text = "Tools";
             // 
             // captureAllToolStripMenuItem
             // 
             this.captureAllToolStripMenuItem.Name = "captureAllToolStripMenuItem";
-            this.captureAllToolStripMenuItem.Size = new System.Drawing.Size(218, 26);
+            this.captureAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.captureAllToolStripMenuItem.Text = "Capture All (ZIP file)";
             this.captureAllToolStripMenuItem.Click += new System.EventHandler(this.captureAllToolStripMenuItem_Click);
             // 
@@ -312,48 +314,25 @@
             this.tabPage2.Controls.Add(this.rtbRobotController);
             this.tabPage2.Controls.Add(this.cboHostSelectorAddr);
             this.tabPage2.Controls.Add(this.label3);
-            this.tabPage2.Location = new System.Drawing.Point(4, 25);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(959, 474);
+            this.tabPage2.Size = new System.Drawing.Size(959, 477);
             this.tabPage2.TabIndex = 0;
             this.tabPage2.Text = "Prepare the Target Robot Controller";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // label5
+            // groupBox1
             // 
-            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(760, 136);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(38, 17);
-            this.label5.TabIndex = 15;
-            this.label5.Text = "Port:";
-            // 
-            // cboHostSelectorPrt
-            // 
-            this.cboHostSelectorPrt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.cboHostSelectorPrt.FormattingEnabled = true;
-            this.cboHostSelectorPrt.Items.AddRange(new object[] {
-            "1250 # Default Port"});
-            this.cboHostSelectorPrt.Location = new System.Drawing.Point(795, 132);
-            this.cboHostSelectorPrt.Name = "cboHostSelectorPrt";
-            this.cboHostSelectorPrt.Size = new System.Drawing.Size(153, 24);
-            this.cboHostSelectorPrt.TabIndex = 1;
-            this.cboHostSelectorPrt.TextChanged += new System.EventHandler(this.cboHostSelectorPrt_TextChanged);
-            // 
-            // btnStopServer
-            // 
-            this.btnStopServer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnStopServer.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnStopServer.ForeColor = System.Drawing.Color.Maroon;
-            this.btnStopServer.Location = new System.Drawing.Point(6, 61);
-            this.btnStopServer.Name = "btnStopServer";
-            this.btnStopServer.Size = new System.Drawing.Size(219, 29);
-            this.btnStopServer.TabIndex = 5;
-            this.btnStopServer.Text = "Force Stop Server";
-            this.btnStopServer.UseVisualStyleBackColor = true;
-            this.btnStopServer.Click += new System.EventHandler(this.btnStopServer_Click);
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.btnStartServer);
+            this.groupBox1.Controls.Add(this.btnStopServer);
+            this.groupBox1.Location = new System.Drawing.Point(710, 350);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(231, 96);
+            this.groupBox1.TabIndex = 20;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Force Diagnostic Server On/Off";
             // 
             // btnStartServer
             // 
@@ -368,16 +347,54 @@
             this.btnStartServer.UseVisualStyleBackColor = true;
             this.btnStartServer.Click += new System.EventHandler(this.btnStartServer_Click);
             // 
-            // rtbRioUpdateBox
+            // btnStopServer
             // 
-            this.rtbRioUpdateBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.rtbRioUpdateBox.Location = new System.Drawing.Point(8, 163);
-            this.rtbRioUpdateBox.Name = "rtbRioUpdateBox";
-            this.rtbRioUpdateBox.Size = new System.Drawing.Size(690, 305);
-            this.rtbRioUpdateBox.TabIndex = 11;
-            this.rtbRioUpdateBox.Text = "";
+            this.btnStopServer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnStopServer.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnStopServer.ForeColor = System.Drawing.Color.Maroon;
+            this.btnStopServer.Location = new System.Drawing.Point(6, 61);
+            this.btnStopServer.Name = "btnStopServer";
+            this.btnStopServer.Size = new System.Drawing.Size(219, 29);
+            this.btnStopServer.TabIndex = 5;
+            this.btnStopServer.Text = "Force Stop Server";
+            this.btnStopServer.UseVisualStyleBackColor = true;
+            this.btnStopServer.Click += new System.EventHandler(this.btnStopServer_Click);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.chkRioWebReminder);
+            this.groupBox2.Controls.Add(this.btnUpdateBinaries);
+            this.groupBox2.Controls.Add(this.btnRevertBinaries);
+            this.groupBox2.Location = new System.Drawing.Point(710, 163);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(243, 181);
+            this.groupBox2.TabIndex = 19;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Install/Uninstall";
+            // 
+            // chkRioWebReminder
+            // 
+            this.chkRioWebReminder.AutoSize = true;
+            this.chkRioWebReminder.Location = new System.Drawing.Point(6, 19);
+            this.chkRioWebReminder.Name = "chkRioWebReminder";
+            this.chkRioWebReminder.Size = new System.Drawing.Size(178, 43);
+            this.chkRioWebReminder.TabIndex = 16;
+            this.chkRioWebReminder.Text = "Insert helpful animation in \r\nroboRIO WebServer\r\nOnly select for 2019 FRC BETA.";
+            this.chkRioWebReminder.UseVisualStyleBackColor = true;
+            // 
+            // btnUpdateBinaries
+            // 
+            this.btnUpdateBinaries.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnUpdateBinaries.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnUpdateBinaries.ForeColor = System.Drawing.Color.DarkGreen;
+            this.btnUpdateBinaries.Location = new System.Drawing.Point(6, 80);
+            this.btnUpdateBinaries.Name = "btnUpdateBinaries";
+            this.btnUpdateBinaries.Size = new System.Drawing.Size(231, 44);
+            this.btnUpdateBinaries.TabIndex = 2;
+            this.btnUpdateBinaries.Text = "Install Phoenix Library/Diagnostics";
+            this.btnUpdateBinaries.UseVisualStyleBackColor = true;
+            this.btnUpdateBinaries.Click += new System.EventHandler(this.btnUpdateBinaries_Click);
             // 
             // btnRevertBinaries
             // 
@@ -392,18 +409,38 @@
             this.btnRevertBinaries.UseVisualStyleBackColor = true;
             this.btnRevertBinaries.Click += new System.EventHandler(this.btnRevertBinaries_Click);
             // 
-            // btnUpdateBinaries
+            // label5
             // 
-            this.btnUpdateBinaries.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUpdateBinaries.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnUpdateBinaries.ForeColor = System.Drawing.Color.DarkGreen;
-            this.btnUpdateBinaries.Location = new System.Drawing.Point(6, 80);
-            this.btnUpdateBinaries.Name = "btnUpdateBinaries";
-            this.btnUpdateBinaries.Size = new System.Drawing.Size(231, 44);
-            this.btnUpdateBinaries.TabIndex = 2;
-            this.btnUpdateBinaries.Text = "Install Phoenix Library/Diagnostics";
-            this.btnUpdateBinaries.UseVisualStyleBackColor = true;
-            this.btnUpdateBinaries.Click += new System.EventHandler(this.btnUpdateBinaries_Click);
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(760, 136);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(29, 13);
+            this.label5.TabIndex = 15;
+            this.label5.Text = "Port:";
+            // 
+            // cboHostSelectorPrt
+            // 
+            this.cboHostSelectorPrt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboHostSelectorPrt.FormattingEnabled = true;
+            this.cboHostSelectorPrt.Items.AddRange(new object[] {
+            "1250 # Default Port"});
+            this.cboHostSelectorPrt.Location = new System.Drawing.Point(795, 132);
+            this.cboHostSelectorPrt.Name = "cboHostSelectorPrt";
+            this.cboHostSelectorPrt.Size = new System.Drawing.Size(153, 21);
+            this.cboHostSelectorPrt.TabIndex = 1;
+            this.cboHostSelectorPrt.TextChanged += new System.EventHandler(this.cboHostSelectorPrt_TextChanged);
+            // 
+            // rtbRioUpdateBox
+            // 
+            this.rtbRioUpdateBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rtbRioUpdateBox.Location = new System.Drawing.Point(8, 163);
+            this.rtbRioUpdateBox.Name = "rtbRioUpdateBox";
+            this.rtbRioUpdateBox.Size = new System.Drawing.Size(690, 308);
+            this.rtbRioUpdateBox.TabIndex = 11;
+            this.rtbRioUpdateBox.Text = "";
             // 
             // rtbRobotController
             // 
@@ -426,7 +463,7 @@
             "localhost # Local PC Development"});
             this.cboHostSelectorAddr.Location = new System.Drawing.Point(156, 132);
             this.cboHostSelectorAddr.Name = "cboHostSelectorAddr";
-            this.cboHostSelectorAddr.Size = new System.Drawing.Size(595, 24);
+            this.cboHostSelectorAddr.Size = new System.Drawing.Size(595, 21);
             this.cboHostSelectorAddr.TabIndex = 0;
             this.cboHostSelectorAddr.TextChanged += new System.EventHandler(this.cboHostSelector_TextChanged);
             // 
@@ -435,7 +472,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(15, 136);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(180, 17);
+            this.label3.Size = new System.Drawing.Size(135, 13);
             this.label3.TabIndex = 7;
             this.label3.Text = "Diagnostic Server Address:";
             this.label3.Click += new System.EventHandler(this.btnEasterEgg_Click);
@@ -443,10 +480,10 @@
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.splitContainer1);
-            this.tabPage3.Location = new System.Drawing.Point(4, 25);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(959, 474);
+            this.tabPage3.Size = new System.Drawing.Size(959, 477);
             this.tabPage3.TabIndex = 1;
             this.tabPage3.Text = "CAN Devices";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -469,8 +506,8 @@
             this.splitContainer1.Panel2.Controls.Add(this.pnlGenDevConfigOuter);
             this.splitContainer1.Panel2.Controls.Add(this.pnlFirmUpgradeOuter);
             this.splitContainer1.Panel2.Controls.Add(this.panelSelfTestAndConfigControls);
-            this.splitContainer1.Size = new System.Drawing.Size(953, 468);
-            this.splitContainer1.SplitterDistance = 170;
+            this.splitContainer1.Size = new System.Drawing.Size(953, 471);
+            this.splitContainer1.SplitterDistance = 171;
             this.splitContainer1.TabIndex = 48;
             // 
             // pnlDeviceListInner
@@ -483,7 +520,7 @@
             this.pnlDeviceListInner.Controls.Add(this.btnRefreshDevices);
             this.pnlDeviceListInner.Location = new System.Drawing.Point(3, 3);
             this.pnlDeviceListInner.Name = "pnlDeviceListInner";
-            this.pnlDeviceListInner.Size = new System.Drawing.Size(943, 160);
+            this.pnlDeviceListInner.Size = new System.Drawing.Size(943, 161);
             this.pnlDeviceListInner.TabIndex = 5;
             // 
             // lstDevices
@@ -506,7 +543,7 @@
             this.lstDevices.Location = new System.Drawing.Point(0, 0);
             this.lstDevices.MultiSelect = false;
             this.lstDevices.Name = "lstDevices";
-            this.lstDevices.Size = new System.Drawing.Size(943, 130);
+            this.lstDevices.Size = new System.Drawing.Size(943, 131);
             this.lstDevices.SmallImageList = this.imgLstDevices;
             this.lstDevices.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lstDevices.TabIndex = 3;
@@ -577,7 +614,7 @@
             // 
             this.btnRefreshDevices.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.btnRefreshDevices.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRefreshDevices.Location = new System.Drawing.Point(0, 130);
+            this.btnRefreshDevices.Location = new System.Drawing.Point(0, 131);
             this.btnRefreshDevices.Name = "btnRefreshDevices";
             this.btnRefreshDevices.Size = new System.Drawing.Size(943, 30);
             this.btnRefreshDevices.TabIndex = 0;
@@ -620,7 +657,7 @@
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point(142, 12);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(222, 17);
+            this.label4.Size = new System.Drawing.Size(174, 13);
             this.label4.TabIndex = 48;
             this.label4.Text = "General Device Configuration";
             // 
@@ -649,7 +686,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(69, 85);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(358, 17);
+            this.label1.Size = new System.Drawing.Size(270, 13);
             this.label1.TabIndex = 43;
             this.label1.Text = "Press to animate device LEDs and confirm ID is correct.";
             // 
@@ -657,7 +694,7 @@
             // 
             this.txtDeviceNewName.Location = new System.Drawing.Point(145, 57);
             this.txtDeviceNewName.Name = "txtDeviceNewName";
-            this.txtDeviceNewName.Size = new System.Drawing.Size(194, 22);
+            this.txtDeviceNewName.Size = new System.Drawing.Size(194, 20);
             this.txtDeviceNewName.TabIndex = 2;
             this.txtDeviceNewName.TextChanged += new System.EventHandler(this.txtDeviceNewName_TextChanged);
             // 
@@ -666,7 +703,7 @@
             this.label50.AutoSize = true;
             this.label50.Location = new System.Drawing.Point(45, 60);
             this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(124, 17);
+            this.label50.Size = new System.Drawing.Size(94, 13);
             this.label50.TabIndex = 42;
             this.label50.Text = "Change the name:";
             // 
@@ -689,7 +726,7 @@
             0,
             0});
             this.numNewDevId.Name = "numNewDevId";
-            this.numNewDevId.Size = new System.Drawing.Size(44, 22);
+            this.numNewDevId.Size = new System.Drawing.Size(44, 20);
             this.numNewDevId.TabIndex = 1;
             this.numNewDevId.ValueChanged += new System.EventHandler(this.numNewDevId_ValueChanged);
             // 
@@ -698,7 +735,7 @@
             this.label15.AutoSize = true;
             this.label15.Location = new System.Drawing.Point(216, 35);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(102, 17);
+            this.label15.Size = new System.Drawing.Size(79, 13);
             this.label15.TabIndex = 41;
             this.label15.Text = "Change the ID:";
             // 
@@ -735,7 +772,7 @@
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(135, 10);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(235, 17);
+            this.label2.Size = new System.Drawing.Size(184, 13);
             this.label2.TabIndex = 47;
             this.label2.Text = "Field-Upgrade Device Firmware";
             // 
@@ -744,7 +781,7 @@
             this.label17.AutoSize = true;
             this.label17.Location = new System.Drawing.Point(25, 34);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(407, 17);
+            this.label17.Size = new System.Drawing.Size(309, 13);
             this.label17.TabIndex = 46;
             this.label17.Text = "Select CRF and Press \"Update Firmware\" to flash new firmware.";
             // 
@@ -752,7 +789,7 @@
             // 
             this.txtDeviceCRFPath.Location = new System.Drawing.Point(27, 51);
             this.txtDeviceCRFPath.Name = "txtDeviceCRFPath";
-            this.txtDeviceCRFPath.Size = new System.Drawing.Size(361, 22);
+            this.txtDeviceCRFPath.Size = new System.Drawing.Size(361, 20);
             this.txtDeviceCRFPath.TabIndex = 5;
             this.txtDeviceCRFPath.TextChanged += new System.EventHandler(this.txtDeviceCRFPath_TextChanged);
             // 
@@ -803,26 +840,26 @@
             this.panelSelfTestAndConfigControls.Controls.Add(this.txtSelfTestResults);
             this.panelSelfTestAndConfigControls.Location = new System.Drawing.Point(465, 3);
             this.panelSelfTestAndConfigControls.Name = "panelSelfTestAndConfigControls";
-            this.panelSelfTestAndConfigControls.Size = new System.Drawing.Size(481, 288);
+            this.panelSelfTestAndConfigControls.Size = new System.Drawing.Size(481, 290);
             this.panelSelfTestAndConfigControls.TabIndex = 48;
             // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel1.ColumnCount = 3;
+            this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.Controls.Add(this.btnSaveConfigs, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnRefreshConfigs, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.btnSelfTest, 2, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 255);
+            this.tableLayoutPanel1.Controls.Add(this.btnSelfTest, 1, 1);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 226);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(475, 30);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(475, 61);
             this.tableLayoutPanel1.TabIndex = 11;
             // 
             // btnSaveConfigs
@@ -830,29 +867,29 @@
             this.btnSaveConfigs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSaveConfigs.Location = new System.Drawing.Point(3, 3);
             this.btnSaveConfigs.Name = "btnSaveConfigs";
-            this.btnSaveConfigs.Size = new System.Drawing.Size(152, 24);
+            this.btnSaveConfigs.Size = new System.Drawing.Size(231, 25);
             this.btnSaveConfigs.TabIndex = 10;
-            this.btnSaveConfigs.Text = "Save Settings";
+            this.btnSaveConfigs.Text = "Apply JSON to Device";
             this.btnSaveConfigs.UseVisualStyleBackColor = true;
             this.btnSaveConfigs.Click += new System.EventHandler(this.btnSaveConfigs_Click);
             // 
             // btnRefreshConfigs
             // 
             this.btnRefreshConfigs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnRefreshConfigs.Location = new System.Drawing.Point(161, 3);
+            this.btnRefreshConfigs.Location = new System.Drawing.Point(240, 3);
             this.btnRefreshConfigs.Name = "btnRefreshConfigs";
-            this.btnRefreshConfigs.Size = new System.Drawing.Size(152, 24);
+            this.btnRefreshConfigs.Size = new System.Drawing.Size(232, 25);
             this.btnRefreshConfigs.TabIndex = 11;
-            this.btnRefreshConfigs.Text = "Refresh Configs";
+            this.btnRefreshConfigs.Text = "Save to JSON ";
             this.btnRefreshConfigs.UseVisualStyleBackColor = true;
             this.btnRefreshConfigs.Click += new System.EventHandler(this.btnRefreshConfigs_Click);
             // 
             // btnSelfTest
             // 
             this.btnSelfTest.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnSelfTest.Location = new System.Drawing.Point(319, 3);
+            this.btnSelfTest.Location = new System.Drawing.Point(240, 34);
             this.btnSelfTest.Name = "btnSelfTest";
-            this.btnSelfTest.Size = new System.Drawing.Size(153, 24);
+            this.btnSelfTest.Size = new System.Drawing.Size(232, 24);
             this.btnSelfTest.TabIndex = 9;
             this.btnSelfTest.Text = "Self-Test";
             this.btnSelfTest.UseVisualStyleBackColor = true;
@@ -866,7 +903,7 @@
             this.groupedControls.Location = new System.Drawing.Point(3, 1);
             this.groupedControls.Name = "groupedControls";
             this.groupedControls.SelectedIndex = 0;
-            this.groupedControls.Size = new System.Drawing.Size(475, 251);
+            this.groupedControls.Size = new System.Drawing.Size(475, 253);
             this.groupedControls.TabIndex = 2;
             // 
             // txtSelfTestResults
@@ -887,10 +924,10 @@
             this.tabPage6.Controls.Add(this.btnClrDiagLog);
             this.tabPage6.Controls.Add(this.splitContainer2);
             this.tabPage6.Controls.Add(this.richTextBox2);
-            this.tabPage6.Location = new System.Drawing.Point(4, 25);
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(959, 474);
+            this.tabPage6.Size = new System.Drawing.Size(959, 477);
             this.tabPage6.TabIndex = 2;
             this.tabPage6.Text = "Web Diagnostics Log";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -943,7 +980,7 @@
             // 
             this.splitContainer2.Panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.splitContainer2.Panel2.Controls.Add(this.browserMessageDisp);
-            this.splitContainer2.Size = new System.Drawing.Size(951, 373);
+            this.splitContainer2.Size = new System.Drawing.Size(951, 376);
             this.splitContainer2.SplitterDistance = 650;
             this.splitContainer2.TabIndex = 3;
             // 
@@ -962,7 +999,7 @@
             this.gridDiagnosticLog.Location = new System.Drawing.Point(0, 0);
             this.gridDiagnosticLog.Name = "gridDiagnosticLog";
             this.gridDiagnosticLog.ReadOnly = true;
-            this.gridDiagnosticLog.Size = new System.Drawing.Size(648, 371);
+            this.gridDiagnosticLog.Size = new System.Drawing.Size(648, 374);
             this.gridDiagnosticLog.TabIndex = 4;
             this.gridDiagnosticLog.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.diagnosticLog_CellClick);
             this.gridDiagnosticLog.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridDiagnosticLog_CellEnter);
@@ -1002,19 +1039,19 @@
             this.copyToolStripMenuItem,
             this.selectAllCtrlAToolStripMenuItem});
             this.popupHttpLog.Name = "popupHttpLog";
-            this.popupHttpLog.Size = new System.Drawing.Size(198, 52);
+            this.popupHttpLog.Size = new System.Drawing.Size(169, 48);
             // 
             // copyToolStripMenuItem
             // 
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(197, 24);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.copyToolStripMenuItem.Text = "Copy (Ctrl+C)";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.btnCopyHttpLog_Click);
             // 
             // selectAllCtrlAToolStripMenuItem
             // 
             this.selectAllCtrlAToolStripMenuItem.Name = "selectAllCtrlAToolStripMenuItem";
-            this.selectAllCtrlAToolStripMenuItem.Size = new System.Drawing.Size(197, 24);
+            this.selectAllCtrlAToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.selectAllCtrlAToolStripMenuItem.Text = "Select All (Ctrl+A)";
             this.selectAllCtrlAToolStripMenuItem.Click += new System.EventHandler(this.selectAllCtrlAToolStripMenuItem_Click);
             // 
@@ -1027,7 +1064,7 @@
             this.browserMessageDisp.Location = new System.Drawing.Point(3, 3);
             this.browserMessageDisp.MinimumSize = new System.Drawing.Size(20, 20);
             this.browserMessageDisp.Name = "browserMessageDisp";
-            this.browserMessageDisp.Size = new System.Drawing.Size(289, 365);
+            this.browserMessageDisp.Size = new System.Drawing.Size(289, 368);
             this.browserMessageDisp.TabIndex = 4;
             // 
             // richTextBox2
@@ -1048,10 +1085,10 @@
             this.tbUnitTesting.Controls.Add(this.rtbUnitTestBox);
             this.tbUnitTesting.Controls.Add(this.unitTestingCheckboxes);
             this.tbUnitTesting.Controls.Add(this.overnightTestButton);
-            this.tbUnitTesting.Location = new System.Drawing.Point(4, 25);
+            this.tbUnitTesting.Location = new System.Drawing.Point(4, 22);
             this.tbUnitTesting.Name = "tbUnitTesting";
             this.tbUnitTesting.Padding = new System.Windows.Forms.Padding(3);
-            this.tbUnitTesting.Size = new System.Drawing.Size(959, 474);
+            this.tbUnitTesting.Size = new System.Drawing.Size(959, 477);
             this.tbUnitTesting.TabIndex = 3;
             this.tbUnitTesting.Text = "Unit Testing";
             this.tbUnitTesting.UseVisualStyleBackColor = true;
@@ -1065,7 +1102,7 @@
             this.richTextBox3.Location = new System.Drawing.Point(548, 38);
             this.richTextBox3.Name = "richTextBox3";
             this.richTextBox3.ReadOnly = true;
-            this.richTextBox3.Size = new System.Drawing.Size(385, 392);
+            this.richTextBox3.Size = new System.Drawing.Size(385, 395);
             this.richTextBox3.TabIndex = 4;
             this.richTextBox3.Text = resources.GetString("richTextBox3.Text");
             // 
@@ -1077,7 +1114,6 @@
             this.btnStopUnitTest.TabIndex = 3;
             this.btnStopUnitTest.Text = "Stop Test";
             this.btnStopUnitTest.UseVisualStyleBackColor = true;
-            this.btnStopUnitTest.Click += new System.EventHandler(this.btnStopUnitTest_Click);
             // 
             // rtbUnitTestBox
             // 
@@ -1086,7 +1122,7 @@
             this.rtbUnitTestBox.Location = new System.Drawing.Point(183, 8);
             this.rtbUnitTestBox.Name = "rtbUnitTestBox";
             this.rtbUnitTestBox.ReadOnly = true;
-            this.rtbUnitTestBox.Size = new System.Drawing.Size(358, 422);
+            this.rtbUnitTestBox.Size = new System.Drawing.Size(358, 425);
             this.rtbUnitTestBox.TabIndex = 2;
             this.rtbUnitTestBox.Text = "";
             // 
@@ -1106,7 +1142,7 @@
             this.unitTestingCheckboxes.Location = new System.Drawing.Point(8, 35);
             this.unitTestingCheckboxes.Name = "unitTestingCheckboxes";
             this.unitTestingCheckboxes.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.unitTestingCheckboxes.Size = new System.Drawing.Size(169, 361);
+            this.unitTestingCheckboxes.Size = new System.Drawing.Size(169, 364);
             this.unitTestingCheckboxes.TabIndex = 1;
             // 
             // overnightTestButton
@@ -1117,44 +1153,12 @@
             this.overnightTestButton.TabIndex = 0;
             this.overnightTestButton.Text = "Begin Overnight Test";
             this.overnightTestButton.UseVisualStyleBackColor = true;
-            this.overnightTestButton.Click += new System.EventHandler(this.overnightTestButton_Click);
             // 
-            // groupBox2
+            // openFileDialog1
             // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this.chkRioWebReminder);
-            this.groupBox2.Controls.Add(this.btnUpdateBinaries);
-            this.groupBox2.Controls.Add(this.btnRevertBinaries);
-            this.groupBox2.Location = new System.Drawing.Point(710, 163);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(243, 181);
-            this.groupBox2.TabIndex = 19;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Install/Uninstall";
+            this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // chkRioWebReminder
-            // 
-            this.chkRioWebReminder.AutoSize = true;
-            this.chkRioWebReminder.Location = new System.Drawing.Point(6, 19);
-            this.chkRioWebReminder.Name = "chkRioWebReminder";
-            this.chkRioWebReminder.Size = new System.Drawing.Size(232, 55);
-            this.chkRioWebReminder.TabIndex = 16;
-            this.chkRioWebReminder.Text = "Insert helpful animation in \r\nroboRIO WebServer\r\nOnly select for 2019 FRC BETA.";
-            this.chkRioWebReminder.UseVisualStyleBackColor = true;
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.btnStartServer);
-            this.groupBox1.Controls.Add(this.btnStopServer);
-            this.groupBox1.Location = new System.Drawing.Point(710, 350);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(231, 96);
-            this.groupBox1.TabIndex = 20;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Force Diagnostic Server On/Off";
-            // 
-            // frmDashboard
+            // frmMain
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(967, 555);
@@ -1163,8 +1167,8 @@
             this.Controls.Add(this.menuStripTop);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStripTop;
-            this.Name = "frmDashboard";
-            this.Text = "Dashboard";
+            this.Name = "frmMain";
+            this.Text = "DiagClient";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
@@ -1173,6 +1177,9 @@
             this.tabControl.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
@@ -1196,9 +1203,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.gridDiagnosticLog)).EndInit();
             this.popupHttpLog.ResumeLayout(false);
             this.tbUnitTesting.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1300,6 +1304,8 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.CheckBox chkRioWebReminder;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }
 

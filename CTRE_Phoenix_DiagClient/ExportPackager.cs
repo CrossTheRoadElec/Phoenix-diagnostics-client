@@ -4,7 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Windows.Forms;
 
-namespace CTRE_Phoenix_GUI_Dashboard
+namespace CTRE_Phoenix_DiagClient
 {
     public class ExportPackager
     {
