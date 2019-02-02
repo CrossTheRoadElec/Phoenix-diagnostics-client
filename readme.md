@@ -6,7 +6,7 @@
 **Teams should use Phoenix Tuner to ensure proper functionality of all features.**
 
 ~~**This repository is slightly behind maintenance against the latest diagnostic server**~~
-Bins updated to match 2019 kickoff.
+Bins updated to match 2019 week 4 release.
 
 
 ![image](https://user-images.githubusercontent.com/28712271/45908233-7db6ac80-bdc9-11e8-970b-1b5e313c55bf.png)
