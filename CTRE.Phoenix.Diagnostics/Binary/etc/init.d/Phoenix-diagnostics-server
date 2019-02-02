@@ -3,7 +3,7 @@
 case "$1" in
 	start)
 		echo "Starting Phoenix Diagnostics"
-		start-stop-daemon --start --background --quiet -C --exec /usr/local/frc/bin/Phoenix-diagnostics-server "1250" >/home/lvuser/PhoenixServerOutput.txt
+		start-stop-daemon --start --background --quiet -C --exec /usr/local/frc/bin/Phoenix-diagnostics-server "1250" >/var/log/PhoenixServerOutput.txt
 		;;
 	stop)
 		echo "Stopping Daemon"
@@ -15,7 +15,7 @@ case "$1" in
 		echo "Stopping..."
 		start-stop-daemon --stop -x /usr/local/frc/bin/Phoenix-diagnostics-server
 		echo "Starting..."
-		start-stop-daemon --start --background --quiet -C --exec /usr/local/frc/bin/Phoenix-diagnostics-server "1250" >/home/lvuser/PhoenixServerOutput.txt
+		start-stop-daemon --start --background --quiet -C --exec /usr/local/frc/bin/Phoenix-diagnostics-server "1250" >/var/log/PhoenixServerOutput.txt
 		
 		echo "Done!"
 		;;

@@ -101,6 +101,7 @@
             this.btnSaveConfigs = new System.Windows.Forms.Button();
             this.btnRefreshConfigs = new System.Windows.Forms.Button();
             this.btnSelfTest = new System.Windows.Forms.Button();
+            this.btnFactoryDefault = new System.Windows.Forms.Button();
             this.groupedControls = new System.Windows.Forms.TabControl();
             this.txtSelfTestResults = new System.Windows.Forms.RichTextBox();
             this.tabPage6 = new System.Windows.Forms.TabPage();
@@ -376,11 +377,13 @@
             // chkRioWebReminder
             // 
             this.chkRioWebReminder.AutoSize = true;
+            this.chkRioWebReminder.Checked = true;
+            this.chkRioWebReminder.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkRioWebReminder.Location = new System.Drawing.Point(6, 19);
             this.chkRioWebReminder.Name = "chkRioWebReminder";
-            this.chkRioWebReminder.Size = new System.Drawing.Size(178, 43);
+            this.chkRioWebReminder.Size = new System.Drawing.Size(148, 43);
             this.chkRioWebReminder.TabIndex = 16;
-            this.chkRioWebReminder.Text = "Insert helpful animation in \r\nroboRIO WebServer\r\nOnly select for 2019 FRC BETA.";
+            this.chkRioWebReminder.Text = "Insert helpful animation in \r\nroboRIO WebServer\r\nOnly select for 2019 FRC.";
             this.chkRioWebReminder.UseVisualStyleBackColor = true;
             // 
             // btnUpdateBinaries
@@ -854,6 +857,7 @@
             this.tableLayoutPanel1.Controls.Add(this.btnSaveConfigs, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnRefreshConfigs, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnSelfTest, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.btnFactoryDefault, 0, 1);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 226);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
@@ -894,6 +898,17 @@
             this.btnSelfTest.Text = "Self-Test";
             this.btnSelfTest.UseVisualStyleBackColor = true;
             this.btnSelfTest.Click += new System.EventHandler(this.btnSelfTest_Click);
+            // 
+            // btnFactoryDefault
+            // 
+            this.btnFactoryDefault.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnFactoryDefault.Location = new System.Drawing.Point(3, 34);
+            this.btnFactoryDefault.Name = "btnFactoryDefault";
+            this.btnFactoryDefault.Size = new System.Drawing.Size(231, 24);
+            this.btnFactoryDefault.TabIndex = 12;
+            this.btnFactoryDefault.Text = "Factory Default";
+            this.btnFactoryDefault.UseVisualStyleBackColor = true;
+            this.btnFactoryDefault.Click += new System.EventHandler(this.btnFactoryDefault_Click);
             // 
             // groupedControls
             // 
@@ -1306,6 +1321,7 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.Button btnFactoryDefault;
     }
 }
 

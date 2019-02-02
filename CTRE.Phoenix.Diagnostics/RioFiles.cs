@@ -60,7 +60,7 @@ namespace CTRE.Phoenix.Diagnostics
         {
             new RioFile("Binary/ctre/Phoenix-diagnostics-server", "/usr/local/frc/bin/Phoenix-diagnostics-server"),
             new RioFile("Binary/etc/init.d/Phoenix-diagnostics-server", "/etc/init.d/Phoenix-diagnostics-server"),
-            new RioFile("Binary/cci/libCTRE_PhoenixCCI.so", "/usr/local/frc/lib/libCTRE_PhoenixCCI.so"),
+            new RioFile("Binary/cci/libCTRE_PhoenixCCI.so", "/usr/local/frc/third-party/lib/libCTRE_PhoenixCCI.so"),
             new RioFile("Binary/js/SystemConfig.js", "/var/local/natinst/www/HUFF/pages/SystemConfig.js"),
         };
         /// <summary>
@@ -74,6 +74,12 @@ namespace CTRE.Phoenix.Diagnostics
         {
             "/usr/local/frc/bin/Phoenix-diagnostics-server",
             "/etc/init.d/Phoenix-diagnostics-server",
+        };
+
+        public static readonly string[] kFilesToDeleteBeforeInstall = new string[]
+        {
+            "/usr/local/frc/lib/libCTRE_PhoenixCCI.so",
+            "/usr/local/frc/lib/libCTRE_PhoenixCCI.so.orig",
         };
     }
 }

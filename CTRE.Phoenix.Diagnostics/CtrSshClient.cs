@@ -15,6 +15,7 @@ namespace CTRE.Phoenix.Diagnostics
         {
             _rioReference = rioReference;
             _client = new SshClient(host.GetHostName(), "admin", "");
+			_client.ConnectionInfo.Timeout = new TimeSpan(0, 0, 0, 0, 6000);
             _client.Connect();
         }
 

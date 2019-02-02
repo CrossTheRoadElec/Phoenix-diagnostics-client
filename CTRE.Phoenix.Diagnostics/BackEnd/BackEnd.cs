@@ -43,7 +43,7 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
         private RioUpdater _rioUpdater;
         private int _refreshRequest = 0;
 
-        private string _serverSearchDirectory = "/usr/local/frc/bin/";
+        private string _serverSearchDirectory = "/var/volatile/tmp/ctre/";
 
 
         public DateTime GetLastPoll()
@@ -212,6 +212,27 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
                     {
                         NameReturn jsonDeser = JsonConvert.DeserializeObject<NameReturn>(response);
                         retval = (Status)jsonDeser.GeneralReturn.Error;
+                    }
+                    break;
+                case ActionType.FactoryDefault:
+                    /* make sure device was found in our collection */
+                    if (retval == Status.Ok)
+                        retval = (foundOk) ? Status.Ok : Status.DeviceNotFound;
+                    /* perform http exchange */
+                    if (retval == Status.Ok)
+                        retval = _WebServerScripts.HttpGet(_hostName, ddRef.model, ddRef.deviceID, ActionType.FactoryDefault, out response,"", 2000);
+                    /* parse resp */
+                    if (retval == Status.Ok)
+                    {
+                        NameReturn jsonDeser = JsonConvert.DeserializeObject<NameReturn>(response);
+                        retval = (Status)jsonDeser.GeneralReturn.Error;
+                    }
+                    /* Backend should immediately update device config cache */
+                    if (retval == Status.Ok)
+                    {
+                        /* wait a bit before polling the configs out */
+                        System.Threading.Thread.Sleep(2000);
+                        retval = UpdateConfigs(ddRef);
                     }
                     break;
 
@@ -946,6 +967,11 @@ namespace CTRE.Phoenix.Diagnostics.BackEnd
         public Status RequestSelfTest(DeviceDescrip dd, Action.CallBack callback)
         {
             Action ac = new Action(callback, dd, ActionType.SelfTest);
+            return PushAction(ac);
+        }
+        public Status RequestFactoryDefault(DeviceDescrip dd, Action.CallBack callback)
+        {
+            Action ac = new Action(callback, dd, ActionType.FactoryDefault);
             return PushAction(ac);
         }
         public Status RequestChangeName(DeviceDescrip dd, string newName, Action.CallBack callback)

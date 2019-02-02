@@ -60,6 +60,7 @@ namespace CTRE.Phoenix.Diagnostics
         CTRE_DI_CorruptedPOST = (-127),
         CTRE_DI_NoConfigs = (-128),
         CTRE_DI_ConfigFailed = (-129),
+        CTRE_DI_CouldNotReqFactoryDefault = (-130),
         CTRE_DI_InvalidCrfBadHeader = (-200),
         CTRE_DI_InvalidCrfFileSzInvald = (-201),
         CTRE_DI_InvalidCrfWrongProduct = (-202),

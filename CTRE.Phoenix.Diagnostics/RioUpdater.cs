@@ -63,16 +63,27 @@ namespace CTRE.Phoenix.Diagnostics
                 /* If file has contents, delete and place it */
                 else
                 {
-                    /* delete file first, regardless of success, continue */
+                    /* Create directory if missing, regardless of success, continue */
                     try
                     {
+                        /* Create Directory if it does not exist (Remove File and only use directory) */
+                        string temp = targetPath.Remove(targetPath.LastIndexOf('/'));
+                        client.CreateDirectory(temp);
+                    }
+                    catch (Exception) { /* Directory already exists */ }
+
+                    /* Delete file first, regardless of success, continue */
+                    try
+                    {
+                        /* Don't need to perform check, always attempt delete */
                         if (client.Exists(targetPath))
                         {
                             client.DeleteFile(targetPath);
                         }
                     }
-                    catch (Exception) { }
-                    /* write it */
+                    catch (Exception) { /* File could Not be found */ }
+
+                    /* Write file with its content */
                     try
                     {
                         client.WriteAllBytes(targetPath, content);
@@ -89,7 +100,6 @@ namespace CTRE.Phoenix.Diagnostics
         {
             /* This will only happen on second tab, so don't bother logging */
             Status error = Status.Ok;
-            SftpClient client = new SftpClient(_host.GetHostName(), "admin", "");
 
             /* Check if file exists on PC */
             if (error == Status.Ok)
@@ -102,7 +112,11 @@ namespace CTRE.Phoenix.Diagnostics
                 }
             }
 
-            return SendFileContents(file.GetContents(), file.TargetPath);
+			if (error == Status.Ok) 
+			{
+				error = SendFileContents (file.GetContents (), file.TargetPath);
+			}
+			return error;
         }
         public Status StartServer()
         {
@@ -329,6 +343,10 @@ namespace CTRE.Phoenix.Diagnostics
             ArrayList files = new ArrayList();
             foreach (RioFile sourceFile in RioFiles.kFilesToCreate) { files.Add(sourceFile); }
 
+            /* copy a mutable list of File objects to delete */
+            ArrayList filesToDel = new ArrayList();
+            foreach (string sourceFile in RioFiles.kFilesToDeleteBeforeInstall) { filesToDel.Add(sourceFile); }
+
             /* throw out whatever needs to be removed */
             if (bInstallAnimIntoRioWebServer == false)
             {
@@ -406,6 +424,23 @@ namespace CTRE.Phoenix.Diagnostics
                 }
             }
 
+            /* delete them the diag related files */
+            if (error == 0)
+            {
+                Log("Removing old files...");
+                foreach (string filePathToDel in filesToDel)
+                {
+                    if (ftpClient.Exists(filePathToDel) == false)
+                    {
+                        /* do nothing */
+                    }
+                    else
+                    {
+                        /* delete the target */
+                        try { ftpClient.DeleteFile(filePathToDel); } catch (Exception) { }
+                    }
+                }
+            }
             /* write new files  */
             if (error == 0)
             {

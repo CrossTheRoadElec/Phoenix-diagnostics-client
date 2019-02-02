@@ -12,6 +12,7 @@ namespace CTRE.Phoenix.Diagnostics.HTTP
             { ActionType.Blink, "action=blink" },
             { ActionType.SetID, "action=setid" },
             { ActionType.SetDeviceName, "action=setname" },
+            { ActionType.FactoryDefault, "action=factorydef" },            
             { ActionType.SelfTest, "action=selftest" },
             { ActionType.FieldUpgradeDevice, "action=fieldupgrade" },
             { ActionType.CheckUpdateProgress, "action=progress" },

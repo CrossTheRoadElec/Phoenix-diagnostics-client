@@ -23,6 +23,7 @@ namespace CTRE_Phoenix_DiagClient {
             Disabled_WaitForSelfTest, //!< Waiting for selt-test to finish
             Disabled_waitForReflash, //!< Waiting for field-upgrade to finish
             Disabled_WaitForInstallIntoRobotController,  //!< Waiting for installing into RIO/RaspPi/etc.
+            Disabled_WaitForSettingsChanged,
         }
 
         /* ----------- state variables -------- */
@@ -298,9 +299,13 @@ namespace CTRE_Phoenix_DiagClient {
 
                 /* dump html into GUI component */
                 browserMessageDisp.Navigate("about:blank");
-                browserMessageDisp.Document.OpenNew(false);
-                browserMessageDisp.Document.Write(textBox);
-                browserMessageDisp.Refresh();
+				if (browserMessageDisp.Document == null) {
+					/* TODO: do something, this happens on Ubuntu/Mono */
+				} else {
+					browserMessageDisp.Document.OpenNew (false);
+					browserMessageDisp.Document.Write (textBox);
+					browserMessageDisp.Refresh ();
+				}
             }
         }
 
@@ -608,6 +613,17 @@ namespace CTRE_Phoenix_DiagClient {
             /* common post-action checks, transition to wait for response handler */
             PostOperation(er, GuiState.Disabled_WaitForSelfTest);
         }
+        void FactoryDefaultSelectedDevice()
+        {
+            /* common pre-action checks, including getting the selected device */
+            DeviceDescrip dd;
+            Status er = PreOperation(out dd);
+            /* request the action */
+            if (er == Status.Ok)
+                er = BackEnd.Instance.RequestFactoryDefault(dd, new BackEndAction.CallBack(ActionCallBack));
+            /* common post-action checks, transition to wait for response handler */
+            PostOperation(er, GuiState.Disabled_WaitForSettingsChanged);
+        }
         void FieldUpgradeSelectedDevice()
         {
             /* common pre-action checks, including getting the selected device */
@@ -673,16 +689,22 @@ namespace CTRE_Phoenix_DiagClient {
         }
         void StartServer()
         {
-            rtbRioUpdateBox.Clear(); //Clear text
-
-            Status er = BackEnd.Instance.StartServer(new BackEndAction.CallBack(ActionCallBack));
+			rtbRioUpdateBox.Clear(); //Clear text
+			Status er = PreOperation();
+			/* request the action */
+			if (er == Status.Ok) {
+				er = BackEnd.Instance.StartServer(new BackEndAction.CallBack(ActionCallBack));
+			}
             PostOperation(er, GuiState.Disabled_WaitForInstallIntoRobotController);
         }
         void StopServer()
         {
-            rtbRioUpdateBox.Clear(); //Clear text
-
-            Status er = BackEnd.Instance.StopServer(new BackEndAction.CallBack(ActionCallBack));
+			rtbRioUpdateBox.Clear(); //Clear text
+			Status er = PreOperation();
+			/* request the action */
+			if (er == Status.Ok) {
+				er = BackEnd.Instance.StopServer (new BackEndAction.CallBack (ActionCallBack));
+			}
             PostOperation(er, GuiState.Disabled_WaitForInstallIntoRobotController);
         }
 
@@ -694,7 +716,7 @@ namespace CTRE_Phoenix_DiagClient {
 
             /* get backup status, color, and hover message */
             string msg, messageColor, hoverMsg;
-            BackEnd.State state = BackEnd.Instance.GetStatus(out msg, out messageColor, out hoverMsg);
+            BackEnd.Instance.GetStatus(out msg, out messageColor, out hoverMsg);
             string connectionStatus = BackEnd.Instance.GetConnectionStatus();
 
             /* its up to the GUI how much of this stuff to show */
@@ -757,6 +779,18 @@ namespace CTRE_Phoenix_DiagClient {
                             groupedControls.SelectedTab = GetSelfTestTabPage();
                         }
                         break;
+
+                    case GuiState.Disabled_WaitForSettingsChanged:
+                        /* if response is captured, transition */
+                        if (HasReceivedActionResponse())
+                        {
+                            /* back to normal */
+                            EnableDisableEntireGui(true);
+                            /* back to enabled */
+                            SetGuiState(GuiState.Enabled, 0);
+                        }
+                        break;
+
                     case GuiState.Disabled_waitForReflash:
                         /* periodically update progress bar */
                         int prog = (int)BackEnd.Instance.FieldUpgradeProgressPerc;
@@ -830,6 +864,7 @@ namespace CTRE_Phoenix_DiagClient {
                     case ActionType.SetConfig:
                     case ActionType.SetDeviceName:
                     case ActionType.SetID:
+                    case ActionType.FactoryDefault:
                         color = Color.Gold;
                         break;
                     case ActionType.SelfTest:
@@ -902,9 +937,7 @@ namespace CTRE_Phoenix_DiagClient {
         }
         private void EasterEggHandler()
         {
-            if (System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.LeftShift)) {
-                EasterEgg_Show();
-			}
+			EasterEgg_Show();
         }
         //--------------------------------------------------------------------------------------------------//
         //----------------------------------------- User Prompts -------------------------------------------//
@@ -920,11 +953,11 @@ namespace CTRE_Phoenix_DiagClient {
         }        
         private void PromptClipboardNotAvailable()
         {
-               var result = MessageBox.Show("Application could not get access to clipboard.",
-                                            "Clipboard not available",
-                                            MessageBoxButtons.OK,
-                                            MessageBoxIcon.Information,
-                                            MessageBoxDefaultButton.Button1); // Default to OK
+               MessageBox.Show(	"Application could not get access to clipboard.",
+                                "Clipboard not available",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information,
+                                MessageBoxDefaultButton.Button1); // Default to OK
         }
 
         void OpenFileBrowserCRF()
@@ -1052,6 +1085,8 @@ namespace CTRE_Phoenix_DiagClient {
         private void btnUpdateDevice_Click(object sender, EventArgs e) { FieldUpgradeSelectedDevice(); }
 
         private void btnSelfTest_Click(object sender, EventArgs e) { FetchSelfTestOfSelectedDevice(); }
+
+        private void btnFactoryDefault_Click(object sender, EventArgs e) { FactoryDefaultSelectedDevice(); }
 
         private void cboHostSelector_TextChanged(object sender, EventArgs e) { UpdateHostNameAndPort(); }
 
